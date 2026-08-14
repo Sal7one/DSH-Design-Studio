@@ -1,0 +1,13 @@
+# Bundle patch applied when a profile lists @sal7one/dsh-design-studio in
+# `dsh.profile.bundles`. The row id is deployment-local; the package name
+# must match package.json.
+#
+# The row is enabled by default. To disable this plugin for your profile,
+# add an id-targeted override to your profile's own cordis.patch.yml
+# (profile layers apply after bundle layers and win per row):
+#
+#   - id: dsh-design-studio
+#     disabled: true
+- insert:
+    - id: dsh-design-studio
+      name: "@sal7one/dsh-design-studio"

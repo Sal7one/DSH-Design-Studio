@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tic Tac Toe — Design Studio</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<main class="app">
+
+  <header class="masthead">
+    <div class="logo" aria-hidden="true">
+      <svg viewBox="0 0 48 48" width="46" height="46" focusable="false">
+        <line class="logo-x" x1="13" y1="13" x2="35" y2="35" />
+        <line class="logo-x" x1="35" y1="13" x2="13" y2="35" />
+        <circle class="logo-o" cx="24" cy="24" r="10" />
+      </svg>
+    </div>
+    <div class="head-text">
+      <h1 class="title">Tic Tac Toe</h1>
+      <p class="subtitle">First to three in a row wins</p>
+    </div>
+  </header>
+
+  <div class="mode-switch" role="group" aria-label="Game mode">
+    <button class="mode-btn is-active" data-mode="pvp" aria-pressed="true" type="button">2 Players</button>
+    <button class="mode-btn" data-mode="cpu" aria-pressed="false" type="button">vs CPU</button>
+  </div>
+
+  <section class="scoreboard" aria-label="Scoreboard">
+    <div class="score-card score-card--x" id="score-card-x">
+      <span class="score-mark" aria-hidden="true">✕</span>
+      <span class="score-label">X wins</span>
+      <span class="score-value" id="score-x">0</span>
+    </div>
+    <div class="score-card score-card--draw" id="score-card-draw">
+      <span class="score-mark" aria-hidden="true">—</span>
+      <span class="score-label">Draws</span>
+      <span class="score-value" id="score-draws">0</span>
+    </div>
+    <div class="score-card score-card--o" id="score-card-o">
+      <span class="score-mark" aria-hidden="true">◯</span>
+      <span class="score-label">O wins</span>
+      <span class="score-value" id="score-o">0</span>
+    </div>
+  </section>
+
+  <section class="board-wrap" aria-label="Game board">
+    <div class="board" id="board">
+      <svg class="win-line" id="win-line" viewBox="0 0 330 330" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <line id="win-line-el" x1="0" y1="0" x2="0" y2="0" pathLength="1" />
+      </svg>
+    </div>
+  </section>
+
+  <div class="status-stack">
+    <div class="status" id="status" role="status" aria-live="polite">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span class="status-text" id="status-text">X's turn</span>
+      <span class="status-hint" id="status-hint"></span>
+    </div>
+    <p class="round-note" id="round-note">Round 1 · New board</p>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn--primary" id="btn-new-round" type="button">New Round</button>
+    <button class="btn btn--ghost" id="btn-reset" type="button">Reset Score</button>
+  </div>
+
+  <footer class="foot">Interactive demo mockup · scores are local to this preview session</footer>
+
+</main>
+<script src="../js/app.js"></script>
+</body>
+</html>

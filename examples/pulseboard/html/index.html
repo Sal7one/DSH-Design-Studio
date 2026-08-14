@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulseboard — Incident Management</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<aside class="sidebar" id="sidebar" aria-label="Primary">
+  <div class="side-brand">
+    <span class="logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="22" height="22"><path d="M3 12h4l2-6 4 12 2-6h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </span>
+    <span class="logo-name">Pulseboard</span>
+  </div>
+
+  <button class="workspace-switch" aria-haspopup="true" aria-expanded="false">
+    <span class="ws-avatar" aria-hidden="true">A</span>
+    <span class="ws-meta"><span class="ws-name">Acme Cloud</span><span class="ws-plan">Enterprise · us-east-1</span></span>
+    <span class="ws-caret" aria-hidden="true">▾</span>
+  </button>
+
+  <nav class="side-nav" aria-label="Main navigation">
+    <a class="nav-item active" href="#" aria-current="page"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1"/><rect x="9" y="1.5" width="5.5" height="5.5" rx="1"/><rect x="1.5" y="9" width="5.5" height="5.5" rx="1"/><rect x="9" y="9" width="5.5" height="5.5" rx="1"/></svg>Overview</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5 14.5 13h-13z"/></svg>Incidents <span class="nav-badge">7</span></a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="5" cy="8" r="2.5"/><circle cx="11" cy="8" r="2.5"/><circle cx="8" cy="8" r="2.5"/></svg>Services</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M8 2v6l4 2"/></svg>On-call</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 12h12M4 12V7M7 12V4M10 12v-3M13 12V6"/></svg>Analytics</a>
+  </nav>
+
+  <div class="side-user">
+    <span class="user-avatar" aria-hidden="true">SM</span>
+    <span class="user-meta"><span class="user-name">Samira Malik</span><span class="user-role">On-call lead</span></span>
+    <button class="icon-btn" aria-label="User menu">⋯</button>
+  </div>
+</aside>
+<div class="sidebar-scrim" id="sidebarScrim" hidden></div>
+
+<div class="app">
+  <header class="topbar">
+    <button class="icon-btn hamburger" id="hamburger" aria-label="Open navigation"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h12"/></svg></button>
+    <div class="topbar-title">
+      <h1>Overview</h1>
+      <span class="topbar-sub">All systems nominal · last sync 12s ago</span>
+    </div>
+    <div class="topbar-controls">
+      <label class="sr-only" for="daterange">Date range</label>
+      <select class="select" id="daterange">
+        <option>Last 24 hours</option>
+        <option>Last 7 days</option>
+        <option>Last 30 days</option>
+      </select>
+      <div class="search">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg>
+        <label class="sr-only" for="search">Search</label>
+        <input id="search" type="search" placeholder="Search incidents, services…">
+      </div>
+      <button class="icon-btn has-badge" aria-label="Notifications, 3 unread"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5a4.5 4.5 0 0 1 4.5 4.5c0 3.5 1.5 4 1.5 5.5H2c0-1.5 1.5-2 1.5-5.5A4.5 4.5 0 0 1 8 1.5Z"/><path d="M6.5 13.5h3"/></svg><span class="badge-dot">3</span></button>
+      <button class="btn btn-primary" id="createIncident">Create incident</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="kpi-row" id="kpiRow" aria-label="Key metrics"></section>
+
+    <section class="mid-grid">
+      <article class="panel chart-panel" aria-labelledby="healthTitle">
+        <div class="panel-head">
+          <h2 id="healthTitle">System health</h2>
+          <span class="muted">Last 24 hours · requests per minute</span>
+          <div class="legend"><span class="legend-item"><i class="swatch sw-ok"></i>Healthy</span><span class="legend-item"><i class="swatch sw-degraded"></i>Degraded</span></div>
+        </div>
+        <div class="chart-wrap" id="healthChart" role="img" aria-label="System health chart, last 24 hours, with an incident spike at 14:00"></div>
+      </article>
+
+      <article class="panel activity-panel" aria-labelledby="activityTitle">
+        <div class="panel-head"><h2 id="activityTitle">Activity</h2><button class="link-btn" id="activityFilter" aria-pressed="true">All updates</button></div>
+        <ul class="timeline" id="timeline"></ul>
+      </article>
+    </section>
+
+    <section class="panel incidents-panel" aria-labelledby="incidentsTitle">
+      <div class="panel-head">
+        <h2 id="incidentsTitle">Active incidents</h2>
+        <div class="filter-row" role="group" aria-label="Filter incidents">
+          <span class="filter-label">Severity</span>
+          <div class="chips" id="sevChips">
+            <button class="chip active" data-sev="all">All</button>
+            <button class="chip" data-sev="critical">Critical</button>
+            <button class="chip" data-sev="high">High</button>
+            <button class="chip" data-sev="medium">Medium</button>
+            <button class="chip" data-sev="low">Low</button>
+          </div>
+          <span class="filter-label">Status</span>
+          <div class="chips" id="statusChips">
+            <button class="chip active" data-status="all">All</button>
+            <button class="chip" data-status="investigating">Investigating</button>
+            <button class="chip" data-status="identified">Identified</button>
+            <button class="chip" data-status="monitoring">Monitoring</button>
+            <button class="chip" data-status="resolved">Resolved</button>
+          </div>
+        </div>
+      </div>
+      <div id="incidentTable" aria-live="polite"></div>
+    </section>
+
+    <section class="panel services-panel" aria-labelledby="servicesTitle">
+      <div class="panel-head"><h2 id="servicesTitle">Service status</h2><button class="link-btn">View all services</button></div>
+      <div class="service-grid" id="serviceGrid"></div>
+    </section>
+
+    <footer class="page-foot">
+      <details class="design-notes">
+        <summary>Design notes &amp; reusable components</summary>
+        <p><strong>Direction.</strong> Charcoal/navy surfaces with one electric-blue accent; severity/status colors are semantic and never the only signal (every badge carries an icon or text label). No gradients or stock imagery — hierarchy comes from type, borders, and density.</p>
+        <p><strong>Reusable components.</strong> <code>KpiCard</code>, <code>Sparkline</code>, <code>AreaChart</code> (with hover tooltip), <code>MiniBars</code>, <code>IncidentTable</code> (with loading / empty / error states), <code>IncidentRow</code>, <code>SeverityBadge</code>, <code>StatusPill</code>, <code>Avatar</code>, <code>Timeline</code>, <code>ServiceCard</code>, <code>Drawer</code>, <code>Modal</code>, <code>ChipGroup</code>, <code>Toast</code>. All mock data is labeled <em>demo data</em> and lives in <code>js/app.js</code>.</p>
+        <p><strong>Demo states.</strong> Use the switches in the table header ("Simulate loading / error") to see the loading skeleton, the empty state (pick filters with no matches), and the error state with retry.</p>
+      </details>
+      <span class="muted">Pulseboard demo · read-only mock data · no live endpoints</span>
+    </footer>
+  </main>
+</div>
+
+<div class="drawer-scrim" id="drawerScrim" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden></aside>
+
+<div class="modal-scrim" id="modalScrim" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head">
+      <h2 id="modalTitle">Create incident</h2>
+      <button class="icon-btn" id="modalClose" aria-label="Close dialog">✕</button>
+    </div>
+    <form id="incidentForm">
+      <label class="field">
+        <span class="field-label">Title</span>
+        <input required type="text" name="title" placeholder="e.g. Checkout API elevated 5xx rate">
+      </label>
+      <label class="field">
+        <span class="field-label">Severity</span>
+        <select required name="severity">
+          <option value="critical">Critical</option>
+          <option value="high">High</option>
+          <option value="medium" selected>Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="field-label">Affected service</span>
+        <select required name="service">
+          <option>API Gateway</option><option>Checkout API</option><option>Auth Service</option>
+          <option>Database — primary</option><option>Billing Engine</option><option>Web Frontend</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="field-label">Description</span>
+        <textarea name="description" rows="4" placeholder="What changed, what's failing, who's looking…"></textarea>
+      </label>
+      <div class="modal-actions">
+        <button type="button" class="btn" id="modalCancel">Cancel</button>
+        <button type="submit" class="btn btn-primary">Create incident</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script src="../js/app.js"></script>
+</body>
+</html>

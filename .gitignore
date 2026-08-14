@@ -1,0 +1,5 @@
+node_modules/
+*.tgz
+.DS_Store
+# NOTE: lib/ is NOT ignored — it is the shipped entry point.
+_studio/.tmp/

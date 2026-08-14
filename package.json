@@ -1,0 +1,23 @@
+{
+  "name": "@sal7one/dsh-design-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Persistent Design Studio host for the DSH harness: the design_studio agent tool (design systems under temp_design_folder/, identity presets, OpenRouter vision review, and a real harness-subagent design agent that lists, reads and edits the design files itself), the /design-studio live-preview route, and a system-prompt section that routes operator design briefs into the studio. UI lives in the dynamic plugin (dynamic/) when running.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": { ".": { "import": "./lib/index.js" } },
+  "files": ["lib/index.js", "cordis.patch.yml", "README.md"],
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@deepseek-ai/cordis": "workspace:*",
+    "@deepseek-ai/dsh-tools": "workspace:*"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

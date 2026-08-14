@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sal7one Homelab — Command Center</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="mark">◈</span>
+    <div class="brandtext">
+      <div class="title">Sal7one Homelab</div>
+      <div class="subtitle">Command Center · read-only projection</div>
+    </div>
+  </div>
+  <div class="health-dots" id="healthDots"></div>
+  <div class="topright">
+    <div class="clock" id="clock">--:--:--</div>
+    <div class="updated" id="updated">mock data · wire to real aggregator</div>
+  </div>
+</header>
+
+<main>
+  <section class="kpis" id="kpis"></section>
+
+  <section class="panel needs">
+    <h2>Needs you now <span class="pill" id="needsCount"></span></h2>
+    <div class="needs-list" id="needsList"></div>
+  </section>
+
+  <section class="strip">
+    <div class="panel spend" id="spend"></div>
+    <div class="panel cutover" id="cutover"></div>
+  </section>
+
+  <section class="panel services">
+    <h2>Services <span class="muted" id="servicesSummary"></span></h2>
+    <div class="service-grid" id="serviceGrid"></div>
+  </section>
+
+  <section class="panel timeline">
+    <h2>Activity</h2>
+    <div class="timeline-list" id="timeline"></div>
+  </section>
+</main>
+
+<footer>
+  <span>read-only projection</span><span>·</span>
+  <span>mock data in js/app.js — wire to harness2/harness3/goodbot/docker endpoints</span><span>·</span>
+  <span>source: user_need.md</span>
+</footer>
+
+<script src="../js/app.js"></script>
+</body>
+</html>
