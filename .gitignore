@@ -3,3 +3,5 @@ node_modules/
 .DS_Store
 # NOTE: lib/ is NOT ignored — it is the shipped entry point.
 _studio/.tmp/
+
+awesome-deepseek-harness/
