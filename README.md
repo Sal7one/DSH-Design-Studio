@@ -165,6 +165,8 @@ Everything else works without it.
 2. **Start the harness:**
    ```sh
    npx @deepseek-ai/dsh web
+
+   I personally skipped npx, used npm, and installed this globally.
    ```
    A browser window opens at `http://127.0.0.1:3080` — that's the harness Web UI.
 3. **Install this plugin:**
