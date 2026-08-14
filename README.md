@@ -1,59 +1,122 @@
 # @sal7one/dsh-design-studio
 
-A **DeepSeek Harness plugin** that turns design mockups into a first-class workflow:
-live previews, identity presets, screenshots, vision review, and a design-agent chat —
-all backed by real files on disk under `temp_design_folder/`.
+A **DeepSeek Harness plugin** that turns design mockups into a first-class AI workflow.
+Live previews, an element picker, a real design agent, vision review, screenshots,
+identity presets — and a two-agent apply flow where **DeepSeek edits and the design
+agent verifies**. Everything is backed by real files on disk under `temp_design_folder/`,
+and everything is **launch-persistent**: install once, the Design Studio tab is there
+on every launch.
 
 ```text
 dsh-design-studio/
-├── package.json          # dsh.bundle manifest → ./cordis.patch.yml
+├── package.json          # dual-face manifest: dsh.bundle (host) + dsh.client (web UI)
 ├── cordis.patch.yml      # the composition layer this bundle contributes
 ├── README.md             # this file
 ├── LICENSE               # MIT
-├── lib/index.js          # persistent HOST half: tool + route + prompt section
-└── dynamic/              # the UI (tab, agent chat, Shot, Review) — a separate artifact
-    ├── host.js           # RPC handlers, screenshot, agent engine, review transports
-    ├── client.js         # browser UI: tab, settings sections, run panel
-    └── README.md         # how to run the UI half
+├── lib/
+│   ├── index.js          # HOST half: design_studio tool, /design-studio route + JSON API,
+│   │                     #   design-agent engine, freshness stamps, auto-verification
+│   └── client.js         # WEB UI half: conversation tab, element picker, agent chat, settings
+├── examples/             # example design systems (html/css/js mockups + presets)
+└── dynamic/              # legacy dynamic-plugin prototype (reference only — not needed)
 ```
 
-## What you get
+---
 
-- **`design_studio` agent tool** — list/create/read/write/zip/reveal design systems,
-  identity-preset CRUD, vision review (GOOD|POOR), and the design-agent chat.
-  Writes are scoped to `temp_design_folder/` design-system folders only.
-- **A real design agent** — the `agent` action runs a **harness subagent** (spawn
-  provider, design-studio persona) on the harness's default model route: it lists,
-  reads and edits the design files itself across multiple tool calls, with live
-  file activity and a persisted per-system history. Explicitly selected images
-  (`images` or the UI picker) take priority and are pre-described by the operator's
-  vision model, so "the image" always means the right one.
-- **`/design-studio/<slug>/html/index.html` live-preview route** served by the harness web server.
-- **A system-prompt section** that routes operator design briefs into the studio.
-- **The Design Studio UI** (persistent `dsh.client` tab): conversation tab with live preview iframe,
-  📸 Shot (macOS `screencapture`), 👁 Review, 🎯 element picker, file drop zones,
-  the Design Agent chat with live activity + inline errors, plus
-  Settings → Design Studio / All designs.
-- **Two ways to apply a picked element change** — after 🎯 Select, the change popup
-  offers **🤖 Ask DeepSeek** (default: saves the reference and sends it to your main
-  chat — DeepSeek edits the files itself, may invoke the design agent mid-turn for
-  vision, and the studio **auto-runs a design-agent verification** once its edits
-  settle) and **◈ Make the design agent do it** (the classic agent-chat flow,
-  renamed). **💾 Save only** writes `EDIT_REQUEST.md` without sending.
+## ✨ Features
 
-## Install
+### Core platform
 
-Works with **both** distributions of the harness:
+- **One command, persistent** — a dual-face `dsh.bundle` + `dsh.client` package:
+  `dsh plugin add` once, and the tool, the preview route, the prompt section and the
+  **Design Studio tab** are all present on every launch. No build step, no TypeScript,
+  **zero runtime dependencies** (plain JavaScript).
+- **`design_studio` agent tool** — your assistant (and any subagent) can
+  `list / all / create / read / write / zip / reveal / delete / sweep` design systems,
+  manage identity presets, run vision reviews, chat with the design agent, read its
+  history, and configure the studio — all scoped to `temp_design_folder/` design folders.
+- **Live preview route** — `/design-studio/<slug>/html/index.html`, served by the
+  harness web server; the studio tab embeds it in an iframe with hot reload on save.
+- **Design-brief routing** — a system-prompt section turns operator screen briefs into
+  design systems automatically.
 
-- the npm distribution (`npx @deepseek-ai/dsh web`), and
-- a source checkout (`git clone …/deepseek-harness && pnpm install && pnpm dsh web`).
+### Design systems
 
-The bundle is **plain JavaScript — no build step**, and its dependencies are plain
-npm semver ranges (`^4.0.1` / `^0.1.0-rc.5` — no `workspace:` protocol), so it
-installs into either:
+- **Mockup-scoped files** — every design system is `html/index.html`,
+  `css/style.css`, `css/token.css`, `js/app.js` (minimal presentation) plus
+  `design_prompts_forcoders.md` (the brief the coding agent follows) and
+  `assets/images/` for uploads. Mock data stays honest — empty/loading states,
+  never fabricated live numbers.
+- **Per-conversation ownership** — each design system is bound to the conversation
+  that created it; the tab shows only your chat's designs (unbound legacy systems
+  are adopted on first list).
+- **Drop zones** — drop images or code files onto the tab; images land in
+  `assets/images/` and auto-select in the agent chat picker.
+- **Zip export + Finder reveal + delete** — `_zips/<slug>.zip` (files only), `open -R`,
+  and shell-free recursive delete that works even on hosts with no POSIX shell.
+
+### Design agent (real harness subagent)
+
+- **It does the work itself** — the agent chat runs a **harness subagent** (spawn
+  engine, design-studio persona) that lists, reads and edits the design files across
+  multiple tool calls per message, then summarizes file-level changes.
+- **Live activity** — its reads/edits stream into the chat as they happen, with
+  inline errors, a persisted per-system history, and run timeouts.
+- **Vision pre-pass** — images explicitly selected in the picker (or mentioned by
+  filename) are pre-described by your configured vision model, so "the image"
+  always means the right one and the agent never guesses between assets.
+- **Design-cache discipline** — on every turn (even a bare "ok") the agent verifies
+  the freshness stamp, reports whether the design changed since its last turn,
+  adopts the latest files as truth, and asks what you want when the request is vague.
+
+### 🎯 Element picker + two-agent apply flow
+
+Click **🎯 Select**, click any element in the live preview, describe the change:
+
+| Button | What happens |
+| --- | --- |
+| **🤖 Ask DeepSeek** *(default)* | Saves `EDIT_REQUEST.md`, injects the request into your **main chat**. DeepSeek edits the files itself and invokes the design agent only when it needs vision (the tool routes it explicitly). A **live run banner** tracks queued → working → finished in the tab, and the studio **auto-runs a design-agent verification** once the edits settle — guaranteed designer involvement, not a hope. |
+| **◈ Make the design agent do it** | The classic flow: the design agent applies the change itself and replies in its chat. |
+| **💾 Save only** | Just writes `EDIT_REQUEST.md` — apply later from either chat. |
+
+### Freshness stamps (multi-agent safety)
+
+- Every design change bumps a **stamp `{hash, at}`** (fresh random hash + ISO time,
+  latest-status only) — the plugin detects changes from *any* editor via the
+  harness `fs/observed` stream, plus synchronous bumps on its own write paths.
+- Agents compare their remembered hash with the current one: drift ("changed since
+  your last turn") is surfaced in prompts and tool output, and the design agent
+  records a per-turn **design cache** so the next turn can prove UNCHANGED/CHANGED.
+
+### Vision, screenshots & presets
+
+- **📸 Shot** — capture a screen region (`screencapture` on macOS) straight into the
+  design system's `assets/images/`.
+- **👁 Review** — honest `GOOD | POOR` verdict + one-sentence notes from your
+  OpenRouter vision model against the brief (configurable models, effort, options).
+- **Identity presets** — save palettes/typography/logos as presets; `preset_apply`
+  writes `css/token.css` and copies logo assets. Credentials are handled through the
+  harness credential seam (`OPENROUTER_API_KEY`) — the key is never rendered or returned.
+
+### Settings & data
+
+- **Settings → Design Studio / All designs** pages: config, key status, system list,
+  zip/reveal/delete per design.
+- **Everything survives restarts** — designs, presets, config, reviews and agent
+  history live on disk under `temp_design_folder/`.
+
+---
+
+## Quick start
+
+Works with **both** harness distributions — the npm distribution
+(`npx @deepseek-ai/dsh web`) and a source checkout (`pnpm dsh web`).
 
 ```sh
+# 1. start the harness (if not running): npx @deepseek-ai/dsh web
+# 2. install the plugin
 dsh plugin --profile web add "github:sal7two/dsh-design-studio#main"
+# 3. restart the harness so the new layers load
 ```
 
 From a local checkout:
@@ -65,7 +128,7 @@ dsh plugin --profile web add -w /absolute/path/to/dsh-design-studio
 > `-w` is only needed when your profile directory is a pnpm workspace root
 > (`pnpm-workspace.yaml` with `packages: [., packages/*]`), and the path must be
 > **absolute** — a bare relative path is misread as a GitHub `owner/repo` shorthand.
-> `remove` takes the package name, not the path:
+> Remove with the package name:
 > `dsh plugin --profile web remove @sal7one/dsh-design-studio`.
 
 The bundle row is **enabled by default**. To keep it installed but off, override it in
@@ -77,52 +140,46 @@ per row):
   disabled: true
 ```
 
-The UI is part of the same package (a `dsh.client` face): once the bundle row is
-active, the Design Studio tab and settings pages are composed into the web UI
-automatically — nothing session-scoped to load. `dynamic/` holds the legacy
-prototype (dynamic plugin) that this replaced; it is not needed.
+Optional: in the tab → Settings → Design Studio, paste an OpenRouter API key to enable
+vision review and image description (stored via the credential seam; never shown again).
+Everything else works without it.
 
 ## Plain-English setup (non-power users)
 
-You don't need to understand any of the internals. From a fresh machine:
-
 1. **Install Node.js** (v22 or newer) from nodejs.org.
-2. **Start the harness.** Open a terminal and run:
+2. **Start the harness:**
    ```sh
    npx @deepseek-ai/dsh web
    ```
-   (First run downloads everything; afterwards it starts quickly.) A browser window
-   opens at `http://127.0.0.1:3080` — that's the harness Web UI.
-3. **Install this plugin** (same terminal, or stop the server first with Ctrl+C and run):
+   A browser window opens at `http://127.0.0.1:3080` — that's the harness Web UI.
+3. **Install this plugin:**
    ```sh
    dsh plugin --profile web add "github:sal7two/dsh-design-studio#main"
    ```
-   then start the server again if you stopped it.
-4. **Restart the harness** (Ctrl+C, then start it again) so the new layers load. The
-   **Design Studio tab** is now in the conversation view on every launch, plus
-   Settings → Design Studio / All designs.
-5. **Optional — vision features:** in the tab, go to Settings → Design Studio and paste
-   an OpenRouter API key (it's stored safely; never shown again). Without it, everything
-   except image review/description still works.
-6. **Design something.** Create a design system (or just describe a screen to the
-   assistant — it routes briefs into the studio automatically), then chat with the
-   Design Agent in the tab: it reads and edits the files itself. The live preview URL is
+4. **Restart the harness** (Ctrl+C, start again). The **Design Studio tab** now
+   appears in every conversation, plus Settings → Design Studio / All designs.
+5. **Design something.** Create a design system, or just describe a screen to the
+   assistant — it routes briefs into the studio automatically. The live preview is
    `http://127.0.0.1:3080/design-studio/<name>/html/index.html`.
 
-## What survives a restart ("on launch")
+## Workflows
 
-- ✅ **Everything is launch-persistent now.** This is a dual-face package: the
-  `design_studio` tool, the design-agent engine, the `/design-studio/...` preview
-  route + JSON API, the design-brief prompt section, AND the built-in Design Studio
-  web UI (conversation tab, agent chat, Settings pages) — all registered from the
-  bundle/client layers. `dsh plugin add` once → every launch has the tab, no
-  loading command, no session-scoped steps.
-- ✅ **All data survives:** designs, presets, config, and agent history live on disk
-  under `temp_design_folder/`.
-- 🧹 **`dynamic/` is legacy reference code** (the prototype dynamic plugin this
-  port replaced). You don't need it; keep or delete it. If BOTH the dynamic plugin
-  and this persistent UI are loaded in the same session, the tab id collides —
-  stop using the dynamic one.
+**Iterate with the design agent.** Open the Design Studio tab → select your design →
+type a request in the agent chat ("make the status bar left-aligned", "use this image
+as the background"). It reads, edits and summarizes; the preview reloads.
+
+**Pick an element and let DeepSeek change it.** 🎯 Select → click the element → type
+the change → **🤖 Ask DeepSeek**. The request appears in your main chat, DeepSeek
+edits, the tab banner tracks progress, and the design agent auto-verifies the result.
+
+**Give DeepSeek a visual job.** Drop a palette image on the tab (it lands in
+`assets/images/`), then in the **main chat**:
+> In the tic-tac-toe design, read the color palette from `assets/images/palette.png`
+> and apply it to `css/token.css`. Use the design agent for the visual read.
+
+DeepSeek routes the vision work to the design agent (`design_studio` → `agent`), the
+image is auto-attached and vision-described, and the result flows back into DeepSeek's
+tool result.
 
 ## Requirements
 
@@ -130,8 +187,7 @@ You don't need to understand any of the internals. From a fresh machine:
   the same generation) with the standard host services
   (`fs`, `subprocess`, `webServer`, `llm`, `credentials`, `attachments`, `systemPrompt`, `tools`).
 - The design tree root must exist at the **server process workspace root** as
-  `temp_design_folder/` (the route resolves against the server cwd, not any session's
-  workspace — a symlink is fine).
+  `temp_design_folder/` (a symlink is fine).
 - For vision review: an OpenRouter key stored under credential reference
   `OPENROUTER_API_KEY`, or a harness `openrouter` provider route.
 
@@ -155,8 +211,12 @@ This plugin was built and broken against a moving harness base. The traps:
    committed inside one ships without its entry point. This repo lives at its own top
    level and ships plain JS, so `lib/index.js` is committed.
 5. **Dynamic plugins die on restart.** Everything in `dynamic/` is in-memory by design.
-   The bundle is the restart-safe part; the UI is re-run after a restart. Don't promise
-   users a persistent tab from a dynamic package.
+   The bundle is the restart-safe part. Don't promise users a persistent tab from a
+   dynamic package.
+6. **Client services are scope-addressed.** The main chat is reachable from another
+   tab via `sessions.scope(sessionId).get('conversation')` — property access
+   (`scoped.conversation`) does **not** resolve the service. (This exact bug shipped
+   once; the fix is in `lib/client.js` → `askDeepSeek`.)
 
 ## Publishing
 
@@ -166,7 +226,7 @@ gh repo edit sal7two/dsh-design-studio --add-topic dsh --add-topic dsh-plugin
 ```
 
 Then PR one entry into `awesome-deepseek-harness` (alphabetical, one PR per change,
-carry the `#dsh` topic for discovery).
+carry the `#dsh-plugin` topic for discovery).
 
 ## License
 
