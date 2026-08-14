@@ -36,8 +36,9 @@ dsh-design-studio/
   Settings → Design Studio / All designs.
 - **Two ways to apply a picked element change** — after 🎯 Select, the change popup
   offers **🤖 Ask DeepSeek** (default: saves the reference and sends it to your main
-  chat — DeepSeek edits the files itself and invokes the design agent only when it
-  needs vision) and **◈ Make the design agent do it** (the classic agent-chat flow,
+  chat — DeepSeek edits the files itself, may invoke the design agent mid-turn for
+  vision, and the studio **auto-runs a design-agent verification** once its edits
+  settle) and **◈ Make the design agent do it** (the classic agent-chat flow,
   renamed). **💾 Save only** writes `EDIT_REQUEST.md` without sending.
 
 ## Install
