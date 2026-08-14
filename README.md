@@ -71,9 +71,10 @@ per row):
   disabled: true
 ```
 
-The UI half is a **dynamic Cordis plugin**: it runs in-process and is re-loaded through
-the harness's `cordis_define` / `cordis_run` tooling (or any agent workflow that can run
-dynamic packages). See `dynamic/README.md`.
+The UI is part of the same package (a `dsh.client` face): once the bundle row is
+active, the Design Studio tab and settings pages are composed into the web UI
+automatically — nothing session-scoped to load. `dynamic/` holds the legacy
+prototype (dynamic plugin) that this replaced; it is not needed.
 
 ## Plain-English setup (non-power users)
 
@@ -91,10 +92,9 @@ You don't need to understand any of the internals. From a fresh machine:
    dsh plugin --profile web add "github:sal7two/dsh-design-studio#main"
    ```
    then start the server again if you stopped it.
-4. **Open the Design Studio tab** in the harness Web UI. If it isn't there, tell the
-   assistant in the chat: *"load the Design Studio dynamic plugin from
-   `dynamic/host.js` and `dynamic/client.js` in the dsh-design-studio repo"* — it can
-   run the two files through `cordis_define` + `cordis_run` for you, and the tab appears.
+4. **Restart the harness** (Ctrl+C, then start it again) so the new layers load. The
+   **Design Studio tab** is now in the conversation view on every launch, plus
+   Settings → Design Studio / All designs.
 5. **Optional — vision features:** in the tab, go to Settings → Design Studio and paste
    an OpenRouter API key (it's stored safely; never shown again). Without it, everything
    except image review/description still works.
@@ -105,17 +105,18 @@ You don't need to understand any of the internals. From a fresh machine:
 
 ## What survives a restart ("on launch")
 
-- ✅ **Everything the bundle provides is launch-persistent:** the `design_studio` tool
-  (create/read/write/zip, presets, vision review, the design-agent chat), the
-  `/design-studio/...` preview route, and the design-brief prompt section. After
-  `dsh plugin add` once, every future launch has them — including the design agent,
-  which the assistant can drive from plain chat with no UI at all.
+- ✅ **Everything is launch-persistent now.** This is a dual-face package: the
+  `design_studio` tool, the design-agent engine, the `/design-studio/...` preview
+  route + JSON API, the design-brief prompt section, AND the built-in Design Studio
+  web UI (conversation tab, agent chat, Settings pages) — all registered from the
+  bundle/client layers. `dsh plugin add` once → every launch has the tab, no
+  loading command, no session-scoped steps.
 - ✅ **All data survives:** designs, presets, config, and agent history live on disk
   under `temp_design_folder/`.
-- ⚠️ **The visual tab is a dynamic plugin** and must be re-run after each server
-  restart (step 4 above). The platform's launch-persistent UI mechanism (`dsh.client`
-  bundles) exists but requires the UI to be built as a TypeScript/tsdown client
-  package — tracked as a follow-up; the tool-only workflow above needs nothing extra.
+- 🧹 **`dynamic/` is legacy reference code** (the prototype dynamic plugin this
+  port replaced). You don't need it; keep or delete it. If BOTH the dynamic plugin
+  and this persistent UI are loaded in the same session, the tab id collides —
+  stop using the dynamic one.
 
 ## Requirements
 
