@@ -37,8 +37,14 @@ dsh-design-studio/
 
 ## Install
 
-The bundle is **plain JavaScript — no build step**, so GitHub installs work without
-pnpm's `allowBuilds` dance:
+Works with **both** distributions of the harness:
+
+- the npm distribution (`npx @deepseek-ai/dsh web`), and
+- a source checkout (`git clone …/deepseek-harness && pnpm install && pnpm dsh web`).
+
+The bundle is **plain JavaScript — no build step**, and its dependencies are plain
+npm semver ranges (`^4.0.1` / `^0.1.0-rc.5` — no `workspace:` protocol), so it
+installs into either:
 
 ```sh
 dsh plugin --profile web add "github:sal7two/dsh-design-studio#main"
@@ -69,9 +75,52 @@ The UI half is a **dynamic Cordis plugin**: it runs in-process and is re-loaded 
 the harness's `cordis_define` / `cordis_run` tooling (or any agent workflow that can run
 dynamic packages). See `dynamic/README.md`.
 
+## Plain-English setup (non-power users)
+
+You don't need to understand any of the internals. From a fresh machine:
+
+1. **Install Node.js** (v22 or newer) from nodejs.org.
+2. **Start the harness.** Open a terminal and run:
+   ```sh
+   npx @deepseek-ai/dsh web
+   ```
+   (First run downloads everything; afterwards it starts quickly.) A browser window
+   opens at `http://127.0.0.1:3080` — that's the harness Web UI.
+3. **Install this plugin** (same terminal, or stop the server first with Ctrl+C and run):
+   ```sh
+   dsh plugin --profile web add "github:sal7two/dsh-design-studio#main"
+   ```
+   then start the server again if you stopped it.
+4. **Open the Design Studio tab** in the harness Web UI. If it isn't there, tell the
+   assistant in the chat: *"load the Design Studio dynamic plugin from
+   `dynamic/host.js` and `dynamic/client.js` in the dsh-design-studio repo"* — it can
+   run the two files through `cordis_define` + `cordis_run` for you, and the tab appears.
+5. **Optional — vision features:** in the tab, go to Settings → Design Studio and paste
+   an OpenRouter API key (it's stored safely; never shown again). Without it, everything
+   except image review/description still works.
+6. **Design something.** Create a design system (or just describe a screen to the
+   assistant — it routes briefs into the studio automatically), then chat with the
+   Design Agent in the tab: it reads and edits the files itself. The live preview URL is
+   `http://127.0.0.1:3080/design-studio/<name>/html/index.html`.
+
+## What survives a restart ("on launch")
+
+- ✅ **Everything the bundle provides is launch-persistent:** the `design_studio` tool
+  (create/read/write/zip, presets, vision review, the design-agent chat), the
+  `/design-studio/...` preview route, and the design-brief prompt section. After
+  `dsh plugin add` once, every future launch has them — including the design agent,
+  which the assistant can drive from plain chat with no UI at all.
+- ✅ **All data survives:** designs, presets, config, and agent history live on disk
+  under `temp_design_folder/`.
+- ⚠️ **The visual tab is a dynamic plugin** and must be re-run after each server
+  restart (step 4 above). The platform's launch-persistent UI mechanism (`dsh.client`
+  bundles) exists but requires the UI to be built as a TypeScript/tsdown client
+  package — tracked as a follow-up; the tool-only workflow above needs nothing extra.
+
 ## Requirements
 
-- Node ≥ 22, DeepSeek Harness with the standard host services
+- Node ≥ 22 and the harness (npm distribution ≥ `0.1.0-rc.5`, or a source checkout of
+  the same generation) with the standard host services
   (`fs`, `subprocess`, `webServer`, `llm`, `credentials`, `attachments`, `systemPrompt`, `tools`).
 - The design tree root must exist at the **server process workspace root** as
   `temp_design_folder/` (the route resolves against the server cwd, not any session's
