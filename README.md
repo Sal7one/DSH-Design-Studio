@@ -30,10 +30,15 @@ dsh-design-studio/
   vision model, so "the image" always means the right one.
 - **`/design-studio/<slug>/html/index.html` live-preview route** served by the harness web server.
 - **A system-prompt section** that routes operator design briefs into the studio.
-- **The Design Studio UI** (dynamic half): conversation tab with live preview iframe,
+- **The Design Studio UI** (persistent `dsh.client` tab): conversation tab with live preview iframe,
   📸 Shot (macOS `screencapture`), 👁 Review, 🎯 element picker, file drop zones,
   the Design Agent chat with live activity + inline errors, plus
   Settings → Design Studio / All designs.
+- **Two ways to apply a picked element change** — after 🎯 Select, the change popup
+  offers **🤖 Ask DeepSeek** (default: saves the reference and sends it to your main
+  chat — DeepSeek edits the files itself and invokes the design agent only when it
+  needs vision) and **◈ Make the design agent do it** (the classic agent-chat flow,
+  renamed). **💾 Save only** writes `EDIT_REQUEST.md` without sending.
 
 ## Install
 
