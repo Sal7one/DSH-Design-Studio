@@ -7,12 +7,27 @@ agent verifies**. Everything is backed by real files on disk under `temp_design_
 and everything is **launch-persistent**: install once, the Design Studio tab is there
 on every launch.
 
+## Screenshots
+
+<p align="center">
+  <a href="repo-images/screenshot-01.png"><img src="repo-images/screenshot-01.png" width="170" alt="Design Studio screenshot"></a>
+  <a href="repo-images/screenshot-02.png"><img src="repo-images/screenshot-02.png" width="170" alt="Design Studio screenshot"></a>
+  <a href="repo-images/screenshot-03.png"><img src="repo-images/screenshot-03.png" width="170" alt="Design Studio screenshot"></a>
+  <a href="repo-images/screenshot-04.png"><img src="repo-images/screenshot-04.png" width="170" alt="Design Studio screenshot"></a>
+  <a href="repo-images/screenshot-05.png"><img src="repo-images/screenshot-05.png" width="170" alt="Design Studio screenshot"></a>
+  <a href="repo-images/screenshot-06.png"><img src="repo-images/screenshot-06.png" width="170" alt="Design Studio screenshot"></a>
+  <a href="repo-images/screenshot-07.png"><img src="repo-images/screenshot-07.png" width="170" alt="Design Studio screenshot"></a>
+</p>
+
+<p align="center"><em>Click any thumbnail for the full-size image.</em></p>
+
 ```text
 dsh-design-studio/
 ├── package.json          # dual-face manifest: dsh.bundle (host) + dsh.client (web UI)
 ├── cordis.patch.yml      # the composition layer this bundle contributes
 ├── README.md             # this file
 ├── LICENSE               # MIT
+├── repo-images/          # UI screenshots shown at the top of this README
 ├── lib/
 │   ├── index.js          # HOST half: design_studio tool, /design-studio route + JSON API,
 │   │                     #   design-agent engine, freshness stamps, auto-verification
