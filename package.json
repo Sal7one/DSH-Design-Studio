@@ -1,6 +1,6 @@
 {
   "name": "@sal7one/dsh-design-studio",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "private": true,
   "description": "Persistent dual-face Design Studio plugin for the DSH harness: the design_studio agent tool (design systems under temp_design_folder/, identity presets, OpenRouter vision review, and a real harness-subagent design agent that lists, reads and edits the design files itself), the /design-studio live-preview route + JSON API, a design-brief prompt section, and the built-in Design Studio web UI (conversation tab, agent chat, settings pages). Install once \u2014 the tab appears on every launch. Zero runtime dependencies (plain JS).",
   "type": "module",
