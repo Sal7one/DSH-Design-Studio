@@ -37,6 +37,10 @@ dsh-design-studio/
 ```
 
 ---
+## Todos
+
+- Remove The scerenshot feature it's buggy
+
 
 ## ✨ Features
 
