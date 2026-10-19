@@ -217,6 +217,9 @@ test('studio workspace renders its library, tabs and default preview tab', async
     if (overrides && overrides.workspaceTab) seeds[17] = overrides.workspaceTab
     if (overrides && overrides.stylePreview) seeds[20] = overrides.stylePreview
     if (overrides && overrides.styleTour) seeds[22] = overrides.styleTour
+    if (overrides && overrides.keyState) seeds[9] = overrides.keyState
+    if (overrides && overrides.harnessState) seeds[10] = overrides.harnessState
+    if (overrides && overrides.selection) seeds[16] = overrides.selection
     let index = 0
     return {
       useState(initial) {
@@ -257,6 +260,22 @@ test('studio workspace renders its library, tabs and default preview tab', async
   for (const label of ['Style tour', 'Liquid Glass', 'Apply style', 'Close']) {
     assert.ok(tourText.includes(label), 'style tour renders ' + label)
   }
+  const selection = {
+    tag: 'a',
+    cssPath: 'body > a.brand',
+    classPath: 'brand',
+    classes: ['brand'],
+    rect: { x: 10, y: 10, w: 120, h: 40 },
+    styles: { 'border-radius': '12px', 'background-color': '#fff', padding: '4px', 'font-size': '1rem' },
+    text: 'Sand & Stone',
+    html: '<a class="brand">Sand &amp; Stone</a>',
+  }
+  const warningText = renderWith({
+    keyState: { configured: false },
+    harnessState: { vision: { available: false, reason: 'current model advertises text input only' } },
+    selection,
+  })
+  assert.ok(warningText.includes('No image-capable model active'), 'selection warns when vision is unavailable')
 })
 
 test('history panel renders its controls', async () => {

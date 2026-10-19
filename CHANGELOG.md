@@ -2,6 +2,17 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.4.3 — 2026-10-20
+
+Vision-readiness warning.
+
+- The selection editor now warns when the current harness model has no image
+  input and no OpenRouter key is configured: DeepSeek can still edit files, but
+  it cannot see the rendered preview and visual judgment is unreliable.
+- When a text-only model has an OpenRouter key configured, a lighter note says
+  screenshot checks use the vision fallback.
+- Added a render test covering the warning. 98 checks, 8 tests.
+
 ## 2.4.2 — 2026-10-20
 
 Selection default action.

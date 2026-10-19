@@ -6,6 +6,10 @@ and a two-agent apply flow where **DeepSeek edits and the design agent verifies*
 Everything is backed by real files under `temp_design_folder/`, and everything is
 **launch-persistent**: install once, the Design Studio tab is there on every launch.
 
+> **2.4.3 — vision warning.** The selection editor warns when the active model
+> has no image input and no OpenRouter fallback is configured, so you know that
+> DeepSeek will edit from files only and cannot visually verify the result.
+>
 > **2.4.2 — Enter asks DeepSeek.** In the selection editor, Enter now sends the
 > change to **Ask DeepSeek**; Shift+Enter adds a line, and Save only remains an
 > explicit “don’t send” action.
@@ -436,7 +440,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.4.2`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.4.3`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 
