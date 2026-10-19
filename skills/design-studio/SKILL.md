@@ -75,6 +75,8 @@ A design system can be frozen as a read-only handoff.
 
 - `design_studio action=list` returns `frozen: true` and a `freeze` record with
   `implementation` and `finalSnapshot`.
+- The implementation target defaults to the current conversation project (the
+  UI shows a project selector); if a record is empty, ask the operator.
 - While frozen, **do not edit the mockup**. Do not call write, style apply/asset
   changes, history restores, ingest, delete, or the design agent.
 - Work in the recorded `freeze.implementation` target instead. If it is empty,

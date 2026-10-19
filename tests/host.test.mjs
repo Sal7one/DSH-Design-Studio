@@ -96,7 +96,7 @@ function makeHarness() {
   const sections = []
   const registeredTools = new Map()
   const activations = []
-  const parent = { id: 'session-1' }
+  const parent = { id: 'session-1', session: { header: { cwd: '/work/project' } } }
   const streamed = []
 
   const services = {
@@ -365,7 +365,7 @@ test('host half registers current contracts and exercises the studio flow', asyn
   assert.match(await tool.execute({ action: 'freeze', slug: 'demo' }, exec), /design frozen: demo/)
   const noTargetList = JSON.parse(await tool.execute({ action: 'list' }, exec))
   assert.equal(noTargetList[0].frozen, true)
-  assert.equal(noTargetList[0].freeze.implementation, '')
+  assert.equal(noTargetList[0].freeze.implementation, '/work/project')
   assert.match(await tool.execute({ action: 'unfreeze', slug: 'demo' }, exec), /design thawed: demo/)
 
   await assert.rejects(() => tool.execute({ action: 'read', slug: 'demo', path: '../escape' }, exec), /invalid path/)
@@ -422,6 +422,19 @@ test('route serves the API and the live preview', async () => {
   const freezeBody = JSON.parse(freezeRes.body)
   assert.equal(freezeBody.ok, true)
   assert.equal(freezeBody.data.frozen, true)
+
+  const projectRes = fakeRes()
+  await route.handler(fakeReq('POST', '/design-studio/__api/studio.project', {}), projectRes)
+  assert.equal(projectRes.statusCode, 200)
+  const projectBody = JSON.parse(projectRes.body)
+  assert.equal(projectBody.ok, true)
+  assert.equal(projectBody.data.defaultPath, process.cwd())
+  assert.ok(Array.isArray(projectBody.data.options))
+  assert.equal(projectBody.data.options[0].label, 'This project')
+
+  const sessionProjectRes = fakeRes()
+  await route.handler(fakeReq('POST', '/design-studio/__api/studio.project', { sessionId: 'session-1' }), sessionProjectRes)
+  assert.equal(JSON.parse(sessionProjectRes.body).data.defaultPath, '/work/project')
 
   const frozenWriteRes = fakeRes()
   await route.handler(fakeReq('POST', '/design-studio/__api/studio.history.undo', { slug: 'preview' }), frozenWriteRes)

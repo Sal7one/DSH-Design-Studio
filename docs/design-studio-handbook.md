@@ -235,7 +235,9 @@ system**, not a global switch.
   a final snapshot, refreshes the zip, and records:
   - slug, timestamp, design stamp
   - final snapshot id
-  - implementation target (path/repo/note)
+  - implementation target — **defaults to the current conversation project**
+    (session cwd), with a UI selector for this project / recent targets / a
+    custom path
   - optional handoff note
 - `design_studio list` / `all` return `frozen` plus the `freeze` record.
 - While frozen:

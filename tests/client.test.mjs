@@ -212,7 +212,7 @@ test('studio workspace renders its library, tabs and default preview tab', async
   const makeReact = (overrides) => {
     const seeds = [
       [demo], 'demo', '', '', 0, '', '', '', null, null, null, '', [], false, '', false, null,
-      'preview', 'desktop', true, null, null, null, false, false, '', '', [], false, '', '', null, false, null, 0,
+      'preview', 'desktop', true, null, null, null, false, false, '', '', false, [], false, [], false, '', '', null, false, null, 0,
     ]
     if (overrides && overrides.systems) seeds[0] = overrides.systems
     if (overrides && overrides.workspaceTab) seeds[17] = overrides.workspaceTab

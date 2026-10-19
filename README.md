@@ -6,6 +6,10 @@ and a two-agent apply flow where **DeepSeek edits and the design agent verifies*
 Everything is backed by real files under `temp_design_folder/`, and everything is
 **launch-persistent**: install once, the Design Studio tab is there on every launch.
 
+> **2.6.1 — project selector for freeze.** Freeze defaults to the current
+> conversation project; choose This project/Recent/Other path from a selector.
+> No path typing required.
+>
 > **2.6.0 — design freeze.** A large **Finish & freeze design** handoff marks the
 > mockup read-only, records the implementation target, blocks Studio/AI writes,
 > and switches the agent to implementation mode until an explicit Thaw.
@@ -218,7 +222,9 @@ Click **🎯 Select**, click any element in the live preview, describe the chang
 
 - A large **❄ Finish & freeze design** button marks a design system as the
   read-only source of truth. Freeze captures a final snapshot, refreshes the zip,
-  and records an **implementation target** plus optional handoff note.
+  and records an **implementation target** (defaults to the current project,
+  chosen from a UI selector; recent/custom paths supported) plus an optional
+  handoff note.
 - While frozen, `design_studio` rejects write/style/asset/history-restore/delete
   and design-agent actions; read, snapshot, review, zip, and open still work.
   `list`/`all` return `frozen` and the freeze record so every agent can see it.
@@ -485,7 +491,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.6.0`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.6.1`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 

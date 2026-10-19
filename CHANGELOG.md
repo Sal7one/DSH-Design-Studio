@@ -2,6 +2,20 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.6.1 — 2026-10-20
+
+Freeze project defaults and selector.
+
+- Freeze no longer requires typing a path. The implementation target defaults to
+  the **current conversation project** (session cwd), falling back to the host
+  cwd only when no session project is available.
+- Added `studio.project`: returns the current project plus recent implementation
+  targets. The freeze modal shows a **project selector** (This project / Recent /
+  Other path) instead of a raw path input by default.
+- Tool `freeze` uses the same session-aware default when `implementation` is
+  omitted; `list`/`all` still expose the recorded target.
+- Tests cover the session default (`/work/project`) and the selector endpoint.
+
 ## 2.6.0 — 2026-10-20
 
 Design freeze: an explicit design → implementation handoff.
