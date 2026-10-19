@@ -91,7 +91,9 @@ implementation change (work in the target) or design change (ask them to thaw).
 
 When you believe a design is complete, ask one `ask_user_question` with exactly
 three choices: **Keep refining**, **Freeze only**, **Freeze & implement**. Act on
-the answer; ask once per design, not after every edit. Skip the gate when the
+the answer. Ask once per **completed revision**, not after every tiny edit; after
+Keep refining and the next revision, ask again with the native tool — do not
+substitute a plain-chat question while it is available. Skip the gate when the
 operator already approved or asked to implement. If the question tool is
 unavailable, use a short numbered question with the same choices.
 

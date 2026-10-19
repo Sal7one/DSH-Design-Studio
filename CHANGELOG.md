@@ -2,6 +2,18 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.7.1 — 2026-10-20
+
+Repeat the completion gate after refinement.
+
+- The agent now asks the native “Design ready” question once per **completed
+  revision**, not once per design. After **Keep refining** finishes a new
+  revision, it calls `ask_user_question` again instead of falling back to a
+  plain-chat “should I freeze?” message.
+- Plain chat is explicitly only the fallback when the question tool is
+  unavailable. Approval/implementation remains a skip condition.
+- Tests assert the revised gate rules. Version 2.7.1.
+
 ## 2.7.0 — 2026-10-20
 
 Workspace-local design storage.

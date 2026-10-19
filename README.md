@@ -7,6 +7,10 @@ Everything is backed by real files in the current workspace under
 `design-studio/`, and the install is **launch-persistent**: install once, the
 Design Studio tab is there on every launch.
 
+> **2.7.1 — repeat the Design ready gate after refinement.** Choose **Keep
+> refining**, finish the next revision, and the native three-choice question
+> returns. No plain-chat fallback while `ask_user_question` is available.
+>
 > **2.7.0 — workspace-local designs.** New designs live in the current workspace
 > at `design-studio/<slug>/`, readable by workspace-sandboxed agents. Profile
 > `temp_design_folder/` remains only for legacy designs, global config/presets
@@ -257,8 +261,9 @@ Click **🎯 Select**, click any element in the live preview, describe the chang
   project.
 - **Completion gate**: when the design is ready, the agent asks one native
   question with three choices — **Keep refining**, **Freeze only**, or
-  **Freeze & implement** — then acts on the answer. It asks once per design, not
-  after every edit.
+  **Freeze & implement** — then acts on the answer. It asks once per completed
+  revision, not after every tiny edit; after a refinement it asks again with the
+  native tool instead of falling back to plain chat.
 
 ### Freshness stamps (multi-agent safety)
 
@@ -542,7 +547,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.7.0`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.7.1`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 

@@ -270,9 +270,12 @@ conversation project.
 
 At design completion the agent should ask **one** native `ask_user_question`
 with three choices — **Keep refining**, **Freeze only**, **Freeze & implement** —
-and act on the answer. Ask once per design, not after every edit. Skip the gate
-when the operator already approved or asked to implement. If the question tool
-is unavailable, use a short numbered question with the same choices.
+and act on the answer. Ask once per **completed revision**, not after every tiny
+edit. After **Keep refining** and the next revision, ask again with the native
+question tool; do not substitute a plain-chat question while the tool is
+available. Skip the gate when the operator already approved or asked to
+implement. If the question tool is unavailable, use a short numbered question
+with the same choices.
 
 ## 16. Safety
 
