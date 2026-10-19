@@ -4,8 +4,8 @@ A **DeepSeek Harness plugin** that turns design mockups into a first-class AI wo
 Live previews, an element picker, a real design agent, vision review, identity presets —
 and a two-agent apply flow where **DeepSeek edits and the design agent verifies**.
 Everything is backed by real files in the current workspace under
-`design-studio/`, and everything is
-**launch-persistent**: install once, the Design Studio tab is there on every launch.
+`design-studio/`, and the install is **launch-persistent**: install once, the
+Design Studio tab is there on every launch.
 
 > **2.7.0 — workspace-local designs.** New designs live in the current workspace
 > at `design-studio/<slug>/`, readable by workspace-sandboxed agents. Profile
@@ -378,7 +378,8 @@ directly. The key is stored via the credential seam and never shown again.
    ```sh
    npx @deepseek-ai/dsh web
    ```
-   A browser window opens at `http://127.0.0.1:3080` — that's the harness Web UI.
+   A browser window opens at the harness URL it prints (usually a loopback
+   address such as `http://127.0.0.1:<port>`) — that's the harness Web UI.
 3. **Install this plugin:**
    ```sh
    dsh plugin --profile desktop add @sal7one/dsh-design-studio
@@ -387,16 +388,25 @@ directly. The key is stored via the credential seam and never shown again.
    appears in every conversation, plus Settings → Design Studio / All designs.
 5. **Design something.** Create a design system, or just describe a screen to the
    assistant — it routes briefs into the studio automatically. The live preview is
-   `http://127.0.0.1:3080/design-studio/<name>/html/index.html`.
+   served at `<harness-origin>/design-studio/<name>/html/index.html` (the exact
+   origin is the one printed by the harness).
 
 ## Workflows
+
+**Design → freeze → implement.** Describe the mockup. The plugin's injected
+routing keeps the agent in design mode until the design is approved. When it
+thinks the design is ready it asks one native question: **Keep refining**,
+**Freeze only**, or **Freeze & implement**. Freeze defaults to the current
+project. “LGTM / looks good / done” freezes directly; “freeze and implement”
+does both without another confirmation.
 
 **Iterate with the design agent.** Open the Design Studio tab → select your design →
 type a request in the agent chat ("make the status bar left-aligned", "use this image
 as the background"). It reads, edits and summarizes; the preview reloads.
 
 **Pick an element and let DeepSeek change it.** 🎯 Select → click the element → type
-the change → **🤖 Ask DeepSeek**. The request appears in your main chat, DeepSeek
+the change → **Enter** sends it to Ask DeepSeek (Shift+Enter adds a line; Save only
+writes the request without sending). The request appears in your main chat, DeepSeek
 edits, the tab banner tracks progress, and the design agent auto-verifies the result.
 
 **Give DeepSeek a visual job.** Drop a palette image on the tab (it lands in
@@ -420,6 +430,22 @@ tool result.
   or an OpenRouter key under credential reference `OPENROUTER_API_KEY` as the fallback.
 - For **📷 Capture**: a local Microsoft Edge, Google Chrome, or Chromium install.
   It is optional; the rest of the studio works without it.
+
+## Storage and upgrades (2.7.0)
+
+- **New designs:** `<workspace>/design-studio/<slug>/`. These are ordinary
+  workspace files and can be committed, reviewed and edited under the normal
+  sandbox.
+- **Profile:** `temp_design_folder/` still holds global config, presets, the
+  slug registry, and **legacy** designs created before 2.7.0.
+- **Legacy designs are not auto-migrated.** They remain readable and editable
+  from the Studio, but a workspace-only agent may not have filesystem access to
+  the profile path. New work should use a new workspace design.
+- **Slug collisions:** a slug is unique across the profile registry and legacy
+  designs. Creating the same slug in another workspace is rejected. Use a
+  unique slug, or migrate the legacy design deliberately.
+- **Preview** resolves the design's registered root, so `/design-studio/<slug>/`
+  works for both workspace and legacy designs.
 
 ## Issue #1 — install/distribution failure
 

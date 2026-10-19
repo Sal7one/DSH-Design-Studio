@@ -53,7 +53,7 @@ Check the rendered result with `action=snapshot`, fix overflow/contrast/focus,
 then `action=zip` and report:
 
 ```text
-http://127.0.0.1:61546/design-studio/<slug>/html/index.html
+http://<harness-origin>/design-studio/<slug>/html/index.html
 ```
 
 ## Edit workflow

@@ -103,7 +103,7 @@ Common actions:
 The preview URL is:
 
 ```text
-http://127.0.0.1:61546/design-studio/<slug>/html/index.html
+http://<harness-origin>/design-studio/<slug>/html/index.html
 ```
 
 Use `open` when the DSH in-app browser is unsuitable; it launches the OS browser.
@@ -296,3 +296,22 @@ npm test
 
 `lib/client.js` is generated and committed. `npm test` targets the two test files
 explicitly so ignored research checkouts are not discovered.
+
+## 18. Storage and upgrades (2.7.0)
+
+- New designs: `<workspace>/design-studio/<slug>/`. They are ordinary workspace
+  files, readable by any agent scoped to that workspace.
+- Profile `temp_design_folder/` retains global config, presets, the slug
+  registry, and legacy designs made before 2.7.0.
+- Legacy designs are **not auto-migrated**. They stay readable in the Studio,
+  but a workspace-only agent may not have access to the profile path. New work
+  should use a new workspace design.
+- Slugs are unique across the registry and legacy designs; a same-slug create in
+  another workspace is rejected rather than overwriting the registry.
+- The plugin's fs service may be narrower than the workspace agent policy. When
+  a design text write is denied, the plugin falls back to the same Node write
+  seam used for binary assets; this is why workspace files still land.
+- Preview, zip, assets, history, styles, freeze and delete resolve the registered
+  root per design; list/all expose the absolute `root`.
+- Delete removes the design's history directory as well as the design folder,
+  zip, freeze record and request marker.
