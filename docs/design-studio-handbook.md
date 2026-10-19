@@ -264,6 +264,12 @@ frozen design”. “Done / looks good / LGTM / freeze” is enough to trigger t
 handoff; “freeze and implement” does both. Freeze defaults to the current
 conversation project.
 
+At design completion the agent should ask **one** native `ask_user_question`
+with three choices — **Keep refining**, **Freeze only**, **Freeze & implement** —
+and act on the answer. Ask once per design, not after every edit. Skip the gate
+when the operator already approved or asked to implement. If the question tool
+is unavailable, use a short numbered question with the same choices.
+
 ## 16. Safety
 
 - Writes are scoped to `temp_design_folder/<slug>/`; do not escape it.

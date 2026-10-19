@@ -2,6 +2,20 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.6.3 — 2026-10-20
+
+Design-completion question gate.
+
+- The injected routing now tells the agent to ask **one** native
+  `ask_user_question` when it believes the design is complete, with three
+  choices: **Keep refining**, **Freeze only**, **Freeze & implement**. Each
+  choice drives the next action; the question is asked once per design, not
+  after every edit.
+- The gate is skipped when approval/implementation was already explicit. If the
+  question tool is unavailable, a numbered text question with the same choices
+  is the fallback.
+- Tests assert the question gate and its three labels. Version 2.6.3.
+
 ## 2.6.2 — 2026-10-20
 
 Built-in design→freeze→implementation routing.

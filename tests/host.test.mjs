@@ -193,6 +193,11 @@ test('host half registers current contracts and exercises the studio flow', asyn
   assert.match(harness.sections[0].text, /defaults to this\s+conversation's project/)
   assert.match(harness.sections[0].text, /never ask the operator for a path/)
   assert.match(harness.sections[0].text, /freeze and implement/)
+  assert.match(harness.sections[0].text, /ask_user_question/)
+  assert.match(harness.sections[0].text, /Design ready/)
+  assert.match(harness.sections[0].text, /Keep refining/)
+  assert.match(harness.sections[0].text, /Freeze & implement/)
+  assert.match(harness.sections[0].text, /Ask this gate only once per design/)
 
   const route = harness.routes.find((r) => r.path === '/design-studio')
   assert.ok(route, '/design-studio route registered')

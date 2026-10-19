@@ -6,6 +6,10 @@ and a two-agent apply flow where **DeepSeek edits and the design agent verifies*
 Everything is backed by real files under `temp_design_folder/`, and everything is
 **launch-persistent**: install once, the Design Studio tab is there on every launch.
 
+> **2.6.3 — design-ready question gate.** When the design is done, the agent asks
+> one native question with **Keep refining / Freeze only / Freeze & implement**,
+> then acts on the choice. Asked once, not after every edit.
+>
 > **2.6.2 — built-in design→freeze→implementation routing.** The plugin injects
 > the workflow into the DSH system prompt: design phase is default, LGTM/done
 > freezes, frozen means implement in the current project, and “freeze and
@@ -244,6 +248,10 @@ Click **🎯 Select**, click any element in the live preview, describe the chang
   freeze…”, or “implement the frozen design” on every project. Approving with
   **done / looks good / LGTM / freeze** is enough; freeze defaults to the current
   project.
+- **Completion gate**: when the design is ready, the agent asks one native
+  question with three choices — **Keep refining**, **Freeze only**, or
+  **Freeze & implement** — then acts on the answer. It asks once per design, not
+  after every edit.
 
 ### Freshness stamps (multi-agent safety)
 
@@ -501,7 +509,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.6.2`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.6.3`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 

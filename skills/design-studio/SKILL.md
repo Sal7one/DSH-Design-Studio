@@ -89,6 +89,12 @@ A design system can be frozen as a read-only handoff.
 If the operator asks for a design change while a design is frozen, clarify:
 implementation change (work in the target) or design change (ask them to thaw).
 
+When you believe a design is complete, ask one `ask_user_question` with exactly
+three choices: **Keep refining**, **Freeze only**, **Freeze & implement**. Act on
+the answer; ask once per design, not after every edit. Skip the gate when the
+operator already approved or asked to implement. If the question tool is
+unavailable, use a short numbered question with the same choices.
+
 ## Styles
 
 - `design_studio action=style_list` lists styles; `style_apply` applies one.
