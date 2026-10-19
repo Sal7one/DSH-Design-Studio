@@ -2,6 +2,14 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.4.6 — 2026-10-20
+
+Assets full-view top spacing.
+
+- The full-screen Asset library overlay now starts below the OS/window controls
+  (56px top padding, 48px on narrow screens), so its Upload/Refresh/Close row no
+  longer collides with the window buttons.
+
 ## 2.4.5 — 2026-10-20
 
 Cancellable delete confirmation.
