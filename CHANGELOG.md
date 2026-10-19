@@ -2,6 +2,26 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.4.0 — 2026-10-20
+
+Style pager, random-next preview, reversible applies, and per-edit auto snapshots.
+
+### Added — style pager and safe apply flow
+
+- **Horizontal style pager** in the Styles tab: large current-style card, previous/
+  next arrows, a horizontal palette strip to jump to any style, and a Grid toggle.
+- Preview bar now keeps **Try another random** beside Apply with breathing room,
+  plus Apply/Revert. Switching styles stays in the live preview without writing.
+- **Apply is reversible**: before applying a style, the host captures a
+  `before-style` snapshot. The returned `beforeSnapshot` drives an **Undo apply**
+  action in the Styles panel and the preview bar, alongside History restore.
+- **Auto snapshots after AI edits**: the design-agent turn now captures a snapshot
+  when it finishes, and debounced file-change captures were widened to 2.2s so
+  one batch/prompt settles into one snapshot. Existing style applies also capture
+  the pre-style state.
+- Tests now target `tests/host.test.mjs` and `tests/client.test.mjs` explicitly so
+  ignored research checkouts are never discovered by `npm test`.
+
 ## 2.3.0 — 2026-10-20
 
 Attributed style atlas, live style previews, and save/create from style.

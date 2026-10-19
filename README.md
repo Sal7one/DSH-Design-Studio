@@ -6,6 +6,10 @@ and a two-agent apply flow where **DeepSeek edits and the design agent verifies*
 Everything is backed by real files under `temp_design_folder/`, and everything is
 **launch-persistent**: install once, the Design Studio tab is there on every launch.
 
+> **2.4.0 — style pager and safe applies.** Horizontal style pager with a palette
+> strip, random-next preview, one-click Undo apply backed by a pre-style snapshot,
+> and auto snapshots after AI edit batches/agent turns.
+>
 > **2.3.0 — attributed style atlas.** 88 design styles from dsh-ui-ux-pro-max
 > (MIT) are vendored as normalized data, then exposed through a **Styles** tab:
 > try a style live in the current design, apply tokens, create a new project from
@@ -131,10 +135,11 @@ DSH-Design-Studio/
   are excluded from the library.
 - **Attributed style atlas** — 88 styles, 192 palettes and font moods adapted from
   **dsh-ui-ux-pro-max** (MIT; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)).
-  The **Styles** tab filters/searches styles, previews one live against the current
-  design without touching files, applies tokens (preserving design-specific custom
-  variables), creates a new project from the full template, and saves the current
-  `token.css` as a reusable custom style. Random style and font mood are built in.
+  The **Styles** tab has a horizontal pager with a palette strip, filters/search,
+  live **Try** against the current design without touching files, random-next,
+  Apply with a pre-style snapshot and **Undo apply**, full-template **New**, and
+  “Save current” into a reusable custom style. Auto snapshots follow AI edit
+  batches and design-agent turns.
 - **Content-addressed edit history** — every design gets a snapshot tree under
   `_studio/history/<slug>/`: sha256 blobs, sorted tree manifests, and parent-linked
   snapshots with a head cursor. Auto-capture runs after edits settle; the **History**
@@ -415,7 +420,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.3.0`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.4.0`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 
