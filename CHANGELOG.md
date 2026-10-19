@@ -2,6 +2,19 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.5.0 — 2026-10-20
+
+Repo-local Design Studio knowledge and skill.
+
+- Added `docs/design-studio-handbook.md`: design-system layout, UI map, tool
+  actions, create/edit/selection workflows, style tour, history, vision,
+  responsive/accessibility checks, assets, safety, and maintainer verification.
+- Added `skills/design-studio/SKILL.md`: a reusable working procedure for agents
+  building, editing, previewing, styling, snapshotting, and reviewing mockups.
+- Added `AGENTS.md` and `skills/README.md` so repo agents know where the material
+  lives. These are explicitly **not installed into the DSH profile yet**.
+- Packaged the handbook, skill folder, and AGENTS.md; version 2.5.0.
+
 ## 2.4.6 — 2026-10-20
 
 Assets full-view top spacing.

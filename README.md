@@ -6,6 +6,10 @@ and a two-agent apply flow where **DeepSeek edits and the design agent verifies*
 Everything is backed by real files under `temp_design_folder/`, and everything is
 **launch-persistent**: install once, the Design Studio tab is there on every launch.
 
+> **2.5.0 — agent handbook + skill.** Added a repo-local Design Studio handbook,
+> a reusable `design-studio` skill, and `AGENTS.md` guidance. Not installed into
+> the DSH profile yet.
+>
 > **2.4.6 — assets top spacing.** The full-screen Asset library starts below the
 > OS/window controls, so Upload/Refresh/Close no longer overlap them.
 >
@@ -250,6 +254,19 @@ Click **🎯 Select**, click any element in the live preview, describe the chang
 
 ---
 
+## Agent knowledge and skill
+
+For agents working in this repo, Design Studio now has a repo-local handbook and
+skill. These are **not installed into the DSH profile yet**; they are source
+material for future distribution.
+
+- [docs/design-studio-handbook.md](docs/design-studio-handbook.md) — workflows,
+  file layout, style/history/vision behavior, quality checklist, and safety.
+- [skills/design-studio/SKILL.md](skills/design-studio/SKILL.md) — the working
+  procedure for creating, editing, previewing, styling, snapshotting, and
+  reviewing mockups.
+- [AGENTS.md](AGENTS.md) — repository-level guidance for coding agents.
+
 ## Quick start
 
 Works with both harness distributions — the npm distribution
@@ -449,7 +466,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.4.6`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.5.0`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 
