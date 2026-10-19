@@ -1,37 +1,70 @@
 {
   "name": "@sal7one/dsh-design-studio",
-  "version": "1.2.3",
-  "private": true,
-  "description": "Persistent dual-face Design Studio plugin for the DSH harness: the design_studio agent tool (design systems under temp_design_folder/, identity presets, OpenRouter vision review, and a real harness-subagent design agent that lists, reads and edits the design files itself), the /design-studio live-preview route + JSON API, a design-brief prompt section, and the built-in Design Studio web UI (conversation tab, agent chat, settings pages). Install once \u2014 the tab appears on every launch. Zero runtime dependencies (plain JS).",
+  "version": "2.1.0",
+  "description": "Persistent Design Studio plugin for DeepSeek Harness: the design_studio agent tool, a /design-studio live-preview route + JSON API, identity presets, OpenRouter vision review, a real harness-subagent design agent, and a vision-first Settings page — plus the built-in Design Studio conversation tab. Zero runtime dependencies (plain JS, no install-time build step).",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
     ".": "./lib/index.js",
     "./client": "./lib/client.js",
     "./cordis.patch.yml": "./cordis.patch.yml",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
     "./package.json": "./package.json"
   },
   "files": [
     "lib",
     "cordis.patch.yml",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "locale/*.json",
+    "icon.svg"
   ],
   "license": "MIT",
+  "author": "Sal7one",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sal7one/DSH-Design-Studio.git"
+  },
+  "homepage": "https://github.com/Sal7one/DSH-Design-Studio#readme",
+  "bugs": {
+    "url": "https://github.com/Sal7one/DSH-Design-Studio/issues"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "design-studio",
+    "design-system",
+    "ui-mockup",
+    "openrouter"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
-    "node": ">=22"
+    "node": ">=22",
+    "dsh": ">=0.2.0-rc.2 <0.3.0"
+  },
+  "scripts": {
+    "build:client": "node scripts/bundle-client.mjs",
+    "check": "node scripts/check.mjs",
+    "test": "node --test"
   },
   "dsh": {
+    "manifestVersion": 1,
     "bundle": {
       "patch": "./cordis.patch.yml"
     },
     "client": {
       "platform": "web",
+      "immediately": true,
       "inject": [
-        "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-ui-slots",
         "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-connection",
-        "@deepseek-ai/dsh-api-remotes"
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-session",
+        "@deepseek-ai/dsh-client-ui-settings"
       ]
     }
   }
