@@ -56,6 +56,11 @@ Keep it in sync with the files.
 
 Tabs: **Preview, Styles, Agent, Assets, History, Review, Upload, Settings**.
 
+The workspace bar above the tabs includes a **Design** selector. It lists every
+visible design, marks frozen ones with 🔒, and switches the preview, files,
+history, assets, styles and freeze state. Studio-wide settings (vision, capture
+size, agent preset) are global, not per design.
+
 - **Preview** — live iframe, `Fit` (default, scales the whole device into the
   stage) / `1:1`, desktop/tablet/mobile frame, element Select, snapshot/review,
   OS-browser open. The style tour appears above the iframe while active.

@@ -2,6 +2,19 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.7.3 — 2026-10-20
+
+Design switcher in every tab.
+
+- The workspace bar now has a **Design** selector that lists all visible designs
+  and marks frozen ones with 🔒. Preview no longer hides the only way to switch
+  designs.
+- Switching clears the selection/style preview and reloads that design's
+  preview, history, assets, styles and freeze state.
+- Each design keeps its own files, history, assets and freeze. Studio-wide
+  settings (vision, capture size, agent preset) remain global.
+- Added a two-design switcher render test. Version 2.7.3.
+
 ## 2.7.2 — 2026-10-20
 
 Keep workspace designs visible across conversations.

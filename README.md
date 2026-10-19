@@ -7,6 +7,10 @@ Everything is backed by real files in the current workspace under
 `design-studio/`, and the install is **launch-persistent**: install once, the
 Design Studio tab is there on every launch.
 
+> **2.7.3 — design switcher.** Preview now has a **Design** selector in the
+> workspace bar for every visible design, with frozen badges; switching reloads
+> that design's files, history, assets, styles and freeze state.
+>
 > **2.7.2 — workspace designs visible across chats.** A design in
 > `<workspace>/design-studio/` appears in every conversation rooted at that
 > workspace, not just the chat that created it. Legacy profile designs keep
@@ -242,6 +246,11 @@ Click **🎯 Select**, click any element in the live preview, describe the chang
 | **🤖 Ask DeepSeek** *(default)* | Saves `EDIT_REQUEST.md`, sends the request to your **main chat** through the retained Session binding (`session.prompt(..., 'queue')`). DeepSeek edits the files itself and invokes the design agent only when it needs a visual read. A **live run banner** tracks queued → working → finished in the tab, and the studio **auto-runs a design-agent verification** once the edits settle. |
 | **◈ Make the design agent do it** | The classic flow: the design agent applies the change itself and replies in its chat. |
 | **💾 Save only** | Just writes `EDIT_REQUEST.md` — apply later from either chat. |
+
+- **Design switcher** — the workspace bar in every tab (including Preview) lists
+  all designs and marks frozen ones with 🔒. Switching reloads that design's
+  preview, files, history, assets, styles and freeze state. Studio-wide settings
+  (vision, capture size, agent preset) remain global.
 
 ### Design freeze (design → implementation handoff)
 
@@ -553,7 +562,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.7.2`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.7.3`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 

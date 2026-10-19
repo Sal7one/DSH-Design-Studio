@@ -262,6 +262,9 @@ test('studio workspace renders its library, tabs and default preview tab', async
     assert.ok(frozenText.includes(label), 'frozen workspace renders ' + label)
   }
   assert.ok(!frozenText.includes('Finish & freeze design'), 'frozen workspace hides the freeze button')
+  const secondDemo = Object.assign({}, demo, { slug: 'second-design', frozen: false, freeze: null })
+  const switcherText = renderWith({ systems: [demo, secondDemo] })
+  assert.ok(switcherText.includes('second-design'), 'preview includes a design switcher for every design')
   const tourStyle = { id: 'liquid-glass', name: 'Liquid Glass', zh: '液态玻璃', vars: { '--bg': '#fff', '--gold': '#0071e3' } }
   const tourText = renderWith({
     stylePreview: tourStyle,
