@@ -7,102 +7,6 @@ Everything is backed by real files in the current workspace under
 `design-studio/`, and the install is **launch-persistent**: install once, the
 Design Studio tab is there on every launch.
 
-> **2.7.4 — release-review hardening.** Local API rejects cross-site writes,
-> workspace write fallback is root-bound, vision brief overrides work, design
-> switches reset the run banner, and the publish workflow checks tag/version.
-> Freeze's project picker now lists other live chat projects and workspaces with
-> designs. Screenshots now render on npm; the local security model is documented.
->
-> **2.7.3 — design switcher.** Preview now has a **Design** selector in the
-> workspace bar for every visible design, with frozen badges; switching reloads
-> that design's files, history, assets, styles and freeze state.
->
-> **2.7.2 — workspace designs visible across chats.** A design in
-> `<workspace>/design-studio/` appears in every conversation rooted at that
-> workspace, not just the chat that created it. Legacy profile designs keep
-> their old per-session behavior.
->
-> **2.7.1 — repeat the Design ready gate after refinement.** Choose **Keep
-> refining**, finish the next revision, and the native three-choice question
-> returns. No plain-chat fallback while `ask_user_question` is available.
->
-> **2.7.0 — workspace-local designs.** New designs live in the current workspace
-> at `design-studio/<slug>/`, readable by workspace-sandboxed agents. Profile
-> `temp_design_folder/` remains only for legacy designs, global config/presets
-> and the slug registry.
->
-> **2.6.3 — design-ready question gate.** When the design is done, the agent asks
-> one native question with **Keep refining / Freeze only / Freeze & implement**,
-> then acts on the choice. Asked once, not after every edit.
->
-> **2.6.2 — built-in design→freeze→implementation routing.** The plugin injects
-> the workflow into the DSH system prompt: design phase is default, LGTM/done
-> freezes, frozen means implement in the current project, and “freeze and
-> implement” does both. No per-project boilerplate.
->
-> **2.6.1 — project selector for freeze.** Freeze defaults to the current
-> conversation project; choose This project/Recent/Other path from a selector.
-> No path typing required.
->
-> **2.6.0 — design freeze.** A large **Finish & freeze design** handoff marks the
-> mockup read-only, records the implementation target, blocks Studio/AI writes,
-> and switches the agent to implementation mode until an explicit Thaw.
->
-> **2.5.0 — agent handbook + skill.** Added a repo-local Design Studio handbook,
-> a reusable `design-studio` skill, and `AGENTS.md` guidance. Not installed into
-> the DSH profile yet.
->
-> **2.4.6 — assets top spacing.** The full-screen Asset library starts below the
-> OS/window controls, so Upload/Refresh/Close no longer overlap them.
->
-> **2.4.5 — cancel delete.** Arming Delete now shows a Cancel button, so the
-> confirmation can be dismissed without switching tabs.
->
-> **2.4.4 — tab row spacing.** The workspace tab row now has breathing room above
-> it instead of sitting flush against the Create row.
->
-> **2.4.3 — vision warning.** The selection editor warns when the active model
-> has no image input and no OpenRouter fallback is configured, so you know that
-> DeepSeek will edit from files only and cannot visually verify the result.
->
-> **2.4.2 — Enter asks DeepSeek.** In the selection editor, Enter now sends the
-> change to **Ask DeepSeek**; Shift+Enter adds a line, and Save only remains an
-> explicit “don’t send” action.
->
-> **2.4.1 — run banner lifecycle.** The Ask-DeepSeek banner now polls the session
-> binding so a finished run clears on its own; unobserved pickups fall back to
-> “watch the main chat” and finished/untracked banners auto-dismiss after 8s.
->
-> **2.4.0 — style tour and safe applies.** The Styles grid gets a large **Try them
-> now** button that opens a horizontal style tour over the current design; arrow
-> keys auto-try each style. The tour sits above the preview and has a **Fit**
-> toggle that scales and centers the whole preview so the page does not scroll;
-> the strip scrolls horizontally on its own. Random-next preview, one-click Undo
-> apply backed by a pre-style snapshot, and auto snapshots after AI edit
-> batches/agent turns.
->
-> **2.3.0 — attributed style atlas.** 88 design styles from dsh-ui-ux-pro-max
-> (MIT) are vendored as normalized data, then exposed through a **Styles** tab:
-> try a style live in the current design, apply tokens, create a new project from
-> the full template, save the current `token.css` as a custom style, and shuffle
-> fonts/palettes. No runtime dependency on the source repo.
->
-> **2.2.0 — content-addressed edit history.** Every design now has a snapshot tree
-> (`_studio/history/<slug>/`) with sha256 blobs, sorted tree manifests, parent-linked
-> snapshots and a head cursor. Auto-capture runs after edits settle; the **History** tab
-> offers undo-last-edit and restore-to-snapshot.
->
-> **2.1.0 — settings redesign and file split.** A vision-first Settings page (transport,
-> review style, capture viewport, agent preset, auto-verify) and modular host/client
-> sources: `lib/host/*` and `lib/client/src/*`, with a zero-dependency bundler that emits
-> the committed `lib/client.js`. **Installs still need no build step.**
->
-> **2.0.0 — modernized for DSH 0.2.x.** The host now uses the current
-> `ctx.subagents.startActivation` contract and `Agent.id`, the client uses the current
-> slot registration and Session `prompt()` API, and the plugin no longer shells out to
-> `sh`, `curl`, `zip`, `base64` or `screencapture`. The buggy screenshot-capture feature
-> and the unused `dynamic/` prototype were removed. See [CHANGELOG.md](CHANGELOG.md).
-
 ## Screenshots
 
 <p align="center">
@@ -604,3 +508,101 @@ The style-atlas data is adapted with attribution from
 **dsh-ui-ux-pro-max** (contributors) and its upstream
 **ui-ux-pro-max-skill** (Next Level Builder), both MIT.
 See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+## Changelog
+
+> **2.7.4 — release-review hardening.** Local API rejects cross-site writes,
+> workspace write fallback is root-bound, vision brief overrides work, design
+> switches reset the run banner, and the publish workflow checks tag/version.
+> Freeze's project picker now lists other live chat projects and workspaces with
+> designs. Screenshots now render on npm; the local security model is documented.
+>
+> **2.7.3 — design switcher.** Preview now has a **Design** selector in the
+> workspace bar for every visible design, with frozen badges; switching reloads
+> that design's files, history, assets, styles and freeze state.
+>
+> **2.7.2 — workspace designs visible across chats.** A design in
+> `<workspace>/design-studio/` appears in every conversation rooted at that
+> workspace, not just the chat that created it. Legacy profile designs keep
+> their old per-session behavior.
+>
+> **2.7.1 — repeat the Design ready gate after refinement.** Choose **Keep
+> refining**, finish the next revision, and the native three-choice question
+> returns. No plain-chat fallback while `ask_user_question` is available.
+>
+> **2.7.0 — workspace-local designs.** New designs live in the current workspace
+> at `design-studio/<slug>/`, readable by workspace-sandboxed agents. Profile
+> `temp_design_folder/` remains only for legacy designs, global config/presets
+> and the slug registry.
+>
+> **2.6.3 — design-ready question gate.** When the design is done, the agent asks
+> one native question with **Keep refining / Freeze only / Freeze & implement**,
+> then acts on the choice. Asked once, not after every edit.
+>
+> **2.6.2 — built-in design→freeze→implementation routing.** The plugin injects
+> the workflow into the DSH system prompt: design phase is default, LGTM/done
+> freezes, frozen means implement in the current project, and “freeze and
+> implement” does both. No per-project boilerplate.
+>
+> **2.6.1 — project selector for freeze.** Freeze defaults to the current
+> conversation project; choose This project/Recent/Other path from a selector.
+> No path typing required.
+>
+> **2.6.0 — design freeze.** A large **Finish & freeze design** handoff marks the
+> mockup read-only, records the implementation target, blocks Studio/AI writes,
+> and switches the agent to implementation mode until an explicit Thaw.
+>
+> **2.5.0 — agent handbook + skill.** Added a repo-local Design Studio handbook,
+> a reusable `design-studio` skill, and `AGENTS.md` guidance. Not installed into
+> the DSH profile yet.
+>
+> **2.4.6 — assets top spacing.** The full-screen Asset library starts below the
+> OS/window controls, so Upload/Refresh/Close no longer overlap them.
+>
+> **2.4.5 — cancel delete.** Arming Delete now shows a Cancel button, so the
+> confirmation can be dismissed without switching tabs.
+>
+> **2.4.4 — tab row spacing.** The workspace tab row now has breathing room above
+> it instead of sitting flush against the Create row.
+>
+> **2.4.3 — vision warning.** The selection editor warns when the active model
+> has no image input and no OpenRouter fallback is configured, so you know that
+> DeepSeek will edit from files only and cannot visually verify the result.
+>
+> **2.4.2 — Enter asks DeepSeek.** In the selection editor, Enter now sends the
+> change to **Ask DeepSeek**; Shift+Enter adds a line, and Save only remains an
+> explicit “don’t send” action.
+>
+> **2.4.1 — run banner lifecycle.** The Ask-DeepSeek banner now polls the session
+> binding so a finished run clears on its own; unobserved pickups fall back to
+> “watch the main chat” and finished/untracked banners auto-dismiss after 8s.
+>
+> **2.4.0 — style tour and safe applies.** The Styles grid gets a large **Try them
+> now** button that opens a horizontal style tour over the current design; arrow
+> keys auto-try each style. The tour sits above the preview and has a **Fit**
+> toggle that scales and centers the whole preview so the page does not scroll;
+> the strip scrolls horizontally on its own. Random-next preview, one-click Undo
+> apply backed by a pre-style snapshot, and auto snapshots after AI edit
+> batches/agent turns.
+>
+> **2.3.0 — attributed style atlas.** 88 design styles from dsh-ui-ux-pro-max
+> (MIT) are vendored as normalized data, then exposed through a **Styles** tab:
+> try a style live in the current design, apply tokens, create a new project from
+> the full template, save the current `token.css` as a custom style, and shuffle
+> fonts/palettes. No runtime dependency on the source repo.
+>
+> **2.2.0 — content-addressed edit history.** Every design now has a snapshot tree
+> (`_studio/history/<slug>/`) with sha256 blobs, sorted tree manifests, parent-linked
+> snapshots and a head cursor. Auto-capture runs after edits settle; the **History** tab
+> offers undo-last-edit and restore-to-snapshot.
+>
+> **2.1.0 — settings redesign and file split.** A vision-first Settings page (transport,
+> review style, capture viewport, agent preset, auto-verify) and modular host/client
+> sources: `lib/host/*` and `lib/client/src/*`, with a zero-dependency bundler that emits
+> the committed `lib/client.js`. **Installs still need no build step.**
+>
+> **2.0.0 — modernized for DSH 0.2.x.** The host now uses the current
+> `ctx.subagents.startActivation` contract and `Agent.id`, the client uses the current
+> slot registration and Session `prompt()` API, and the plugin no longer shells out to
+> `sh`, `curl`, `zip`, `base64` or `screencapture`. The buggy screenshot-capture feature
+> and the unused `dynamic/` prototype were removed. See [CHANGELOG.md](CHANGELOG.md).
