@@ -4,3 +4,6 @@ node_modules/
 # NOTE: lib/ is NOT ignored — it is the shipped entry point.
 # Local studio data created when running the plugin from this checkout:
 temp_design_folder/
+
+# External reference implementations (research only; never packaged):
+research/dsh-vsceditor/
