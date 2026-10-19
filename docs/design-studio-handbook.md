@@ -258,6 +258,12 @@ system**, not a global switch.
 This is how to avoid the “design or code?” ambiguity: frozen means implementation
 mode; unfrozen means design mode.
 
+The plugin injects this workflow into the DSH system prompt, so operators do not
+need to restate “build the mockup only”, “when I say freeze”, or “implement the
+frozen design”. “Done / looks good / LGTM / freeze” is enough to trigger the
+handoff; “freeze and implement” does both. Freeze defaults to the current
+conversation project.
+
 ## 16. Safety
 
 - Writes are scoped to `temp_design_folder/<slug>/`; do not escape it.

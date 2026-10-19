@@ -1,6 +1,6 @@
 {
   "name": "@sal7one/dsh-design-studio",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "description": "Persistent Design Studio plugin for DeepSeek Harness: the design_studio agent tool, a /design-studio live-preview route + JSON API, identity presets, an attributed 88-style design atlas, content-addressed edit history with undo/restore, OpenRouter vision review, a real harness-subagent design agent, and a vision-first Settings page — plus the built-in Design Studio conversation tab. Zero runtime dependencies (plain JS, no install-time build step).",
   "type": "module",
   "main": "lib/index.js",

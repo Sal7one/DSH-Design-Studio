@@ -188,6 +188,11 @@ test('host half registers current contracts and exercises the studio flow', asyn
   assert.equal(harness.sections.length, 1)
   assert.equal(harness.sections[0].name, 'design-studio-routing')
   assert.match(harness.sections[0].text, /http:\/\/127\.0\.0\.1:4567\/design-studio\/<slug>\/html\/index\.html/)
+  assert.match(harness.sections[0].text, /DESIGN PHASE IS THE DEFAULT/)
+  assert.match(harness.sections[0].text, /LGTM/)
+  assert.match(harness.sections[0].text, /defaults to this\s+conversation's project/)
+  assert.match(harness.sections[0].text, /never ask the operator for a path/)
+  assert.match(harness.sections[0].text, /freeze and implement/)
 
   const route = harness.routes.find((r) => r.path === '/design-studio')
   assert.ok(route, '/design-studio route registered')

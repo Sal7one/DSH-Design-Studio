@@ -2,6 +2,21 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.6.2 — 2026-10-20
+
+Built-in design→freeze→implementation routing.
+
+- The injected DSH system-prompt section now states the workflow automatically:
+  design phase is the default; do not implement until approved/frozen; approving
+  with done / looks good / LGTM / freeze triggers freeze; frozen means implement
+  in the current project, never edit the mockup; “freeze and implement” does both
+  without another confirmation.
+- Freeze defaults to the current conversation project, so operators do not need
+  to write “mockup only”, “when I say freeze…”, or “implement the frozen design”
+  in every project prompt.
+- Expanded the system-prompt test to assert the design-phase, LGTM, default
+  project, no-path-ask, and freeze-and-implement rules.
+
 ## 2.6.1 — 2026-10-20
 
 Freeze project defaults and selector.

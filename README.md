@@ -6,6 +6,11 @@ and a two-agent apply flow where **DeepSeek edits and the design agent verifies*
 Everything is backed by real files under `temp_design_folder/`, and everything is
 **launch-persistent**: install once, the Design Studio tab is there on every launch.
 
+> **2.6.2 — built-in design→freeze→implementation routing.** The plugin injects
+> the workflow into the DSH system prompt: design phase is default, LGTM/done
+> freezes, frozen means implement in the current project, and “freeze and
+> implement” does both. No per-project boilerplate.
+>
 > **2.6.1 — project selector for freeze.** Freeze defaults to the current
 > conversation project; choose This project/Recent/Other path from a selector.
 > No path typing required.
@@ -234,6 +239,11 @@ Click **🎯 Select**, click any element in the live preview, describe the chang
   [skills/design-studio/SKILL.md](skills/design-studio/SKILL.md), and the
   [handbook](docs/design-studio-handbook.md): frozen means work in the
   implementation target, not the mockup.
+- **Built-in routing**: the plugin injects this workflow into the DSH system
+  prompt. Operators do not need to write “build the mockup only”, “when I say
+  freeze…”, or “implement the frozen design” on every project. Approving with
+  **done / looks good / LGTM / freeze** is enough; freeze defaults to the current
+  project.
 
 ### Freshness stamps (multi-agent safety)
 
@@ -491,7 +501,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.6.1`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.6.2`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 
