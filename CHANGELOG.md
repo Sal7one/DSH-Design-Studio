@@ -2,6 +2,14 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.4.5 — 2026-10-20
+
+Cancellable delete confirmation.
+
+- The Delete action now shows a **Cancel** button while armed, so the confirmation
+  can be dismissed without switching tabs. Changing the selected design still
+  disarms it automatically.
+
 ## 2.4.4 — 2026-10-20
 
 Workspace tab row spacing.

@@ -6,6 +6,9 @@ and a two-agent apply flow where **DeepSeek edits and the design agent verifies*
 Everything is backed by real files under `temp_design_folder/`, and everything is
 **launch-persistent**: install once, the Design Studio tab is there on every launch.
 
+> **2.4.5 — cancel delete.** Arming Delete now shows a Cancel button, so the
+> confirmation can be dismissed without switching tabs.
+>
 > **2.4.4 — tab row spacing.** The workspace tab row now has breathing room above
 > it instead of sitting flush against the Create row.
 >
@@ -443,7 +446,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.4.4`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.4.5`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 
