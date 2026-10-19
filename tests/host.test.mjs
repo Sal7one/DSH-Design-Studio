@@ -215,12 +215,13 @@ test('host half registers current contracts and exercises the studio flow', asyn
   const created = await tool.execute({ action: 'create', slug: 'demo' }, exec)
   assert.match(created, /created design system demo/)
   assert.match(created, /bound to this conversation \(session-1\)/)
-  assert.ok(harness.services.fs.files.has('/work/temp_design_folder/demo/html/index.html'))
-  assert.ok(harness.services.fs.files.has('/work/temp_design_folder/demo/design_prompts_forcoders.md'))
+  assert.ok(harness.services.fs.files.has('/work/project/design-studio/demo/html/index.html'))
+  assert.ok(harness.services.fs.files.has('/work/project/design-studio/demo/design_prompts_forcoders.md'))
 
   const firstList = JSON.parse(await tool.execute({ action: 'list' }, exec))
   assert.equal(firstList.length, 1)
   assert.equal(firstList[0].slug, 'demo')
+  assert.equal(firstList[0].root, '/work/project/design-studio')
   assert.equal(firstList[0].sessionId, 'session-1')
   const firstStamp = firstList[0].stamp.hash
   assert.match(firstStamp, /^[0-9a-f-]{36}$/)
@@ -256,7 +257,7 @@ test('host half registers current contracts and exercises the studio flow', asyn
   assert.equal(activation.delivery, 'caller')
   assert.equal(activation.label, 'design-agent:demo')
   assert.equal(activation.request.parent, harness.parent)
-  assert.equal(activation.request.cwd, '/work/temp_design_folder/demo')
+  assert.equal(activation.request.cwd, '/work/project/design-studio/demo')
   assert.equal(activation.request.maxDepth, 1, 'the child is depth 1; 1 allows it and blocks grandchildren')
   assert.ok(activation.request.signal instanceof AbortSignal)
   assert.equal(activation.request.prompt.length, 1)
@@ -266,7 +267,7 @@ test('host half registers current contracts and exercises the studio flow', asyn
 
   // With a vision-capable harness model, selected images are attached to the
   // child prompt instead of being described by OpenRouter first.
-  harness.services.fs.files.set('/work/temp_design_folder/demo/assets/images/palette.png', { content: 'fake-png-bytes', rev: 500 })
+  harness.services.fs.files.set('/work/project/design-studio/demo/assets/images/palette.png', { content: 'fake-png-bytes', rev: 500 })
   const imageAgentResult = await tool.execute(
     { action: 'agent', slug: 'demo', message: 'Use palette.png as the palette', images: ['assets/images/palette.png'] },
     exec,

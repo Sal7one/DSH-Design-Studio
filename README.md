@@ -3,9 +3,15 @@
 A **DeepSeek Harness plugin** that turns design mockups into a first-class AI workflow.
 Live previews, an element picker, a real design agent, vision review, identity presets —
 and a two-agent apply flow where **DeepSeek edits and the design agent verifies**.
-Everything is backed by real files under `temp_design_folder/`, and everything is
+Everything is backed by real files in the current workspace under
+`design-studio/`, and everything is
 **launch-persistent**: install once, the Design Studio tab is there on every launch.
 
+> **2.7.0 — workspace-local designs.** New designs live in the current workspace
+> at `design-studio/<slug>/`, readable by workspace-sandboxed agents. Profile
+> `temp_design_folder/` remains only for legacy designs, global config/presets
+> and the slug registry.
+>
 > **2.6.3 — design-ready question gate.** When the design is done, the agent asks
 > one native question with **Keep refining / Freeze only / Freeze & implement**,
 > then acts on the choice. Asked once, not after every edit.
@@ -146,7 +152,8 @@ DSH-Design-Studio/
   restore edit history (`history / snapshot_save / snapshot_restore / snapshot_undo`),
   apply/save/create styles (`style_list / style_apply / style_save / style_create`),
   manage identity presets, run vision reviews, chat with the design agent, read its history,
-  and configure the studio — all scoped to `temp_design_folder/` design folders.
+  and configure the studio — design files live in the workspace
+  `design-studio/<slug>/` folder (legacy profile designs remain readable).
 - **Live preview route** — `/design-studio/<slug>/html/index.html`, served by the
   harness web server. Inline **Preview** is the default open tab and sits in the same
   tab bar as Agent, Assets, Review, Upload and Settings — no modal, no top-right panel.
@@ -292,8 +299,8 @@ Click **🎯 Select**, click any element in the live preview, describe the chang
   disclosures, so the page stays readable.
 - **Settings → All designs** — every design system across conversations, with
   zip/reveal/delete and an explicit orphan sweep.
-- **Everything survives restarts** — designs, presets, config, reviews and agent
-  history live on disk under `temp_design_folder/`.
+- **Everything survives restarts** — designs live on disk in the workspace
+  `design-studio/`; presets, config, reviews and agent history stay in the profile.
 
 ---
 
@@ -407,8 +414,8 @@ tool result.
   `>=0.2.0-rc.2 <0.3.0`; tested on `0.2.1-rc.2`) with the standard host services
   (`fs`, `subprocess`, `webServer`, `llm`, `credentials`, `attachments`,
   `systemPrompt`, `tools`, plus optional `agents`/`subagents` for the design-agent chat).
-- The design tree root `temp_design_folder/` is **created automatically** on first
-  use; no symlink or manual setup is required.
+- The workspace `design-studio/` folder is **created automatically** on first use;
+  legacy profile designs remain readable. No symlink or manual setup is required.
 - For vision: a harness model that advertises image input (preferred; no extra key),
   or an OpenRouter key under credential reference `OPENROUTER_API_KEY` as the fallback.
 - For **📷 Capture**: a local Microsoft Edge, Google Chrome, or Chromium install.
@@ -509,7 +516,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.6.3`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.7.0`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 

@@ -2,6 +2,26 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.7.0 — 2026-10-20
+
+Workspace-local design storage.
+
+- New design systems live in the **current workspace** under `design-studio/<slug>/`,
+  so the workspace sandbox can read/edit them like any project file. The profile
+  `temp_design_folder/` is now only for legacy designs, global config, presets and
+  the slug registry.
+- `list`/`all` report each design's absolute `root`; the selected-element prompt
+  uses the real design root instead of the old profile path.
+- Added a host slug registry and per-slug design roots. Preview, zip, assets,
+  history, styles, snapshots, freeze, delete, and the design agent resolve the
+  correct workspace root even with multiple conversations/projects open.
+- The plugin fs service can be narrower than the agent workspace policy; design
+  text writes fall back to the existing Node write seam when the service denies
+  a workspace path.
+- Delete now removes the design's history directory too.
+- Existing profile designs remain readable as legacy; new designs are workspace
+  local. Version 2.7.0.
+
 ## 2.6.3 — 2026-10-20
 
 Design-completion question gate.

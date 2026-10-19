@@ -5,7 +5,8 @@ is a repo-local handbook; it is not installed into a DSH profile.
 
 ## 1. What this plugin is
 
-A persistent Design Studio under `temp_design_folder/` with:
+A persistent Design Studio in the **current workspace** under
+`design-studio/`, with:
 
 - a `design_studio` agent tool (create/read/write/zip/history/styles/assets/review/agent);
 - a `/design-studio/<slug>/html/index.html` live-preview route;
@@ -31,7 +32,7 @@ or runtime integrations.
 ## 3. Design system layout
 
 ```text
-temp_design_folder/<slug>/
+<workspace>/design-studio/<slug>/
   html/index.html
   css/style.css
   css/token.css
@@ -43,6 +44,9 @@ temp_design_folder/<slug>/
   EDIT_REQUEST.md            # created by element selection
   preview.png                # captured preview
 ```
+
+Global config/presets and the slug registry stay in the profile; legacy designs
+made before workspace-local storage remain readable from `temp_design_folder/`.
 
 `design_prompts_forcoders.md` is the implementation brief: visual direction,
 layout, type, color, interaction/state notes, responsive behavior, constraints.
@@ -272,7 +276,8 @@ is unavailable, use a short numbered question with the same choices.
 
 ## 16. Safety
 
-- Writes are scoped to `temp_design_folder/<slug>/`; do not escape it.
+- Writes are scoped to the design system's `design-studio/<slug>/` folder
+  (legacy profile designs remain under `temp_design_folder/<slug>/`); do not escape it.
 - Never put credentials in mockups, prompts, snapshots, or asset manifests.
 - The OpenRouter key is a credential reference; its value is never returned.
 - Research clones under `research/` are reference-only and ignored; never package

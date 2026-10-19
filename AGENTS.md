@@ -10,8 +10,9 @@ When the task is a design brief or an edit to a mockup:
 
 1. Load the repo skill: `skills/design-studio/SKILL.md`.
 2. Read `docs/design-studio-handbook.md` for the full workflow.
-3. Use the `design_studio` tool; do not hand-assemble the design-system file
-   layout or write outside `temp_design_folder/`.
+3. Use the `design_studio` tool; design files live in the workspace
+   `design-studio/<slug>/` (legacy profile `temp_design_folder/` designs remain
+   readable). Do not hand-assemble the layout or write outside the design folder.
 4. Check `design_studio action=list` and the freshness stamp before editing.
 5. If `frozen` is true, stop design work: do not write the mockup or call the
    design agent. Work in the recorded `freeze.implementation` target; if none is
