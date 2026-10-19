@@ -6,6 +6,12 @@ and a two-agent apply flow where **DeepSeek edits and the design agent verifies*
 Everything is backed by real files under `temp_design_folder/`, and everything is
 **launch-persistent**: install once, the Design Studio tab is there on every launch.
 
+> **2.3.0 — attributed style atlas.** 88 design styles from dsh-ui-ux-pro-max
+> (MIT) are vendored as normalized data, then exposed through a **Styles** tab:
+> try a style live in the current design, apply tokens, create a new project from
+> the full template, save the current `token.css` as a custom style, and shuffle
+> fonts/palettes. No runtime dependency on the source repo.
+>
 > **2.2.0 — content-addressed edit history.** Every design now has a snapshot tree
 > (`_studio/history/<slug>/`) with sha256 blobs, sorted tree manifests, parent-linked
 > snapshots and a head cursor. Auto-capture runs after edits settle; the **History** tab
@@ -41,12 +47,15 @@ DSH-Design-Studio/
 ├── package.json          # dual-face manifest: dsh.bundle (host) + dsh.client (web UI)
 ├── cordis.patch.yml      # the composition layer this bundle contributes
 ├── README.md             # this file
-├── CHANGELOG.md          # release notes (2.0 modernization, 2.1 split/settings)
+├── CHANGELOG.md          # release notes (2.3 atlas, 2.2 history, 2.1 split/settings)
 ├── LICENSE               # MIT
+├── THIRD_PARTY_NOTICES.md # style-atlas attribution and MIT notices
 ├── icon.svg              # plugin inventory artwork
 ├── locale/               # plugin inventory display metadata (en/zh)
 ├── repo-images/          # UI screenshots shown at the top of this README
 ├── lib/
+│   ├── data/
+│   │   └── style-atlas.json # attributed 88-style snapshot (no runtime dependency)
 │   ├── index.js          # host orchestrator: design systems, agent, HTTP route + tool
 │   ├── host/             # host domains
 │   │   ├── constants.js  # shared limits, key reference, slug regex
@@ -57,10 +66,12 @@ DSH-Design-Studio/
 │   │   ├── preview.js    # headless preview snapshot
 │   │   ├── presets.js    # identity preset CRUD + apply
 │   │   ├── assets.js     # asset manifest, sha256 dedupe, upload/import/delete
-│   │   └── history.js    # content-addressed blobs, trees, snapshots + restore
+│   │   ├── history.js    # content-addressed blobs, trees, snapshots + restore
+│   │   └── styles.js     # style atlas apply/save/create + CSS token generation
 │   ├── client.js         # GENERATED self-contained ModuleLoader bundle (shipped)
 │   └── client/src/       # runtime, styles, labels, primitives, api, element-picker,
-│                         #   scaled-preview, assets-modal, history, studio-view, settings, index
+│                         #   scaled-preview, assets-modal, history, style-atlas,
+│                         #   studio-view, settings, index
 ├── scripts/
 │   ├── check.mjs         # dependency-free release/check script
 │   └── bundle-client.mjs # source → lib/client.js; installs never run it
@@ -83,6 +94,7 @@ DSH-Design-Studio/
   `list / all / create / read / write / zip / reveal / delete / sweep` design systems,
   manage assets (`asset_list / asset_upload / asset_import / asset_delete`), save and
   restore edit history (`history / snapshot_save / snapshot_restore / snapshot_undo`),
+  apply/save/create styles (`style_list / style_apply / style_save / style_create`),
   manage identity presets, run vision reviews, chat with the design agent, read its history,
   and configure the studio — all scoped to `temp_design_folder/` design folders.
 - **Live preview route** — `/design-studio/<slug>/html/index.html`, served by the
@@ -117,6 +129,12 @@ DSH-Design-Studio/
   `assets/assets.json`, and offers thumbnails, a lightbox, copy-path/copy-`<img>`, and
   delete. `asset_import` can pull an operator attachment path directly. Preview captures
   are excluded from the library.
+- **Attributed style atlas** — 88 styles, 192 palettes and font moods adapted from
+  **dsh-ui-ux-pro-max** (MIT; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)).
+  The **Styles** tab filters/searches styles, previews one live against the current
+  design without touching files, applies tokens (preserving design-specific custom
+  variables), creates a new project from the full template, and saves the current
+  `token.css` as a reusable custom style. Random style and font mood are built in.
 - **Content-addressed edit history** — every design gets a snapshot tree under
   `_studio/history/<slug>/`: sha256 blobs, sorted tree manifests, and parent-linked
   snapshots with a head cursor. Auto-capture runs after edits settle; the **History**
@@ -397,7 +415,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.2.0`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.3.0`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 
@@ -407,3 +425,7 @@ carry the `#dsh-plugin` topic for discovery).
 ## License
 
 MIT
+
+The style-atlas data is adapted with attribution from
+**dsh-ui-ux-pro-max** by ChenYiming-aaa and its upstream
+**ui-ux-pro-max-skill**, both MIT. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

@@ -212,7 +212,7 @@ test('studio workspace renders its library, tabs and default preview tab', async
   const makeReact = (overrides) => {
     const seeds = [
       [demo], 'demo', '', '', 0, '', '', '', null, null, null, '', [], false, '', false, null,
-      'preview', 'desktop', [], false, '', '', null, false, null, 0,
+      'preview', 'desktop', null, [], false, '', '', null, false, null, 0,
     ]
     if (overrides && overrides.workspaceTab) seeds[17] = overrides.workspaceTab
     let index = 0
@@ -268,6 +268,28 @@ test('history panel renders its controls', async () => {
   const text = flattenTree(HistoryPanel({ slug: 'demo', onChanged() {} }))
   for (const label of ['Edit history', 'Snapshot now', 'Undo last edit', 'loading snapshots']) {
     assert.ok(text.includes(label), 'history panel renders ' + label)
+  }
+})
+
+test('style atlas renders its gallery controls', async () => {
+  const React = {
+    useState(initial) {
+      return [typeof initial === 'function' ? initial() : initial, () => {}]
+    },
+    useEffect() {},
+    useRef() {
+      return { current: null }
+    },
+    createElement(type, props, ...children) {
+      return { type, props: props || {}, children }
+    },
+  }
+  globalThis.React = React
+  globalThis.h = React.createElement
+  const { StyleAtlas } = await import('../lib/client/src/style-atlas.js?atlas-test')
+  const text = flattenTree(StyleAtlas({ slug: 'demo', onPreview() {}, onChanged() {}, onCreated() {} }))
+  for (const label of ['Style atlas', 'Random style', 'Save current', 'loading style atlas']) {
+    assert.ok(text.includes(label), 'style atlas renders ' + label)
   }
 })
 

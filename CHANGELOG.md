@@ -2,6 +2,33 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.3.0 — 2026-10-20
+
+Attributed style atlas, live style previews, and save/create from style.
+
+### Added — style atlas integration
+
+- Committed `lib/data/style-atlas.json` with **88 styles** adapted from
+  **dsh-ui-ux-pro-max** (MIT) and its upstream `ui-ux-pro-max-skill` (MIT);
+  see `THIRD_PARTY_NOTICES.md`. The plugin has no runtime dependency on either
+  repository or package.
+- New **Styles** tab: search, category/status filters, font mood
+  (auto/serif/sans/mono), random style, palette swatches, Try, Apply, New, and
+  “Save current token.css as…”.
+- **Try** previews a style live in the current design by setting CSS variables
+  on the preview iframe — no files are touched until Apply. The preview bar
+  offers Apply or Revert.
+- **Apply** writes a generated `css/token.css`, preserving design-specific
+  custom tokens (e.g. `--abaya`) while replacing the core palette, type and
+  radii. History auto-captures the change.
+- **New** creates a complete design system from a style (`css/token.css`,
+  html/css/js scaffold and brief), then selects it.
+- **Save current** stores the current `token.css` as a custom style under
+  `_studio/styles/`; custom styles appear in the same gallery and can be applied
+  to current designs or used to create new ones.
+- Host APIs/actions: `studio.styles.list/apply/save/delete/create` and
+  `style_list/style_apply/style_save/style_delete/style_create`.
+
 ## 2.2.0 — 2026-10-19
 
 Content-addressed edit history with undo and restore.

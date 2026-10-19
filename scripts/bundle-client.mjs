@@ -21,6 +21,7 @@ const ORDER = [
   'scaled-preview.js',
   'assets-modal.js',
   'history.js',
+  'style-atlas.js',
   'studio-view.js',
   'settings.js',
   'index.js',

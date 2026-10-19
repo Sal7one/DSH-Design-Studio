@@ -231,6 +231,12 @@ test('host half registers current contracts and exercises the studio flow', asyn
   assert.ok(snapHistory2.count >= snapHistory.count)
   assert.equal(snapHistory2.snapshots[snapHistory2.snapshots.length - 1].current, true)
 
+  const styleList = JSON.parse(await tool.execute({ action: 'style_list' }, exec))
+  assert.equal(styleList.count, 88)
+  assert.equal(styleList.styles[0].id, 'minimalism-and-swiss-style')
+  const styleApplied = await tool.execute({ action: 'style_apply', slug: 'demo', styleId: 'minimalism-and-swiss-style' }, exec)
+  assert.match(styleApplied, /applied style minimalism-and-swiss-style/)
+
   const agentResult = await tool.execute({ action: 'agent', slug: 'demo', message: 'Make it blue' }, exec)
   assert.match(agentResult, /design agent \(harness-spawn-agent\): done/)
 
