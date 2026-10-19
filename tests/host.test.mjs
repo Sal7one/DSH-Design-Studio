@@ -220,6 +220,12 @@ test('host half registers current contracts and exercises the studio flow', asyn
   assert.match(created, /bound to this conversation \(session-1\)/)
   assert.ok(harness.services.fs.files.has('/work/project/design-studio/demo/html/index.html'))
   assert.ok(harness.services.fs.files.has('/work/project/design-studio/demo/design_prompts_forcoders.md'))
+  const scaffoldBrief = await tool.execute({ action: 'read', slug: 'demo', path: 'design_prompts_forcoders.md' }, exec)
+  assert.ok(scaffoldBrief.includes('# design_prompts_forcoders — demo'))
+  assert.doesNotMatch(scaffoldBrief, /user_need|service-index|gen-service-index|M2 Pro|7th surface|wire to real endpoints/)
+  const scaffoldJs = await tool.execute({ action: 'read', slug: 'demo', path: 'js/app.js' }, exec)
+  assert.match(scaffoldJs, /DEMO DATA ONLY/)
+  assert.doesNotMatch(scaffoldJs, /wire to real endpoints|fetch\(/)
 
   const firstList = JSON.parse(await tool.execute({ action: 'list' }, exec))
   assert.equal(firstList.length, 1)
@@ -361,7 +367,7 @@ test('host half registers current contracts and exercises the studio flow', asyn
     /DESIGN FROZEN/,
   )
   await assert.rejects(
-    () => tool.execute({ action: 'history_undo', slug: 'demo' }, exec),
+    () => tool.execute({ action: 'snapshot_undo', slug: 'demo' }, exec),
     /DESIGN FROZEN/,
   )
   await assert.rejects(
@@ -371,16 +377,16 @@ test('host half registers current contracts and exercises the studio flow', asyn
   assert.match(await tool.execute({ action: 'read', slug: 'demo', path: 'css/token.css' }, exec), /:root/)
   assert.match(await tool.execute({ action: 'zip', slug: 'demo' }, exec), /_zips\/demo\.zip/)
   assert.match(await tool.execute({ action: 'freeze', slug: 'demo' }, exec), /already frozen/)
-  assert.match(await tool.execute({ action: 'unfreeze', slug: 'demo' }, exec), /design thawed: demo/)
+  assert.match(await tool.execute({ action: 'unfreeze', slug: 'demo', confirm: true }, exec), /design thawed: demo/)
   const thawedList = JSON.parse(await tool.execute({ action: 'list' }, exec))
   assert.equal(thawedList[0].frozen, false)
   await tool.execute({ action: 'write', slug: 'demo', path: 'css/style.css', content: '.topbar { color: blue; }\n' }, exec)
-  assert.match(await tool.execute({ action: 'unfreeze', slug: 'demo' }, exec), /already thawed/)
+  assert.match(await tool.execute({ action: 'unfreeze', slug: 'demo', confirm: true }, exec), /already thawed/)
   assert.match(await tool.execute({ action: 'freeze', slug: 'demo' }, exec), /design frozen: demo/)
   const noTargetList = JSON.parse(await tool.execute({ action: 'list' }, exec))
   assert.equal(noTargetList[0].frozen, true)
   assert.equal(noTargetList[0].freeze.implementation, '/work/project')
-  assert.match(await tool.execute({ action: 'unfreeze', slug: 'demo' }, exec), /design thawed: demo/)
+  assert.match(await tool.execute({ action: 'unfreeze', slug: 'demo', confirm: true }, exec), /design thawed: demo/)
 
   await assert.rejects(() => tool.execute({ action: 'read', slug: 'demo', path: '../escape' }, exec), /invalid path/)
 })
@@ -415,7 +421,8 @@ test('route serves the API and the live preview', async () => {
   assert.equal(apiRes.statusCode, 200)
   const apiBody = JSON.parse(apiRes.body)
   assert.equal(apiBody.ok, true)
-  assert.equal(apiBody.data.studio, 'temp_design_folder')
+  assert.equal(apiBody.data.studio, 'design-studio')
+  assert.equal(apiBody.data.legacyStudio, 'temp_design_folder')
 
   const tool = harness.registeredTools.get('design_studio')
   await tool.execute({ action: 'create', slug: 'preview' }, { agent: { id: 'session-1' } })
@@ -445,6 +452,7 @@ test('route serves the API and the live preview', async () => {
   assert.equal(projectBody.data.defaultPath, process.cwd())
   assert.ok(Array.isArray(projectBody.data.options))
   assert.equal(projectBody.data.options[0].label, 'This project')
+  assert.ok(projectBody.data.options.some((option) => option.path === '/work/project'), 'freeze selector lists other live chat projects')
 
   const sessionProjectRes = fakeRes()
   await route.handler(fakeReq('POST', '/design-studio/__api/studio.project', { sessionId: 'session-1' }), sessionProjectRes)
@@ -466,4 +474,9 @@ test('route serves the API and the live preview', async () => {
   await route.handler(fakeReq('POST', '/design-studio/__api/studio.unfreeze', { slug: 'preview', confirm: true }), thawRes)
   assert.equal(thawRes.statusCode, 200)
   assert.equal(JSON.parse(thawRes.body).data.frozen, false)
+
+  const crossRes = fakeRes()
+  const crossReq = Object.assign(fakeReq('POST', '/design-studio/__api/studio.ping', {}), { headers: { 'sec-fetch-site': 'cross-site' } })
+  await route.handler(crossReq, crossRes)
+  assert.equal(crossRes.statusCode, 403)
 })

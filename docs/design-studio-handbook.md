@@ -245,8 +245,9 @@ system**, not a global switch.
   - slug, timestamp, design stamp
   - final snapshot id
   - implementation target — **defaults to the current conversation project**
-    (session cwd), with a UI selector for this project / recent targets / a
-    custom path
+    (session cwd); the selector also lists other live chat projects, workspaces
+    that already contain designs, and recent freeze targets, with a custom-path
+    fallback
   - optional handoff note
 - `design_studio list` / `all` return `frozen` plus the `freeze` record.
 - While frozen:

@@ -4,10 +4,11 @@
   "count": 88,
   "attribution": {
     "project": "dsh-ui-ux-pro-max",
-    "owner": "ChenYiming-aaa",
+    "owner": "dsh-ui-ux-pro-max contributors",
     "repository": "https://github.com/ChenYiming-aaa/dsh-ui-ux-pro-max",
     "upstream": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
     "license": "MIT",
+    "copyright": "Copyright (c) 2026 dsh-ui-ux-pro-max contributors; Copyright (c) 2024 Next Level Builder",
     "note": "Style names, descriptions and theme tokens adapted from dsh-ui-ux-pro-max (MIT). The Design Studio plugin is independent and does not require or vendor that project."
   },
   "styles": [

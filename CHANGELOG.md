@@ -2,6 +2,35 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.7.4 — 2026-10-20
+
+Release-review hardening.
+
+- Reject cross-site browser writes on the local Studio API (`Sec-Fetch-Site:
+  cross-site` or a mismatched `Origin`) to close the easy CSRF path; add a
+  restrictive CSP to served mockup HTML/SVG.
+- Replace the leaked homelab-specific scaffold brief with a slug-neutral,
+  mockup-only `design_prompts_forcoders.md`; new designs contain no private
+  paths or real-endpoint instructions.
+- Freeze guard now blocks `snapshot_restore`/`snapshot_undo`; tool unfreeze
+  requires explicit `confirm:true`; auto-verify resolves the design root.
+- Correct the third-party copyright notices (contributors + Next Level Builder)
+  and the atlas attribution; fix the stale profile-storage copy and ping
+  contract.
+- Freeze's implementation selector lists other live chat projects and
+  workspaces that already contain designs, not only this project and recent
+  freeze targets.
+- Add a publish-workflow guard that the git tag equals the package version,
+  choose `next` for prereleases, and ship the docs/scripts referenced by the
+  package.
+- Restrict the Node workspace-write fallback to the active design root.
+- Avoid `this`-dependent tool recursion; use the registered tool object.
+- Reset per-design UI state (run banner, agent draft, assets, review, outline,
+  zip) and key asset/style/history panels by slug; functional preview reloads.
+- Respect an explicit `brief` override in vision review.
+- README screenshots use absolute GitHub URLs (work on npm); add the documented
+  local security model.
+
 ## 2.7.3 — 2026-10-20
 
 Design switcher in every tab.

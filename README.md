@@ -7,6 +7,12 @@ Everything is backed by real files in the current workspace under
 `design-studio/`, and the install is **launch-persistent**: install once, the
 Design Studio tab is there on every launch.
 
+> **2.7.4 — release-review hardening.** Local API rejects cross-site writes,
+> workspace write fallback is root-bound, vision brief overrides work, design
+> switches reset the run banner, and the publish workflow checks tag/version.
+> Freeze's project picker now lists other live chat projects and workspaces with
+> designs. Screenshots now render on npm; the local security model is documented.
+>
 > **2.7.3 — design switcher.** Preview now has a **Design** selector in the
 > workspace bar for every visible design, with frozen badges; switching reloads
 > that design's files, history, assets, styles and freeze state.
@@ -100,13 +106,13 @@ Design Studio tab is there on every launch.
 ## Screenshots
 
 <p align="center">
-  <a href="repo-images/screenshot-01.png"><img src="repo-images/screenshot-01.png" width="170" alt="Design Studio screenshot"></a>
-  <a href="repo-images/screenshot-02.png"><img src="repo-images/screenshot-02.png" width="170" alt="Design Studio screenshot"></a>
-  <a href="repo-images/screenshot-03.png"><img src="repo-images/screenshot-03.png" width="170" alt="Design Studio screenshot"></a>
-  <a href="repo-images/screenshot-04.png"><img src="repo-images/screenshot-04.png" width="170" alt="Design Studio screenshot"></a>
-  <a href="repo-images/screenshot-05.png"><img src="repo-images/screenshot-05.png" width="170" alt="Design Studio screenshot"></a>
-  <a href="repo-images/screenshot-06.png"><img src="repo-images/screenshot-06.png" width="170" alt="Design Studio screenshot"></a>
-  <a href="repo-images/screenshot-07.png"><img src="repo-images/screenshot-07.png" width="170" alt="Design Studio screenshot"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-01.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-01.png" width="170" alt="Design Studio screenshot"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-02.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-02.png" width="170" alt="Design Studio screenshot"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-03.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-03.png" width="170" alt="Design Studio screenshot"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-04.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-04.png" width="170" alt="Design Studio screenshot"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-05.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-05.png" width="170" alt="Design Studio screenshot"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-06.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-06.png" width="170" alt="Design Studio screenshot"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-07.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-07.png" width="170" alt="Design Studio screenshot"></a>
 </p>
 
 <p align="center"><em>Click any thumbnail for the full-size image.</em></p>
@@ -169,13 +175,15 @@ DSH-Design-Studio/
   `design-studio/<slug>/` folder (legacy profile designs remain readable).
 - **Live preview route** — `/design-studio/<slug>/html/index.html`, served by the
   harness web server. Inline **Preview** is the default open tab and sits in the same
-  tab bar as Agent, Assets, Review, Upload and Settings — no modal, no top-right panel.
+  tab bar as Styles, Agent, Assets, History, Review, Upload and Settings — no modal, no top-right panel.
   It renders a centered device at a real Desktop (1440×1600), Tablet, or Mobile viewport;
   switching viewport resizes the whole device frame, and the surrounding area uses the
   panel background instead of a white strip. The open Studio polls the selected design's
   stamp every 1.5s and auto-reloads the Preview/outline/assets on external edits.
 - **Large Studio workspace** — a 300px library (Designs, Assets, Outline) and a wide
-  tabbed work area (**Preview / Agent / Assets / Review / Upload / Settings**). The
+  tabbed work area (**Preview / Styles / Agent / Assets / History / Review / Upload / Settings**). The
+  workspace bar's **Design** selector lists every design in the workspace (🔒 when
+  frozen) and switches preview, files, history, assets and styles without leaving Preview.
   Settings and Preview tabs span the full workspace; the standalone Settings page uses a
   two-column layout at wide widths. **Open ↗** is a host action, not a link: it launches
   the OS default browser (`rundll32` / `open` / `xdg-open`), bypassing the DSH in-app
@@ -199,7 +207,7 @@ DSH-Design-Studio/
   `assets/assets.json`, and offers thumbnails, a lightbox, copy-path/copy-`<img>`, and
   delete. `asset_import` can pull an operator attachment path directly. Preview captures
   are excluded from the library.
-- **Attributed style atlas** — 88 styles, 192 palettes and font moods adapted from
+- **Attributed style atlas** — 88 styles plus their theme palettes and font moods adapted from
   **dsh-ui-ux-pro-max** (MIT; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)).
   The **Styles** tab is a gallery grid with a large **Try them now** action. That
   opens a horizontal style tour over the current design: arrows or `←`/`→` auto-try
@@ -256,9 +264,10 @@ Click **🎯 Select**, click any element in the live preview, describe the chang
 
 - A large **❄ Finish & freeze design** button marks a design system as the
   read-only source of truth. Freeze captures a final snapshot, refreshes the zip,
-  and records an **implementation target** (defaults to the current project,
-  chosen from a UI selector; recent/custom paths supported) plus an optional
-  handoff note.
+  and records an **implementation target** (defaults to the current project;
+  the selector also lists other live chat projects, workspaces that already
+  contain designs, and recent freeze targets, with a custom-path fallback) plus
+  an optional handoff note.
 - While frozen, `design_studio` rejects write/style/asset/history-restore/delete
   and design-agent actions; read, snapshot, review, zip, and open still work.
   `list`/`all` return `frozen` and the freeze record so every agent can see it.
@@ -467,6 +476,22 @@ tool result.
 - **Preview** resolves the design's registered root, so `/design-studio/<slug>/`
   works for both workspace and legacy designs.
 
+## Security model
+
+Design Studio is a **local, operator-trusted** tool.
+
+- The HTTP API is loopback-only and unauthenticated. Do not expose the harness
+  port to a network.
+- The preview iframe is same-origin and deliberately unsandboxed so the element
+  picker can inspect the design DOM. A mockup’s HTML/JS is therefore executable
+  code with same-origin access; only open designs you trust.
+- `asset_import` accepts local source paths. Treat the Studio API as equivalent
+  to local file access.
+- Freeze is a tool/context guard, not an OS ACL. Direct file writes are outside
+  its control.
+- The workspace write fallback uses the Node write seam when the host fs policy
+  denies a design path; it is restricted to the active design root.
+
 ## Issue #1 — install/distribution failure
 
 The open issue reported `dsh plugin --profile desktop add git+https://github.com/sal7one/dsh-design-studio.git`
@@ -490,8 +515,9 @@ Two separate problems were involved:
    avoids git entirely.
 
 Verify the published artifact with `npm view @sal7one/dsh-design-studio version`, then
-install from npm (above). A maintainer must run the first `npm publish` (or push a
-`v*` tag with the `NPM_TOKEN` secret configured); the repository is otherwise ready.
+install from npm (above). This release is published by pushing the matching
+`v<package version>` tag with the `NPM_TOKEN` secret configured, or by running
+`npm publish --access public` from a clean checkout.
 
 ## ⚠️ Compatibility notes — current harness contracts
 
@@ -562,7 +588,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.7.3`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.7.4`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 
@@ -574,5 +600,6 @@ carry the `#dsh-plugin` topic for discovery).
 MIT
 
 The style-atlas data is adapted with attribution from
-**dsh-ui-ux-pro-max** by ChenYiming-aaa and its upstream
-**ui-ux-pro-max-skill**, both MIT. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+**dsh-ui-ux-pro-max** (contributors) and its upstream
+**ui-ux-pro-max-skill** (Next Level Builder), both MIT.
+See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

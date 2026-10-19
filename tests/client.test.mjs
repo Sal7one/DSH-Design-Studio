@@ -362,7 +362,7 @@ test('scaled preview and asset modal render their controls', async () => {
   const { AssetsModal } = await import('../lib/client/src/assets-modal.js?modal-test')
 
   const previewText = flattenTree(ScaledPreview({ slug: 'demo', tick: 1, viewport: 'desktop' }))
-  for (const label of ['1440 × 1600', '50%']) {
+  for (const label of ['1440 × 1600', '100%']) {
     assert.ok(previewText.includes(label), 'scaled preview renders ' + label)
   }
 

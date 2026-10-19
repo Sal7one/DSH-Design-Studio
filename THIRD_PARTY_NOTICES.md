@@ -6,11 +6,12 @@ The style catalog in `lib/data/style-atlas.json` is an adapted, attributed
 snapshot of design-style metadata and theme tokens from:
 
 - **Project:** dsh-ui-ux-pro-max
-- **Owner:** ChenYiming-aaa
+- **Owner:** dsh-ui-ux-pro-max contributors
 - **Repository:** https://github.com/ChenYiming-aaa/dsh-ui-ux-pro-max
 - **License:** MIT
 - **Upstream data:** https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
   (MIT; data lineage `56ea9cf`, 2026-10-15)
+- **Upstream copyright:** Copyright (c) 2024 Next Level Builder
 
 The Design Studio plugin is independent: it does not vendor the
 dsh-ui-ux-pro-max repository, depend on its package, or require it at install
@@ -25,7 +26,8 @@ the Style Atlas UI and in this file.
 
 ### MIT License
 
-Copyright (c) 2026 ChenYiming-aaa
+Copyright (c) 2026 dsh-ui-ux-pro-max contributors
+Copyright (c) 2024 Next Level Builder
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
