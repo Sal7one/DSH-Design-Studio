@@ -2,6 +2,13 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.4.4 — 2026-10-20
+
+Workspace tab row spacing.
+
+- Added breathing room above the Preview/Styles/Agent/Assets/History/Review/
+  Upload/Settings tab row so it no longer sits flush against the Create row.
+
 ## 2.4.3 — 2026-10-20
 
 Vision-readiness warning.
