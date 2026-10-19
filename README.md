@@ -6,6 +6,11 @@ and a two-agent apply flow where **DeepSeek edits and the design agent verifies*
 Everything is backed by real files under `temp_design_folder/`, and everything is
 **launch-persistent**: install once, the Design Studio tab is there on every launch.
 
+> **2.2.0 — content-addressed edit history.** Every design now has a snapshot tree
+> (`_studio/history/<slug>/`) with sha256 blobs, sorted tree manifests, parent-linked
+> snapshots and a head cursor. Auto-capture runs after edits settle; the **History** tab
+> offers undo-last-edit and restore-to-snapshot.
+>
 > **2.1.0 — settings redesign and file split.** A vision-first Settings page (transport,
 > review style, capture viewport, agent preset, auto-verify) and modular host/client
 > sources: `lib/host/*` and `lib/client/src/*`, with a zero-dependency bundler that emits
@@ -51,10 +56,11 @@ DSH-Design-Studio/
 │   │   ├── vision.js     # harness + OpenRouter review, image descriptions
 │   │   ├── preview.js    # headless preview snapshot
 │   │   ├── presets.js    # identity preset CRUD + apply
-│   │   └── assets.js     # asset manifest, sha256 dedupe, upload/import/delete
+│   │   ├── assets.js     # asset manifest, sha256 dedupe, upload/import/delete
+│   │   └── history.js    # content-addressed blobs, trees, snapshots + restore
 │   ├── client.js         # GENERATED self-contained ModuleLoader bundle (shipped)
 │   └── client/src/       # runtime, styles, labels, primitives, api, element-picker,
-│                         #   scaled-preview, assets-modal, studio-view, settings, index
+│                         #   scaled-preview, assets-modal, history, studio-view, settings, index
 ├── scripts/
 │   ├── check.mjs         # dependency-free release/check script
 │   └── bundle-client.mjs # source → lib/client.js; installs never run it
@@ -75,8 +81,9 @@ DSH-Design-Studio/
   is bundled ahead of release into the committed `lib/client.js`.
 - **`design_studio` agent tool** — your assistant (and any subagent) can
   `list / all / create / read / write / zip / reveal / delete / sweep` design systems,
-  manage assets (`asset_list / asset_upload / asset_import / asset_delete`), manage
-  identity presets, run vision reviews, chat with the design agent, read its history,
+  manage assets (`asset_list / asset_upload / asset_import / asset_delete`), save and
+  restore edit history (`history / snapshot_save / snapshot_restore / snapshot_undo`),
+  manage identity presets, run vision reviews, chat with the design agent, read its history,
   and configure the studio — all scoped to `temp_design_folder/` design folders.
 - **Live preview route** — `/design-studio/<slug>/html/index.html`, served by the
   harness web server. Inline **Preview** is the default open tab and sits in the same
@@ -110,6 +117,11 @@ DSH-Design-Studio/
   `assets/assets.json`, and offers thumbnails, a lightbox, copy-path/copy-`<img>`, and
   delete. `asset_import` can pull an operator attachment path directly. Preview captures
   are excluded from the library.
+- **Content-addressed edit history** — every design gets a snapshot tree under
+  `_studio/history/<slug>/`: sha256 blobs, sorted tree manifests, and parent-linked
+  snapshots with a head cursor. Auto-capture runs after edits settle; the **History**
+  tab offers manual checkpoints, undo-last-edit, and restore-to-snapshot. Restoring
+  moves the head without deleting later snapshots, so earlier states stay restorable.
 - **Cross-platform zip export + reveal + delete** — a built-in store-only ZIP writer
   (no `zip` binary), the OS file manager (`open -R`, Explorer, `xdg-open`), and
   recursive delete without a POSIX shell.
@@ -385,7 +397,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.1.0`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.2.0`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 

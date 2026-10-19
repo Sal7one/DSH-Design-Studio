@@ -222,6 +222,15 @@ test('host half registers current contracts and exercises the studio flow', asyn
   const secondList = JSON.parse(await tool.execute({ action: 'list' }, exec))
   assert.notEqual(secondList[0].stamp.hash, firstStamp, 'a write bumps the freshness stamp')
 
+  const snapHistory = JSON.parse(await tool.execute({ action: 'history', slug: 'demo' }, exec))
+  assert.ok(snapHistory.count >= 1, 'creation seeds a baseline snapshot')
+  assert.equal(snapHistory.snapshots[0].reason, 'initial')
+  const snap = await tool.execute({ action: 'snapshot_save', slug: 'demo', reason: 'test checkpoint' }, exec)
+  assert.match(snap, /snapshot (saved|unchanged)/)
+  const snapHistory2 = JSON.parse(await tool.execute({ action: 'history', slug: 'demo' }, exec))
+  assert.ok(snapHistory2.count >= snapHistory.count)
+  assert.equal(snapHistory2.snapshots[snapHistory2.snapshots.length - 1].current, true)
+
   const agentResult = await tool.execute({ action: 'agent', slug: 'demo', message: 'Make it blue' }, exec)
   assert.match(agentResult, /design agent \(harness-spawn-agent\): done/)
 

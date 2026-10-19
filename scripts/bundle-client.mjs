@@ -20,6 +20,7 @@ const ORDER = [
   'element-picker.js',
   'scaled-preview.js',
   'assets-modal.js',
+  'history.js',
   'studio-view.js',
   'settings.js',
   'index.js',

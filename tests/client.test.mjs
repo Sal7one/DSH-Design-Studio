@@ -249,6 +249,28 @@ test('studio workspace renders its library, tabs and default preview tab', async
   }
 })
 
+test('history panel renders its controls', async () => {
+  const React = {
+    useState(initial) {
+      return [typeof initial === 'function' ? initial() : initial, () => {}]
+    },
+    useEffect() {},
+    useRef() {
+      return { current: null }
+    },
+    createElement(type, props, ...children) {
+      return { type, props: props || {}, children }
+    },
+  }
+  globalThis.React = React
+  globalThis.h = React.createElement
+  const { HistoryPanel } = await import('../lib/client/src/history.js?history-test')
+  const text = flattenTree(HistoryPanel({ slug: 'demo', onChanged() {} }))
+  for (const label of ['Edit history', 'Snapshot now', 'Undo last edit', 'loading snapshots']) {
+    assert.ok(text.includes(label), 'history panel renders ' + label)
+  }
+})
+
 test('scaled preview and asset modal render their controls', async () => {
   const React = {
     useState(initial) {

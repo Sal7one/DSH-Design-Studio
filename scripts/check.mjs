@@ -61,11 +61,11 @@ let iconBytes = 0
 try { iconBytes = statSync(join(root, 'icon.svg')).size } catch {}
 check(iconBytes > 0 && iconBytes <= 256 * 1024, 'icon.svg exists and is within 256 KiB')
 
-const hostFiles = ['lib/index.js', 'lib/host/constants.js', 'lib/host/util.js', 'lib/host/node-io.js', 'lib/host/config.js', 'lib/host/vision.js', 'lib/host/preview.js', 'lib/host/presets.js', 'lib/host/assets.js']
+const hostFiles = ['lib/index.js', 'lib/host/constants.js', 'lib/host/util.js', 'lib/host/node-io.js', 'lib/host/config.js', 'lib/host/vision.js', 'lib/host/preview.js', 'lib/host/presets.js', 'lib/host/assets.js', 'lib/host/history.js']
 const host = hostFiles.map((file) => readFileSync(join(root, file), 'utf8')).join('\n')
 const client = readFileSync(join(root, 'lib/client.js'), 'utf8')
 const settingsSource = readFileSync(join(root, 'lib/client/src/settings.js'), 'utf8')
-const clientSources = ['runtime.js', 'styles.js', 'labels.js', 'primitives.js', 'api.js', 'element-picker.js', 'scaled-preview.js', 'assets-modal.js', 'studio-view.js', 'settings.js', 'index.js']
+const clientSources = ['runtime.js', 'styles.js', 'labels.js', 'primitives.js', 'api.js', 'element-picker.js', 'scaled-preview.js', 'assets-modal.js', 'history.js', 'studio-view.js', 'settings.js', 'index.js']
 for (const file of hostFiles) {
   check(statSync(join(root, file)).size > 0, 'host module exists: ' + file)
 }
@@ -80,6 +80,8 @@ check(!/\bcurl -sS|\bscreencapture -x|\bbase64 -d|\bsh -c/.test(host), 'host has
 check(/startActivation/.test(host), 'host uses the current startActivation contract')
 check(/harnessVisionInfo/.test(host), 'host detects harness image-input capability')
 check(/createAssets/.test(host) && /asset_upload/.test(host), 'host exposes an asset pipeline')
+check(/createHistory/.test(host) && /snapshot_restore/.test(host), 'host exposes content-addressed snapshot history')
+check(/studio\.history/.test(client), 'client exposes the edit history panel')
 check(/capturePreviewToSystem/.test(host), 'host can capture the rendered preview')
 check(/openPreviewInSystem|openExternal/.test(host), 'host can launch the OS browser explicitly')
 check(/ScaledPreview/.test(client) && /'preview'/.test(client), 'client opens the Preview tab by default')
@@ -99,7 +101,7 @@ check(client.startsWith('// GENERATED FILE'), 'lib/client.js is the generated bu
   check(bundle.status === 0, 'client bundle is up to date (run npm run build:client)' + (bundle.status === 0 ? '' : '\n' + (bundle.stderr || '')))
 }
 
-for (const file of hostFiles.concat(['lib/client.js', 'lib/client/src/settings.js', 'lib/client/src/studio-view.js', 'scripts/check.mjs'])) {
+for (const file of hostFiles.concat(['lib/client.js', 'lib/client/src/history.js', 'lib/client/src/settings.js', 'lib/client/src/studio-view.js', 'scripts/check.mjs'])) {
   const run = spawnSync(process.execPath, ['--check', join(root, file)], { encoding: 'utf8' })
   check(run.status === 0, 'syntax: ' + file + (run.status === 0 ? '' : '\n' + (run.stderr || '')))
 }
