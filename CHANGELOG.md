@@ -2,6 +2,20 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.4.1 — 2026-10-20
+
+Run-banner lifecycle fix.
+
+- The Ask-DeepSeek banner no longer sticks at “request sent — waiting for it to
+  pick up the edit…” after the main turn is already done. The client now polls
+  the session binding instead of relying only on subscription transitions, so a
+  run that starts before the panel mounts (or ends without a final event) still
+  reaches `running`/`finished`.
+- If the pickup is never observed, the banner becomes “watch the main chat” after
+  8s instead of waiting forever.
+- Finished/untracked banners auto-clear after 8s; the × remains for immediate
+  dismissal. Switching tabs is no longer required.
+
 ## 2.4.0 — 2026-10-20
 
 Style tour, random-next preview, reversible applies, and per-edit auto snapshots.
