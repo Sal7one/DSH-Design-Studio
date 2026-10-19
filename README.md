@@ -6,9 +6,10 @@ and a two-agent apply flow where **DeepSeek edits and the design agent verifies*
 Everything is backed by real files under `temp_design_folder/`, and everything is
 **launch-persistent**: install once, the Design Studio tab is there on every launch.
 
-> **2.4.0 — style pager and safe applies.** Horizontal style pager with a palette
-> strip, random-next preview, one-click Undo apply backed by a pre-style snapshot,
-> and auto snapshots after AI edit batches/agent turns.
+> **2.4.0 — style tour and safe applies.** The Styles grid gets a large **Try them
+> now** button that opens a horizontal style tour over the current design; arrow
+> keys auto-try each style. Random-next preview, one-click Undo apply backed by a
+> pre-style snapshot, and auto snapshots after AI edit batches/agent turns.
 >
 > **2.3.0 — attributed style atlas.** 88 design styles from dsh-ui-ux-pro-max
 > (MIT) are vendored as normalized data, then exposed through a **Styles** tab:
@@ -135,11 +136,13 @@ DSH-Design-Studio/
   are excluded from the library.
 - **Attributed style atlas** — 88 styles, 192 palettes and font moods adapted from
   **dsh-ui-ux-pro-max** (MIT; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)).
-  The **Styles** tab has a horizontal pager with a palette strip, filters/search,
-  live **Try** against the current design without touching files, random-next,
-  Apply with a pre-style snapshot and **Undo apply**, full-template **New**, and
-  “Save current” into a reusable custom style. Auto snapshots follow AI edit
-  batches and design-agent turns.
+  The **Styles** tab is a gallery grid with a large **Try them now** action. That
+  opens a horizontal style tour over the current design: arrows or `←`/`→` auto-try
+  each style live, a scrollable strip jumps anywhere, and Apply/Revert are one
+  action away. The gallery also offers filters/search, random-next, a pre-style
+  snapshot with **Undo apply**, full-template **New**, and “Save current” into a
+  reusable custom style. Auto snapshots follow AI edit batches and design-agent
+  turns.
 - **Content-addressed edit history** — every design gets a snapshot tree under
   `_studio/history/<slug>/`: sha256 blobs, sorted tree manifests, and parent-linked
   snapshots with a head cursor. Auto-capture runs after edits settle; the **History**

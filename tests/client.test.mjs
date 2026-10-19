@@ -212,9 +212,11 @@ test('studio workspace renders its library, tabs and default preview tab', async
   const makeReact = (overrides) => {
     const seeds = [
       [demo], 'demo', '', '', 0, '', '', '', null, null, null, '', [], false, '', false, null,
-      'preview', 'desktop', null, null, [], false, '', '', null, false, null, 0,
+      'preview', 'desktop', null, null, null, [], false, '', '', null, false, null, 0,
     ]
     if (overrides && overrides.workspaceTab) seeds[17] = overrides.workspaceTab
+    if (overrides && overrides.stylePreview) seeds[19] = overrides.stylePreview
+    if (overrides && overrides.styleTour) seeds[21] = overrides.styleTour
     let index = 0
     return {
       useState(initial) {
@@ -246,6 +248,14 @@ test('studio workspace renders its library, tabs and default preview tab', async
   const text = renderWith({})
   for (const label of ['Designs', 'Assets', 'Preview', 'Agent', 'Review', 'Upload', 'Settings', 'Open ↗', 'demo']) {
     assert.ok(text.includes(label), 'studio workspace renders ' + label)
+  }
+  const tourStyle = { id: 'liquid-glass', name: 'Liquid Glass', zh: '液态玻璃', vars: { '--bg': '#fff', '--gold': '#0071e3' } }
+  const tourText = renderWith({
+    stylePreview: tourStyle,
+    styleTour: { styles: [tourStyle], index: 0 },
+  })
+  for (const label of ['Style tour', 'Liquid Glass', 'Apply style', 'Close']) {
+    assert.ok(tourText.includes(label), 'style tour renders ' + label)
   }
 })
 
@@ -288,7 +298,7 @@ test('style atlas renders its gallery controls', async () => {
   globalThis.h = React.createElement
   const { StyleAtlas } = await import('../lib/client/src/style-atlas.js?atlas-test')
   const text = flattenTree(StyleAtlas({ slug: 'demo', onPreview() {}, onChanged() {}, onCreated() {} }))
-  for (const label of ['Style atlas', 'Random style', 'Save current', 'loading style atlas']) {
+  for (const label of ['Style atlas', 'Random style', 'Save current', 'Try them now', 'loading style atlas']) {
     assert.ok(text.includes(label), 'style atlas renders ' + label)
   }
 })

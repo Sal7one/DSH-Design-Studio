@@ -4,13 +4,15 @@ All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
 ## 2.4.0 — 2026-10-20
 
-Style pager, random-next preview, reversible applies, and per-edit auto snapshots.
+Style tour, random-next preview, reversible applies, and per-edit auto snapshots.
 
-### Added — style pager and safe apply flow
+### Added — style tour and safe apply flow
 
-- **Horizontal style pager** in the Styles tab: large current-style card, previous/
-  next arrows, a horizontal palette strip to jump to any style, and a Grid toggle.
-- Preview bar now keeps **Try another random** beside Apply with breathing room,
+- The Styles tab stays a **grid by default**. A large **Try them now** button opens
+  a **horizontal style tour** over the current design: prev/next arrows, a
+  scrollable style strip, and automatic live token preview as you flip. Arrow
+  keys (`←`/`→`) auto-try the previous/next style; Escape closes.
+- Preview bar keeps **Try another random** beside Apply with breathing room,
   plus Apply/Revert. Switching styles stays in the live preview without writing.
 - **Apply is reversible**: before applying a style, the host captures a
   `before-style` snapshot. The returned `beforeSnapshot` drives an **Undo apply**
