@@ -7,6 +7,11 @@ Everything is backed by real files in the current workspace under
 `design-studio/`, and the install is **launch-persistent**: install once, the
 Design Studio tab is there on every launch.
 
+> **2.7.2 — workspace designs visible across chats.** A design in
+> `<workspace>/design-studio/` appears in every conversation rooted at that
+> workspace, not just the chat that created it. Legacy profile designs keep
+> their old per-session behavior.
+>
 > **2.7.1 — repeat the Design ready gate after refinement.** Choose **Keep
 > refining**, finish the next revision, and the native three-choice question
 > returns. No plain-chat fallback while `ask_user_question` is available.
@@ -440,7 +445,8 @@ tool result.
 
 - **New designs:** `<workspace>/design-studio/<slug>/`. These are ordinary
   workspace files and can be committed, reviewed and edited under the normal
-  sandbox.
+  sandbox. They are visible in every conversation rooted at that workspace, not
+  just the creating chat.
 - **Profile:** `temp_design_folder/` still holds global config, presets, the
   slug registry, and **legacy** designs created before 2.7.0.
 - **Legacy designs are not auto-migrated.** They remain readable and editable
@@ -547,7 +553,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.7.1`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.7.2`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 

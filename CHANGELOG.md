@@ -2,6 +2,17 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.7.2 — 2026-10-20
+
+Keep workspace designs visible across conversations.
+
+- Designs rooted at the current workspace are now visible in every conversation
+  rooted at that workspace, not only the chat that created them. Legacy profile
+  designs retain their old per-session filter/adoption behavior.
+- Session orphan sweep skips workspace designs; they belong to the project, not
+  a single chat.
+- Added the workspace visibility rule to the storage docs. Version 2.7.2.
+
 ## 2.7.1 — 2026-10-20
 
 Repeat the completion gate after refinement.

@@ -303,7 +303,9 @@ explicitly so ignored research checkouts are not discovered.
 ## 18. Storage and upgrades (2.7.0)
 
 - New designs: `<workspace>/design-studio/<slug>/`. They are ordinary workspace
-  files, readable by any agent scoped to that workspace.
+  files, readable by any agent scoped to that workspace. They stay visible in
+  every conversation rooted at that workspace, not only the chat that created
+  them; the session orphan sweep skips workspace designs.
 - Profile `temp_design_folder/` retains global config, presets, the slug
   registry, and legacy designs made before 2.7.0.
 - Legacy designs are **not auto-migrated**. They stay readable in the Studio,
