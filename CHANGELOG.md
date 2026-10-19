@@ -2,6 +2,26 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.6.0 — 2026-10-20
+
+Design freeze: an explicit design → implementation handoff.
+
+- Added `freeze` / `unfreeze` tool + API actions and a large **❄ Finish & freeze
+  design** button. Freeze captures a final snapshot, refreshes the zip, records
+  the design stamp, optional implementation target and handoff note in
+  `_studio/freeze/<slug>.json`.
+- Freeze is read-only: `list`/`all` expose `frozen` and the freeze record; write,
+  style apply, asset upload/import/delete, ingest, history restore/undo,
+  selection save, delete, and design-agent chat are rejected. Read, snapshot,
+  review, zip, and open remain available.
+- UI: frozen banner with implementation target, read-only/disabled edit paths
+  (Select, Styles, History, Assets, design agent, Delete) and an explicit Thaw
+  confirmation.
+- Agent knowledge: `AGENTS.md`, the repo skill, and the handbook now say frozen
+  means implementation mode — work in the recorded target, never the mockup.
+- Freeze cleanup is included in design deletion; freeze is a tool/context guard,
+  not a filesystem ACL.
+
 ## 2.5.0 — 2026-10-20
 
 Repo-local Design Studio knowledge and skill.

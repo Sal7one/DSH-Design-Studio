@@ -69,6 +69,24 @@ http://127.0.0.1:61546/design-studio/<slug>/html/index.html
 The main conversation agent is the primary editor. Call the design agent only
 for a precise visual question; it is not a substitute for editing files.
 
+## Design freeze (implementation mode)
+
+A design system can be frozen as a read-only handoff.
+
+- `design_studio action=list` returns `frozen: true` and a `freeze` record with
+  `implementation` and `finalSnapshot`.
+- While frozen, **do not edit the mockup**. Do not call write, style apply/asset
+  changes, history restores, ingest, delete, or the design agent.
+- Work in the recorded `freeze.implementation` target instead. If it is empty,
+  ask the operator where the implementation lives.
+- Only the operator thaws it. `action=unfreeze` is for an explicit operator
+  request, not a workaround.
+- Read/snapshot/review/zip/open remain allowed. Freeze is a tool/context guard,
+  not a filesystem ACL.
+
+If the operator asks for a design change while a design is frozen, clarify:
+implementation change (work in the target) or design change (ask them to thaw).
+
 ## Styles
 
 - `design_studio action=style_list` lists styles; `style_apply` applies one.

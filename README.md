@@ -6,6 +6,10 @@ and a two-agent apply flow where **DeepSeek edits and the design agent verifies*
 Everything is backed by real files under `temp_design_folder/`, and everything is
 **launch-persistent**: install once, the Design Studio tab is there on every launch.
 
+> **2.6.0 — design freeze.** A large **Finish & freeze design** handoff marks the
+> mockup read-only, records the implementation target, blocks Studio/AI writes,
+> and switches the agent to implementation mode until an explicit Thaw.
+>
 > **2.5.0 — agent handbook + skill.** Added a repo-local Design Studio handbook,
 > a reusable `design-studio` skill, and `AGENTS.md` guidance. Not installed into
 > the DSH profile yet.
@@ -209,6 +213,21 @@ Click **🎯 Select**, click any element in the live preview, describe the chang
 | **🤖 Ask DeepSeek** *(default)* | Saves `EDIT_REQUEST.md`, sends the request to your **main chat** through the retained Session binding (`session.prompt(..., 'queue')`). DeepSeek edits the files itself and invokes the design agent only when it needs a visual read. A **live run banner** tracks queued → working → finished in the tab, and the studio **auto-runs a design-agent verification** once the edits settle. |
 | **◈ Make the design agent do it** | The classic flow: the design agent applies the change itself and replies in its chat. |
 | **💾 Save only** | Just writes `EDIT_REQUEST.md` — apply later from either chat. |
+
+### Design freeze (design → implementation handoff)
+
+- A large **❄ Finish & freeze design** button marks a design system as the
+  read-only source of truth. Freeze captures a final snapshot, refreshes the zip,
+  and records an **implementation target** plus optional handoff note.
+- While frozen, `design_studio` rejects write/style/asset/history-restore/delete
+  and design-agent actions; read, snapshot, review, zip, and open still work.
+  `list`/`all` return `frozen` and the freeze record so every agent can see it.
+- The UI shows a **Design frozen — implementation mode** banner and disables
+  edit controls. Only an explicit **Thaw design** confirmation re-enables edits.
+- Agent guidance lives in [AGENTS.md](AGENTS.md),
+  [skills/design-studio/SKILL.md](skills/design-studio/SKILL.md), and the
+  [handbook](docs/design-studio-handbook.md): frozen means work in the
+  implementation target, not the mockup.
 
 ### Freshness stamps (multi-agent safety)
 
@@ -466,7 +485,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.5.0`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.6.0`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 

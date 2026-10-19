@@ -226,7 +226,37 @@ shipped yet. Do not claim a live device import or "any app" reconstruction.
 - Do not extract or re-host proprietary assets without permission.
 - Delete removes the manifest entry/file; confirm before destructive changes.
 
-## 15. Safety
+## 15. Design freeze
+
+Freeze is the explicit handoff from design to implementation. It is **per design
+system**, not a global switch.
+
+- The Studio shows a large **❄ Finish & freeze design** button. Freezing captures
+  a final snapshot, refreshes the zip, and records:
+  - slug, timestamp, design stamp
+  - final snapshot id
+  - implementation target (path/repo/note)
+  - optional handoff note
+- `design_studio list` / `all` return `frozen` plus the `freeze` record.
+- While frozen:
+  - `write`, style apply, asset upload/import/delete, ingest, history
+    restore/undo, selection saves, delete, and design-agent chat are blocked
+  - `read`, `list`, `snapshot`, `review`, `zip`, and `open` still work
+  - the UI hides/disables edit paths and shows a read-only banner
+- The implementation agent must **not** edit the mockup. It should work in the
+  recorded `freeze.implementation` target. If no target was recorded, ask the
+  operator where the implementation lives.
+- Only the operator thaws the design. Thaw is an explicit confirmation; then the
+  mockup becomes editable again.
+- Freeze is a context/tool guard, not a filesystem security boundary. A direct
+  file tool could still write the mockup; the agent instructions and tool guard
+  are what prevent the normal flow. Detect changes after freeze as drift and do
+  not silently treat them as the frozen state.
+
+This is how to avoid the “design or code?” ambiguity: frozen means implementation
+mode; unfrozen means design mode.
+
+## 16. Safety
 
 - Writes are scoped to `temp_design_folder/<slug>/`; do not escape it.
 - Never put credentials in mockups, prompts, snapshots, or asset manifests.
@@ -235,7 +265,7 @@ shipped yet. Do not claim a live device import or "any app" reconstruction.
   them.
 - Do not add runtime dependencies without a clear maintenance reason.
 
-## 16. Maintainer verification
+## 17. Maintainer verification
 
 For plugin changes:
 

@@ -319,6 +319,55 @@ test('host half registers current contracts and exercises the studio flow', asyn
   assert.equal(harness.streamed[0].messages[0].content[0].type, 'text')
   assert.equal(harness.streamed[0].messages[0].content[1].type, 'image')
 
+  // Design freeze: read-only handoff, guard all mutating tool paths, and thaw.
+  const froze = await tool.execute({ action: 'freeze', slug: 'demo', implementation: '/work/impl', note: 'handoff' }, exec)
+  assert.match(froze, /design frozen: demo/)
+  const frozenList = JSON.parse(await tool.execute({ action: 'list' }, exec))
+  assert.equal(frozenList[0].frozen, true)
+  assert.equal(frozenList[0].freeze.implementation, '/work/impl')
+  assert.match(frozenList[0].freeze.finalSnapshot, /^[0-9a-f-]{36}$/)
+  await assert.rejects(
+    () => tool.execute({ action: 'write', slug: 'demo', path: 'css/style.css', content: 'x' }, exec),
+    /DESIGN FROZEN/,
+  )
+  await assert.rejects(
+    () => tool.execute({ action: 'style_apply', slug: 'demo', styleId: 'minimalism-and-swiss-style' }, exec),
+    /DESIGN FROZEN/,
+  )
+  await assert.rejects(
+    () => tool.execute({ action: 'agent', slug: 'demo', message: 'edit it' }, exec),
+    /DESIGN FROZEN/,
+  )
+  await assert.rejects(
+    () => tool.execute({ action: 'delete', slug: 'demo' }, exec),
+    /DESIGN FROZEN/,
+  )
+  await assert.rejects(
+    () => tool.execute({ action: 'asset_delete', slug: 'demo', path: 'assets/images/x.png' }, exec),
+    /DESIGN FROZEN/,
+  )
+  await assert.rejects(
+    () => tool.execute({ action: 'history_undo', slug: 'demo' }, exec),
+    /DESIGN FROZEN/,
+  )
+  await assert.rejects(
+    () => tool.execute({ action: 'preset_apply', slug: 'demo', presetId: 'warm' }, exec),
+    /DESIGN FROZEN/,
+  )
+  assert.match(await tool.execute({ action: 'read', slug: 'demo', path: 'css/token.css' }, exec), /:root/)
+  assert.match(await tool.execute({ action: 'zip', slug: 'demo' }, exec), /_zips\/demo\.zip/)
+  assert.match(await tool.execute({ action: 'freeze', slug: 'demo' }, exec), /already frozen/)
+  assert.match(await tool.execute({ action: 'unfreeze', slug: 'demo' }, exec), /design thawed: demo/)
+  const thawedList = JSON.parse(await tool.execute({ action: 'list' }, exec))
+  assert.equal(thawedList[0].frozen, false)
+  await tool.execute({ action: 'write', slug: 'demo', path: 'css/style.css', content: '.topbar { color: blue; }\n' }, exec)
+  assert.match(await tool.execute({ action: 'unfreeze', slug: 'demo' }, exec), /already thawed/)
+  assert.match(await tool.execute({ action: 'freeze', slug: 'demo' }, exec), /design frozen: demo/)
+  const noTargetList = JSON.parse(await tool.execute({ action: 'list' }, exec))
+  assert.equal(noTargetList[0].frozen, true)
+  assert.equal(noTargetList[0].freeze.implementation, '')
+  assert.match(await tool.execute({ action: 'unfreeze', slug: 'demo' }, exec), /design thawed: demo/)
+
   await assert.rejects(() => tool.execute({ action: 'read', slug: 'demo', path: '../escape' }, exec), /invalid path/)
 })
 
@@ -336,11 +385,14 @@ test('route serves the API and the live preview', async () => {
       end(body) { this.body = body === undefined ? '' : String(body) },
     }
   }
-  function fakeReq(method, url) {
+  function fakeReq(method, url, body) {
     return {
       method,
       url,
-      on(event, callback) { if (event === 'end') callback() },
+      on(event, callback) {
+        if (event === 'data' && body !== undefined) callback(Buffer.from(JSON.stringify(body)))
+        if (event === 'end') callback()
+      },
     }
   }
 
@@ -363,4 +415,28 @@ test('route serves the API and the live preview', async () => {
   const missingRes = fakeRes()
   await route.handler(fakeReq('GET', '/design-studio/preview/html/nope.html'), missingRes)
   assert.equal(missingRes.statusCode, 404)
+
+  const freezeRes = fakeRes()
+  await route.handler(fakeReq('POST', '/design-studio/__api/studio.freeze', { slug: 'preview', implementation: '/work/impl' }), freezeRes)
+  assert.equal(freezeRes.statusCode, 200)
+  const freezeBody = JSON.parse(freezeRes.body)
+  assert.equal(freezeBody.ok, true)
+  assert.equal(freezeBody.data.frozen, true)
+
+  const frozenWriteRes = fakeRes()
+  await route.handler(fakeReq('POST', '/design-studio/__api/studio.history.undo', { slug: 'preview' }), frozenWriteRes)
+  assert.equal(frozenWriteRes.statusCode, 200)
+  assert.equal(JSON.parse(frozenWriteRes.body).ok, false)
+  assert.match(frozenWriteRes.body, /DESIGN FROZEN/)
+
+  const noConfirmRes = fakeRes()
+  await route.handler(fakeReq('POST', '/design-studio/__api/studio.unfreeze', { slug: 'preview' }), noConfirmRes)
+  assert.equal(noConfirmRes.statusCode, 200)
+  assert.equal(JSON.parse(noConfirmRes.body).ok, false)
+  assert.match(noConfirmRes.body, /confirm:true/)
+
+  const thawRes = fakeRes()
+  await route.handler(fakeReq('POST', '/design-studio/__api/studio.unfreeze', { slug: 'preview', confirm: true }), thawRes)
+  assert.equal(thawRes.statusCode, 200)
+  assert.equal(JSON.parse(thawRes.body).data.frozen, false)
 })

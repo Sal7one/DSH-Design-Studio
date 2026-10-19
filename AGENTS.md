@@ -13,9 +13,13 @@ When the task is a design brief or an edit to a mockup:
 3. Use the `design_studio` tool; do not hand-assemble the design-system file
    layout or write outside `temp_design_folder/`.
 4. Check `design_studio action=list` and the freshness stamp before editing.
-5. Keep all mockups static: no app/game logic, state machines, persistence,
+5. If `frozen` is true, stop design work: do not write the mockup or call the
+   design agent. Work in the recorded `freeze.implementation` target; if none is
+   recorded, ask where the implementation lives. Only thaw on an explicit
+   operator request.
+6. Keep all mockups static: no app/game logic, state machines, persistence,
    network calls, business rules, or fabricated live data.
-6. Capture a preview and inspect it for layout/contrast/responsive failures
+7. Capture a preview and inspect it for layout/contrast/responsive failures
    before declaring the design done.
 
 These files are **repo-local**. They are not installed into a DSH profile yet;

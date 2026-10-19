@@ -212,8 +212,9 @@ test('studio workspace renders its library, tabs and default preview tab', async
   const makeReact = (overrides) => {
     const seeds = [
       [demo], 'demo', '', '', 0, '', '', '', null, null, null, '', [], false, '', false, null,
-      'preview', 'desktop', true, null, null, null, [], false, '', '', null, false, null, 0,
+      'preview', 'desktop', true, null, null, null, false, false, '', '', [], false, '', '', null, false, null, 0,
     ]
+    if (overrides && overrides.systems) seeds[0] = overrides.systems
     if (overrides && overrides.workspaceTab) seeds[17] = overrides.workspaceTab
     if (overrides && overrides.stylePreview) seeds[20] = overrides.stylePreview
     if (overrides && overrides.styleTour) seeds[22] = overrides.styleTour
@@ -249,9 +250,18 @@ test('studio workspace renders its library, tabs and default preview tab', async
   }
   const { StudioView } = await import('../lib/client/src/studio-view.js?studio-view-test')
   const text = renderWith({})
-  for (const label of ['Designs', 'Assets', 'Preview', 'Agent', 'Review', 'Upload', 'Settings', 'Open ↗', 'demo']) {
+  for (const label of ['Designs', 'Assets', 'Preview', 'Agent', 'Review', 'Upload', 'Settings', 'Open ↗', 'demo', 'Finish & freeze design']) {
     assert.ok(text.includes(label), 'studio workspace renders ' + label)
   }
+  const frozenDemo = Object.assign({}, demo, {
+    frozen: true,
+    freeze: { at: '2026-10-20T00:00:00.000Z', implementation: 'S:\\projects\\example-app', note: '', finalSnapshot: 'snap-1' },
+  })
+  const frozenText = renderWith({ systems: [frozenDemo] })
+  for (const label of ['Design frozen — implementation mode', 'Thaw design', 'S:\\projects\\example-app']) {
+    assert.ok(frozenText.includes(label), 'frozen workspace renders ' + label)
+  }
+  assert.ok(!frozenText.includes('Finish & freeze design'), 'frozen workspace hides the freeze button')
   const tourStyle = { id: 'liquid-glass', name: 'Liquid Glass', zh: '液态玻璃', vars: { '--bg': '#fff', '--gold': '#0071e3' } }
   const tourText = renderWith({
     stylePreview: tourStyle,
