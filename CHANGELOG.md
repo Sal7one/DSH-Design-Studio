@@ -2,6 +2,16 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.4.2 — 2026-10-20
+
+Selection default action.
+
+- Pressing **Enter** in the selection editor now sends the request to
+  **Ask DeepSeek** instead of saving the edit request without sending.
+  Shift+Enter still inserts a newline; IME composition Enter is ignored.
+- “Save only” remains available and its log now makes clear the request was
+  not sent. The modal hint spells out Enter / Shift+Enter / Ask / Save only.
+
 ## 2.4.1 — 2026-10-20
 
 Run-banner lifecycle fix.

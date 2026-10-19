@@ -6,6 +6,10 @@ and a two-agent apply flow where **DeepSeek edits and the design agent verifies*
 Everything is backed by real files under `temp_design_folder/`, and everything is
 **launch-persistent**: install once, the Design Studio tab is there on every launch.
 
+> **2.4.2 — Enter asks DeepSeek.** In the selection editor, Enter now sends the
+> change to **Ask DeepSeek**; Shift+Enter adds a line, and Save only remains an
+> explicit “don’t send” action.
+>
 > **2.4.1 — run banner lifecycle.** The Ask-DeepSeek banner now polls the session
 > binding so a finished run clears on its own; unobserved pickups fall back to
 > “watch the main chat” and finished/untracked banners auto-dismiss after 8s.
@@ -432,7 +436,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.4.1`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.4.2`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 
