@@ -106,14 +106,14 @@ Design Studio tab is there on every launch.
 ## Screenshots
 
 <p align="center">
-  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-01.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-01.png?v=2" width="170" alt="Design Studio preview with the design switcher"></a>
-  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-02.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-02.png?v=2" width="170" alt="Element selection over the live preview"></a>
-  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-03.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-03.png?v=2" width="170" alt="Ask DeepSeek about a selected element"></a>
-  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-04.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-04.png?v=2" width="170" alt="Asset library with sha256 manifest"></a>
-  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-05.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-05.png?v=2" width="170" alt="Attributed style atlas"></a>
-  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-06.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-06.png?v=2" width="170" alt="Horizontal style tour above the preview"></a>
-  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-07.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-07.png?v=2" width="170" alt="Content-addressed edit history"></a>
-  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-08.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-08.png?v=2" width="170" alt="Vision and capture settings"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/studio-preview.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-preview.png" width="170" alt="Design Studio preview with the design switcher"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/studio-select.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-select.png" width="170" alt="Element selection over the live preview"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/studio-edit-request.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-edit-request.png" width="170" alt="Ask DeepSeek about a selected element"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/studio-assets.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-assets.png" width="170" alt="Asset library with sha256 manifest"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/studio-style-atlas.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-style-atlas.png" width="170" alt="Attributed style atlas"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/studio-style-tour.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-style-tour.png" width="170" alt="Horizontal style tour above the preview"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/studio-history.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-history.png" width="170" alt="Content-addressed edit history"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/studio-settings.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-settings.png" width="170" alt="Vision and capture settings"></a>
 </p>
 
 <p align="center"><em>Click any thumbnail for the full-size image.</em></p>
