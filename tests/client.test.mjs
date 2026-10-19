@@ -212,11 +212,11 @@ test('studio workspace renders its library, tabs and default preview tab', async
   const makeReact = (overrides) => {
     const seeds = [
       [demo], 'demo', '', '', 0, '', '', '', null, null, null, '', [], false, '', false, null,
-      'preview', 'desktop', null, null, null, [], false, '', '', null, false, null, 0,
+      'preview', 'desktop', true, null, null, null, [], false, '', '', null, false, null, 0,
     ]
     if (overrides && overrides.workspaceTab) seeds[17] = overrides.workspaceTab
-    if (overrides && overrides.stylePreview) seeds[19] = overrides.stylePreview
-    if (overrides && overrides.styleTour) seeds[21] = overrides.styleTour
+    if (overrides && overrides.stylePreview) seeds[20] = overrides.stylePreview
+    if (overrides && overrides.styleTour) seeds[22] = overrides.styleTour
     let index = 0
     return {
       useState(initial) {

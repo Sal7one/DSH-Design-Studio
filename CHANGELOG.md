@@ -12,6 +12,11 @@ Style tour, random-next preview, reversible applies, and per-edit auto snapshots
   a **horizontal style tour** over the current design: prev/next arrows, a
   scrollable style strip, and automatic live token preview as you flip. Arrow
   keys (`←`/`→`) auto-try the previous/next style; Escape closes.
+- The style tour sits **above** the preview; its card strip scrolls
+  horizontally without scrolling the page vertically. A **Fit** toggle (default
+  on) scales the whole preview device to the available height and centers it;
+  switch to **1:1** for actual size. Starting a tour scrolls the Studio back to
+  the preview instead of leaving you at the gallery position.
 - Preview bar keeps **Try another random** beside Apply with breathing room,
   plus Apply/Revert. Switching styles stays in the live preview without writing.
 - **Apply is reversible**: before applying a style, the host captures a

@@ -8,8 +8,11 @@ Everything is backed by real files under `temp_design_folder/`, and everything i
 
 > **2.4.0 — style tour and safe applies.** The Styles grid gets a large **Try them
 > now** button that opens a horizontal style tour over the current design; arrow
-> keys auto-try each style. Random-next preview, one-click Undo apply backed by a
-> pre-style snapshot, and auto snapshots after AI edit batches/agent turns.
+> keys auto-try each style. The tour sits above the preview and has a **Fit**
+> toggle that scales and centers the whole preview so the page does not scroll;
+> the strip scrolls horizontally on its own. Random-next preview, one-click Undo
+> apply backed by a pre-style snapshot, and auto snapshots after AI edit
+> batches/agent turns.
 >
 > **2.3.0 — attributed style atlas.** 88 design styles from dsh-ui-ux-pro-max
 > (MIT) are vendored as normalized data, then exposed through a **Styles** tab:
@@ -139,10 +142,12 @@ DSH-Design-Studio/
   The **Styles** tab is a gallery grid with a large **Try them now** action. That
   opens a horizontal style tour over the current design: arrows or `←`/`→` auto-try
   each style live, a scrollable strip jumps anywhere, and Apply/Revert are one
-  action away. The gallery also offers filters/search, random-next, a pre-style
-  snapshot with **Undo apply**, full-template **New**, and “Save current” into a
-  reusable custom style. Auto snapshots follow AI edit batches and design-agent
-  turns.
+  action away. The tour sits above the preview and scrolls only its own strip. A
+  **Fit** toggle (default) scales the whole device to the available height and
+  centers it; **1:1** shows actual size. The gallery also offers filters/search,
+  random-next, a pre-style snapshot with **Undo apply**, full-template **New**,
+  and “Save current” into a reusable custom style. Auto snapshots follow AI edit
+  batches and design-agent turns.
 - **Content-addressed edit history** — every design gets a snapshot tree under
   `_studio/history/<slug>/`: sha256 blobs, sorted tree manifests, and parent-linked
   snapshots with a head cursor. Auto-capture runs after edits settle; the **History**
