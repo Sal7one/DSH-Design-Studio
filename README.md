@@ -106,13 +106,14 @@ Design Studio tab is there on every launch.
 ## Screenshots
 
 <p align="center">
-  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-01.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-01.png" width="170" alt="Design Studio screenshot"></a>
-  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-02.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-02.png" width="170" alt="Design Studio screenshot"></a>
-  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-03.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-03.png" width="170" alt="Design Studio screenshot"></a>
-  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-04.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-04.png" width="170" alt="Design Studio screenshot"></a>
-  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-05.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-05.png" width="170" alt="Design Studio screenshot"></a>
-  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-06.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-06.png" width="170" alt="Design Studio screenshot"></a>
-  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-07.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-07.png" width="170" alt="Design Studio screenshot"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-01.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-01.png" width="170" alt="Design Studio preview with the design switcher"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-02.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-02.png" width="170" alt="Element selection over the live preview"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-03.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-03.png" width="170" alt="Ask DeepSeek about a selected element"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-04.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-04.png" width="170" alt="Asset library with sha256 manifest"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-05.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-05.png" width="170" alt="Attributed style atlas"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-06.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-06.png" width="170" alt="Horizontal style tour above the preview"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-07.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-07.png" width="170" alt="Content-addressed edit history"></a>
+  <a href="https://github.com/Sal7one/DSH-Design-Studio/blob/master/repo-images/screenshot-08.png"><img src="https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/screenshot-08.png" width="170" alt="Vision and capture settings"></a>
 </p>
 
 <p align="center"><em>Click any thumbnail for the full-size image.</em></p>
