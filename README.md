@@ -11,9 +11,9 @@ Design Studio tab is there on every launch.
 
 | Preview | Selection | Ask DeepSeek | Assets |
 | :---: | :---: | :---: | :---: |
-| [![Design Studio preview with the design switcher](repo-images/studio-preview.png)](repo-images/studio-preview.png) | [![Element selection over the live preview](repo-images/studio-select.png)](repo-images/studio-select.png) | [![Ask DeepSeek about a selected element](repo-images/studio-edit-request.png)](repo-images/studio-edit-request.png) | [![Asset library with sha256 manifest](repo-images/studio-assets.png)](repo-images/studio-assets.png) |
+| [![Design Studio preview with the design switcher](https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-preview.png)](https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-preview.png) | [![Element selection over the live preview](https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-select.png)](https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-select.png) | [![Ask DeepSeek about a selected element](https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-edit-request.png)](https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-edit-request.png) | [![Asset library with sha256 manifest](https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-assets.png)](https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-assets.png) |
 | **Styles** | **Style tour** | **History** | **Settings** |
-| [![Attributed style atlas](repo-images/studio-style-atlas.png)](repo-images/studio-style-atlas.png) | [![Horizontal style tour above the preview](repo-images/studio-style-tour.png)](repo-images/studio-style-tour.png) | [![Content-addressed edit history](repo-images/studio-history.png)](repo-images/studio-history.png) | [![Vision and capture settings](repo-images/studio-settings.png)](repo-images/studio-settings.png) |
+| [![Attributed style atlas](https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-style-atlas.png)](https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-style-atlas.png) | [![Horizontal style tour above the preview](https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-style-tour.png)](https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-style-tour.png) | [![Content-addressed edit history](https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-history.png)](https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-history.png) | [![Vision and capture settings](https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-settings.png)](https://raw.githubusercontent.com/Sal7one/DSH-Design-Studio/master/repo-images/studio-settings.png) |
 
 *Click any screenshot for the full-size image.*
 
@@ -392,32 +392,38 @@ Design Studio is a **local, operator-trusted** tool.
 - The workspace write fallback uses the Node write seam when the host fs policy
   denies a design path; it is restricted to the active design root.
 
-## Issue #1 — install/distribution failure
+## Issue #1 — install/distribution failure (closed)
 
-The open issue reported `dsh plugin --profile desktop add git+https://github.com/sal7one/dsh-design-studio.git`
-failing with:
+The original report tried:
 
-```text
-git fetch --depth 1 origin c08abef… failed with exit code 128
-LibreSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443
+```sh
+dsh plugin --profile desktop add git+https://github.com/sal7one/dsh-design-studio.git
 ```
 
-Two separate problems were involved:
+and failed at commit `c08abef` with `git fetch` exit 128 /
+`LibreSSL SSL_connect: SSL_ERROR_SYSCALL`. Three separate layers were involved:
 
-1. **No npm package existed**, because `package.json` had `"private": true`, so the
-   hub's registry search found nothing and fell back to git. That is fixed in 2.0.0:
-   the package is publishable (`private` removed, `publishConfig.access: public`,
-   repository/homepage/bugs, `files`, `engines.dsh`, `dsh.manifestVersion`, locales,
-   icon and a tag-driven publish workflow).
-2. **The git fetch itself hit a TLS/network failure** to `github.com:443` on that
-   machine. That part is environmental: the plugin has no build script, so once GitHub
-   is reachable the git install needs no `allowBuilds` permission. Installing from npm
-   avoids git entirely.
+1. **The package was not publishable.** That commit still had `"private": true`
+   and was not on npm. This is fixed: `private` is removed, the package is public,
+   and it has `publishConfig`, `files`, `engines.dsh`, `dsh.manifestVersion` and a
+   tag-driven publish workflow.
+2. **The hub's registry search query is unsupported.** `npm search
+   repository:sal7one/dsh-design-studio` does not search the `repository` field
+   in npm metadata, so it returns nothing even though
+   `@sal7one/dsh-design-studio` is published. This is a hub-side bug; the
+   workaround is to search/install by package name:
+   `npm search sal7one` or `dsh plugin --profile desktop add
+   @sal7one/dsh-design-studio`.
+3. **The git fetch itself hit a TLS/network failure** to `github.com:443` on that
+   machine. The current package has no `prepare` script and no install-time
+   build, so a working GitHub connection needs no `allowBuilds` permission;
+   npm install avoids git entirely.
 
-Verify the published artifact with `npm view @sal7one/dsh-design-studio version`, then
-install from npm (above). This release is published by pushing the matching
-`v<package version>` tag with the `NPM_TOKEN` secret configured, or by running
-`npm publish --access public` from a clean checkout.
+The current repository is public, publishable and installable from npm. Verify
+the published artifact with `npm view @sal7one/dsh-design-studio version`; the
+npm package name is `@sal7one/dsh-design-studio`, not a repository-search hit.
+The hub-side search bug still needs reporting to the hub; installing by package
+name bypasses it.
 
 ## ⚠️ Compatibility notes — current harness contracts
 
