@@ -2,6 +2,16 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.7.5 — 2026-10-21
+
+Keep wide previews reachable with the conversation sidebar open.
+
+- The preview stage now starts wide 1:1 frames at the left edge and scrolls
+  horizontally instead of centering the overflow under the sidebar.
+- The preview column and workspace shell are constrained to the available
+  conversation width, and re-measure when the pane resizes.
+- Added a scroll reset when switching design, viewport, or Fit/1:1 mode.
+
 ## 2.7.4 — 2026-10-20
 
 Release-review hardening.

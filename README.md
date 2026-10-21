@@ -512,6 +512,10 @@ See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Changelog
 
+> **2.7.5 — sidebar-safe preview.** Wide 1:1 previews start at the left edge and
+> scroll horizontally instead of disappearing under the open conversation sidebar;
+> the stage re-measures when the pane resizes.
+>
 > **2.7.4 — release-review hardening.** Local API rejects cross-site writes,
 > workspace write fallback is root-bound, vision brief overrides work, design
 > switches reset the run banner, and the publish workflow checks tag/version.
