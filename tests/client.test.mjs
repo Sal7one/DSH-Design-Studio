@@ -252,7 +252,7 @@ test('studio workspace renders its library, tabs and default preview tab', async
   }
   const { StudioView } = await import('../lib/client/src/studio-view.js?studio-view-test')
   const text = renderWith({})
-  for (const label of ['Designs', 'Assets', 'Preview', 'Agent', 'Review', 'Upload', 'Settings', 'Open ↗', 'demo', 'Finish & freeze design']) {
+  for (const label of ['Designs', 'Assets', 'Preview', 'Agent', 'Review', 'Upload', 'Settings', 'Fit', '1:1', 'Open ↗', 'demo', 'Finish & freeze design']) {
     assert.ok(text.includes(label), 'studio workspace renders ' + label)
   }
   const frozenDemo = Object.assign({}, demo, {
