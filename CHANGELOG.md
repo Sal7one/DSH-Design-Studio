@@ -11,6 +11,8 @@ Keep wide previews reachable with the conversation sidebar open.
 - The preview column and workspace shell are constrained to the available
   conversation width, and re-measure when the pane resizes.
 - Added a scroll reset when switching design, viewport, or Fit/1:1 mode.
+- Preview now defaults to **Fit** and exposes an explicit **Fit / 1:1**
+  segmented control instead of a single action-labelled toggle.
 - Multiple pages per design: `_studio/pages.json`, `pages/<id>.html`,
   page-specific CSS/JS and token overrides, page list/create/rename/delete tool
   actions, a Pages artboard canvas, a Preview page switcher, and page-scoped

@@ -79,7 +79,8 @@ DSH-Design-Studio/
   tab bar as Pages, Styles, Agent, Assets, History, Review, Upload and Settings — no modal, no top-right panel.
   It renders a centered device at a real Desktop (1440×1600), Tablet, or Mobile viewport;
   switching viewport resizes the whole device frame, and the surrounding area uses the
-  panel background instead of a white strip. The open Studio polls the selected design's
+  panel background instead of a white strip. A **Fit / 1:1** control (`Fit` default)
+  scales the device to the available pane or shows actual size with scrolling. The open Studio polls the selected design's
   stamp every 1.5s and auto-reloads the Preview/outline/assets on external edits.
 - **Large Studio workspace** — a 300px library (Designs, Assets, Outline) and a wide
   tabbed work area (**Preview / Pages / Styles / Agent / Assets / History / Review / Upload / Settings**). The
@@ -113,9 +114,8 @@ DSH-Design-Studio/
   The **Styles** tab is a gallery grid with a large **Try them now** action. That
   opens a horizontal style tour over the current design: arrows or `←`/`→` auto-try
   each style live, a scrollable strip jumps anywhere, and Apply/Revert are one
-  action away. The tour sits above the preview and scrolls only its own strip. A
-  **Fit** toggle (default) scales the whole device to the available height and
-  centers it; **1:1** shows actual size. The gallery also offers filters/search,
+  action away. The tour sits above the preview and scrolls only its own strip. The
+  gallery also offers filters/search,
   random-next, a pre-style snapshot with **Undo apply**, full-template **New**,
   and “Save current” into a reusable custom style. Auto snapshots follow AI edit
   batches and design-agent turns.
@@ -510,9 +510,24 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.7.4`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.7.5`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
+
+Before tagging, verify the release smoke path:
+
+```sh
+npm run build:client && npm run check && npm test
+npm pack --dry-run
+```
+
+- `npm pack` contains `lib/host/pages.js`, `scripts/`, `AGENTS.md`, the handbook,
+  and no tests, research, or local `design-studio/` data.
+- A throwaway design: `page_list` → `page_create` → `style_apply scope=page` →
+  `zip` → inspect the zip for `pages/<id>.html`, `_studio/pages.json` and page
+  CSS/JS → `page_delete`.
+- README screenshots use unique filenames and absolute raw URLs. The local
+  `v2.7.5` tag must match `package.json`; the workflow rejects a mismatch.
 
 Then PR one entry into `awesome-deepseek-harness` (alphabetical, one PR per change,
 carry the `#dsh-plugin` topic for discovery).
@@ -528,11 +543,12 @@ See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Changelog
 
-> **2.7.5 — sidebar-safe preview and multi-page canvases.** Wide 1:1 previews
-> start at the left edge and scroll horizontally instead of disappearing under
-> the open conversation sidebar; the stage re-measures when the pane resizes.
-> One design can now hold multiple business pages with a Pages canvas, page
-> switcher and page-scoped style applies. Sidebars/modals stay in-page overlays.
+> **2.7.5 — sidebar-safe preview and multi-page canvases.** Preview defaults to
+> **Fit** with an explicit **Fit / 1:1** control; wide 1:1 previews start at the
+> left edge and scroll horizontally instead of disappearing under the open
+> conversation sidebar. One design can now hold multiple business pages with a
+> Pages canvas, page switcher and page-scoped style applies. Sidebars/modals stay
+> in-page overlays.
 >
 > **2.7.4 — release-review hardening.** Local API rejects cross-site writes,
 > workspace write fallback is root-bound, vision brief overrides work, design
