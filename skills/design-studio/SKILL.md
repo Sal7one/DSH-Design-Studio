@@ -97,6 +97,20 @@ substitute a plain-chat question while it is available. Skip the gate when the
 operator already approved or asked to implement. If the question tool is
 unavailable, use a short numbered question with the same choices.
 
+## Pages
+
+- `page_list` shows the design's business pages; the first page is `index` at
+  `html/index.html`.
+- `page_create` adds `pages/<id>.html` plus page CSS/JS/token override. Use it
+  only for a new business screen/flow.
+- A sidebar, drawer, modal, dropdown, tab, filter, or empty/error state is an
+  overlay on the same page. Use one fixed overlay layer with a blurred/inert
+  backdrop; do not create another page or duplicate the page-behind markup.
+- Page-scoped styles go to `css/pages/<id>.tokens.css`; global styles go to
+  `css/token.css`. The Styles tab exposes **This page / Entire design**.
+- Zip, freeze, history and design delete cover the whole design root, including
+  every page.
+
 ## Styles
 
 - `design_studio action=style_list` lists styles; `style_apply` applies one.

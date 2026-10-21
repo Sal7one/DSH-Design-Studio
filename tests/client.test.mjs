@@ -211,16 +211,18 @@ test('studio workspace renders its library, tabs and default preview tab', async
   }
   const makeReact = (overrides) => {
     const seeds = [
-      [demo], 'demo', '', '', 0, '', '', '', null, null, null, '', [], false, '', false, null,
-      'preview', 'desktop', true, null, null, null, false, false, '', '', false, [], false, [], false, '', '', null, false, null, 0,
+      [demo], 'demo', null, 'index', false, '', '', false, '', '', 0, '', '', '',
+      null, null, null, '', [], false, '', false, null, 'preview', 'desktop', true,
+      'page', null, null, null, false, false, '', '', false, [], false, [], false,
+      '', '', null, false, null, 0,
     ]
     if (overrides && overrides.systems) seeds[0] = overrides.systems
-    if (overrides && overrides.workspaceTab) seeds[17] = overrides.workspaceTab
-    if (overrides && overrides.stylePreview) seeds[20] = overrides.stylePreview
-    if (overrides && overrides.styleTour) seeds[22] = overrides.styleTour
-    if (overrides && overrides.keyState) seeds[9] = overrides.keyState
-    if (overrides && overrides.harnessState) seeds[10] = overrides.harnessState
-    if (overrides && overrides.selection) seeds[16] = overrides.selection
+    if (overrides && overrides.workspaceTab) seeds[23] = overrides.workspaceTab
+    if (overrides && overrides.stylePreview) seeds[27] = overrides.stylePreview
+    if (overrides && overrides.styleTour) seeds[29] = overrides.styleTour
+    if (overrides && overrides.keyState) seeds[15] = overrides.keyState
+    if (overrides && overrides.harnessState) seeds[16] = overrides.harnessState
+    if (overrides && overrides.selection) seeds[22] = overrides.selection
     let index = 0
     return {
       useState(initial) {

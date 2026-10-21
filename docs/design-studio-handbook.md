@@ -73,6 +73,19 @@ size, agent preset) are global, not per design.
 - **History** — snapshot list, restore, undo.
 - **Review** — capture and vision review; shows harness/OpenRouter route.
 - **Upload** — file drop-in.
+- **Pages** — artboard canvas for multiple business pages. New pages live at
+  `pages/<id>.html`, with page CSS/JS/token overrides under `css/pages` and
+  `js/pages`. The Preview toolbar has a Page selector. Create a page only for a
+  new business screen/flow; sidebars, drawers, modals, tabs and filters are
+  in-page overlays with a blurred/inert backdrop, not pages.
+
+### Page-scoped styles
+
+The Styles tab has **This page / Entire design** scope. Page scope writes
+`css/pages/<id>.tokens.css` and leaves `css/token.css` untouched; design scope
+writes the shared tokens. Pages share assets and the shared `style.css`. Zip,
+freeze, history, and design delete operate on the whole design root, so every
+page is included.
 - **Settings** — vision transport/models, review style, capture size, agent
   preset, and related options.
 

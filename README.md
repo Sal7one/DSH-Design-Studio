@@ -67,6 +67,7 @@ DSH-Design-Studio/
   is bundled ahead of release into the committed `lib/client.js`.
 - **`design_studio` agent tool** — your assistant (and any subagent) can
   `list / all / create / read / write / zip / reveal / delete / sweep` design systems,
+  manage business pages (`page_list / page_create / page_rename / page_delete`),
   manage assets (`asset_list / asset_upload / asset_import / asset_delete`), save and
   restore edit history (`history / snapshot_save / snapshot_restore / snapshot_undo`),
   apply/save/create styles (`style_list / style_apply / style_save / style_create`),
@@ -75,13 +76,13 @@ DSH-Design-Studio/
   `design-studio/<slug>/` folder (legacy profile designs remain readable).
 - **Live preview route** — `/design-studio/<slug>/html/index.html`, served by the
   harness web server. Inline **Preview** is the default open tab and sits in the same
-  tab bar as Styles, Agent, Assets, History, Review, Upload and Settings — no modal, no top-right panel.
+  tab bar as Pages, Styles, Agent, Assets, History, Review, Upload and Settings — no modal, no top-right panel.
   It renders a centered device at a real Desktop (1440×1600), Tablet, or Mobile viewport;
   switching viewport resizes the whole device frame, and the surrounding area uses the
   panel background instead of a white strip. The open Studio polls the selected design's
   stamp every 1.5s and auto-reloads the Preview/outline/assets on external edits.
 - **Large Studio workspace** — a 300px library (Designs, Assets, Outline) and a wide
-  tabbed work area (**Preview / Styles / Agent / Assets / History / Review / Upload / Settings**). The
+  tabbed work area (**Preview / Pages / Styles / Agent / Assets / History / Review / Upload / Settings**). The
   workspace bar's **Design** selector lists every design in the workspace (🔒 when
   frozen) and switches preview, files, history, assets and styles without leaving Preview.
   Settings and Preview tabs span the full workspace; the standalone Settings page uses a
@@ -159,6 +160,16 @@ Click **🎯 Select**, click any element in the live preview, describe the chang
   all designs and marks frozen ones with 🔒. Switching reloads that design's
   preview, files, history, assets, styles and freeze state. Studio-wide settings
   (vision, capture size, agent preset) remain global.
+- **Multiple pages per design** — one design can hold several business pages,
+  shown together in the **Pages** artboard canvas and switchable from Preview.
+  Pages live at `pages/<id>.html` with shared `css/token.css` and assets; a page
+  has its own `css/pages/<id>.css`, `js/pages/<id>.js` and optional
+  `css/pages/<id>.tokens.css`. Page-scoped style applies (Styles → This page)
+  write the page token file; Entire design writes the global `css/token.css`.
+  Sidebars, drawers, modals, tabs and filters are overlay states on the same
+  page — not new pages. Use a fixed overlay layer with a blurred/inert backdrop.
+  Add pages only for a new business screen/flow. Zip, freeze, history and delete
+  cover every page automatically because they work on the whole design root.
 
 ### Design freeze (design → implementation handoff)
 
@@ -365,6 +376,11 @@ tool result.
   workspace files and can be committed, reviewed and edited under the normal
   sandbox. They are visible in every conversation rooted at that workspace, not
   just the creating chat.
+- **Pages:** the first page is the existing `html/index.html`. Additional pages
+  are `pages/<id>.html` with `css/pages/<id>.css`, `js/pages/<id>.js` and
+  `css/pages/<id>.tokens.css`; `_studio/pages.json` is the manifest. They share
+  the design's `css/token.css`, `css/style.css` and `assets/`. ZIP/freeze/history
+  and design delete operate on the whole design root, so all pages are included.
 - **Profile:** `temp_design_folder/` still holds global config, presets, the
   slug registry, and **legacy** designs created before 2.7.0.
 - **Legacy designs are not auto-migrated.** They remain readable and editable
@@ -512,9 +528,11 @@ See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Changelog
 
-> **2.7.5 — sidebar-safe preview.** Wide 1:1 previews start at the left edge and
-> scroll horizontally instead of disappearing under the open conversation sidebar;
-> the stage re-measures when the pane resizes.
+> **2.7.5 — sidebar-safe preview and multi-page canvases.** Wide 1:1 previews
+> start at the left edge and scroll horizontally instead of disappearing under
+> the open conversation sidebar; the stage re-measures when the pane resizes.
+> One design can now hold multiple business pages with a Pages canvas, page
+> switcher and page-scoped style applies. Sidebars/modals stay in-page overlays.
 >
 > **2.7.4 — release-review hardening.** Local API rejects cross-site writes,
 > workspace write fallback is root-bound, vision brief overrides work, design

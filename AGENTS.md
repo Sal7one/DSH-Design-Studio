@@ -20,7 +20,12 @@ When the task is a design brief or an edit to a mockup:
    operator request.
 6. Keep all mockups static: no app/game logic, state machines, persistence,
    network calls, business rules, or fabricated live data.
-7. Capture a preview and inspect it for layout/contrast/responsive failures
+7. One design can have several business pages (`page_list`, `page_create`,
+   `pages/<id>.html`). Create a page only for a new business screen/flow; keep
+   sidebars, drawers, modals, tabs and filters as in-page overlays on the current
+   page. Page-scoped styles go in `css/pages/<id>.tokens.css`; global tokens stay
+   in `css/token.css`.
+8. Capture a preview and inspect it for layout/contrast/responsive failures
    before declaring the design done.
 
 These files are **repo-local**. They are not installed into a DSH profile yet;

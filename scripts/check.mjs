@@ -65,7 +65,7 @@ let iconBytes = 0
 try { iconBytes = statSync(join(root, 'icon.svg')).size } catch {}
 check(iconBytes > 0 && iconBytes <= 256 * 1024, 'icon.svg exists and is within 256 KiB')
 
-const hostFiles = ['lib/index.js', 'lib/host/constants.js', 'lib/host/util.js', 'lib/host/node-io.js', 'lib/host/config.js', 'lib/host/vision.js', 'lib/host/preview.js', 'lib/host/presets.js', 'lib/host/assets.js', 'lib/host/history.js', 'lib/host/styles.js']
+const hostFiles = ['lib/index.js', 'lib/host/constants.js', 'lib/host/util.js', 'lib/host/node-io.js', 'lib/host/config.js', 'lib/host/vision.js', 'lib/host/preview.js', 'lib/host/presets.js', 'lib/host/assets.js', 'lib/host/history.js', 'lib/host/styles.js', 'lib/host/pages.js']
 const host = hostFiles.map((file) => readFileSync(join(root, file), 'utf8')).join('\n')
 const client = readFileSync(join(root, 'lib/client.js'), 'utf8')
 const settingsSource = readFileSync(join(root, 'lib/client/src/settings.js'), 'utf8')
