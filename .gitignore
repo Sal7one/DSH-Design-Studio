@@ -4,7 +4,8 @@ node_modules/
 # NOTE: lib/ is NOT ignored — it is the shipped entry point.
 # Local studio data created when running the plugin from this checkout:
 temp_design_folder/
-design-studio/
+# Local Studio data at the repo root only; do not ignore skills/design-studio.
+/design-studio/
 
 # External reference implementations (research only; never packaged):
 research/dsh-ui-ux-pro-max/
