@@ -510,7 +510,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.7.5`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.7.6`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 
@@ -527,7 +527,7 @@ npm pack --dry-run
   `zip` → inspect the zip for `pages/<id>.html`, `_studio/pages.json` and page
   CSS/JS → `page_delete`.
 - README screenshots use unique filenames and absolute raw URLs. The local
-  `v2.7.5` tag must match `package.json`; the workflow rejects a mismatch.
+  `v2.7.6` tag must match `package.json`; the workflow rejects a mismatch.
 
 Then PR one entry into `awesome-deepseek-harness` (alphabetical, one PR per change,
 carry the `#dsh-plugin` topic for discovery).
@@ -543,6 +543,9 @@ See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Changelog
 
+> **2.7.6 — explicit style apply scope.** Style preview and tour actions now
+> expose **Apply to this page** and **Apply to all pages** buttons.
+>
 > **2.7.5 — sidebar-safe preview and multi-page canvases.** Preview defaults to
 > **Fit** with an explicit **Fit / 1:1** control; wide 1:1 previews start at the
 > left edge and scroll horizontally instead of disappearing under the open

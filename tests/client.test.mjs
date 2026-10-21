@@ -272,7 +272,7 @@ test('studio workspace renders its library, tabs and default preview tab', async
     stylePreview: tourStyle,
     styleTour: { styles: [tourStyle], index: 0 },
   })
-  for (const label of ['Style tour', 'Liquid Glass', 'Apply style', 'Close']) {
+  for (const label of ['Style tour', 'Liquid Glass', 'Apply to this page', 'Apply to all pages', 'Close']) {
     assert.ok(tourText.includes(label), 'style tour renders ' + label)
   }
   const selection = {

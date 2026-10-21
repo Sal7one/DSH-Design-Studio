@@ -2,6 +2,14 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.7.6 — 2026-10-21
+
+Explicit style apply scope actions.
+
+- Style preview/tour actions now expose **Apply to this page** and **Apply to
+  all pages** buttons; the Styles tab scope remains available for applying
+  directly from a style card.
+
 ## 2.7.5 — 2026-10-21
 
 Keep wide previews reachable with the conversation sidebar open.
