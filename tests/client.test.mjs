@@ -185,6 +185,9 @@ test('settings view renders the vision-first layout', async () => {
     'Viewport height',
     'Design agent preset',
     'Auto-verify after Ask DeepSeek',
+    'Delete designs when their chat is deleted',
+    'Save changes',
+    'Up to date',
     'OpenRouter fallback',
     'Identity presets',
   ]) {

@@ -550,7 +550,8 @@ See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 > project/all-pages scope, configurable in Design Studio settings. **All designs**
 > is restored as its own revamped settings page: grouped by workspace, search and
 > status filters, summary counts, latest ZIP generation time, and clean
-> preview/zip/show-in-folder/delete actions.
+> preview/zip/show-in-folder/delete actions. Settings now makes unsaved changes
+> explicit and keeps its Save/Refresh header aligned.
 >
 > **2.7.6 — explicit style apply scope.** Style preview and tour actions expose
 > **Apply to this page** and **Apply to all pages** buttons.

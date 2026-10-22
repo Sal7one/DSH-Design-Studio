@@ -16,6 +16,11 @@ Larger default canvas, project-level style scope, settings cleanup.
 - All-design rows show the latest ZIP generation time; **Show in folder**
   creates a missing ZIP and then reveals it through Explorer/Finder/xdg-open.
   Delete updates the list immediately after confirmation.
+- Settings now shows an explicit **Unsaved changes** state, disables Save until
+  there is something to save, and reports **Saved** inline instead of inserting
+  a message block that broke the settings grid.
+- The settings header is an aligned panel with Save/Refresh actions; lifecycle
+  checkboxes are now full-width toggle rows that spell out the required save.
 - Studio tab bar now includes **Pages**.
 
 ## 2.7.6 — 2026-10-21
