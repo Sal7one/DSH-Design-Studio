@@ -13,6 +13,9 @@ Larger default canvas, project-level style scope, settings cleanup.
 - Revamped **Settings → All designs** as its own section: grouped by workspace,
   with search/status filters, summary counts, preview/zip/reveal/delete actions,
   and an inline delete confirmation that no longer collides with card borders.
+- All-design rows show the latest ZIP generation time; **Show in folder**
+  creates a missing ZIP and then reveals it through Explorer/Finder/xdg-open.
+  Delete updates the list immediately after confirmation.
 - Studio tab bar now includes **Pages**.
 
 ## 2.7.6 — 2026-10-21

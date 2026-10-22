@@ -238,7 +238,8 @@ Click **🎯 Select**, click any element in the live preview, describe the chang
   request fields and the identity-preset editor are collapsed disclosures, so the
   page stays readable.
 - **Settings → All designs** — a dedicated library page grouped by workspace,
-  with search, status filters, counts, and preview/zip/reveal/delete actions.
+  with search, status filters, counts, latest ZIP dates, and
+  preview/zip/show-in-folder/delete actions.
 - **Everything survives restarts** — designs live on disk in the workspace
   `design-studio/`; presets, config, reviews and agent history stay in the profile.
 
@@ -548,7 +549,8 @@ See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 > (large design area, scrolls) with Fit available. Style apply defaults to the
 > project/all-pages scope, configurable in Design Studio settings. **All designs**
 > is restored as its own revamped settings page: grouped by workspace, search and
-> status filters, summary counts, and clean preview/zip/reveal/delete actions.
+> status filters, summary counts, latest ZIP generation time, and clean
+> preview/zip/show-in-folder/delete actions.
 >
 > **2.7.6 — explicit style apply scope.** Style preview and tour actions expose
 > **Apply to this page** and **Apply to all pages** buttons.
