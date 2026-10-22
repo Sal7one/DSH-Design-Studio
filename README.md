@@ -83,7 +83,8 @@ DSH-Design-Studio/
   shows actual size with scrolling; Fit scales the device to the available pane. The open Studio polls the selected design's
   stamp every 1.5s and auto-reloads the Preview/outline/assets on external edits.
 - **Large Studio workspace** — a 300px library (Designs, Assets, Outline) and a wide
-  tabbed work area (**Preview / Pages / Styles / Agent / Assets / History / Review / Upload / Settings**). The
+  tabbed work area (**Preview / Pages / Styles / Agent / Assets / History / Review / Upload**); the
+  **⚙ Settings** button opens the shared DeepSeek Design Studio settings page. The
   workspace bar's **Design** selector lists every design in the workspace (🔒 when
   frozen) and switches preview, files, history, assets and styles without leaving Preview.
   Settings and Preview tabs span the full workspace; the standalone Settings page uses a

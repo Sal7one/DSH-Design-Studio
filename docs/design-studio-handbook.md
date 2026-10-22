@@ -10,8 +10,9 @@ A persistent Design Studio in the **current workspace** under
 
 - a `design_studio` agent tool (create/read/write/zip/history/styles/assets/review/agent);
 - a `/design-studio/<slug>/html/index.html` live-preview route;
-- the built-in Design Studio conversation tab (preview, styles, agent, assets,
-  history, review, upload, settings);
+- the built-in Design Studio conversation tab (preview, pages, styles, agent,
+  assets, history, review, upload; its ⚙ Settings button opens the shared
+  DeepSeek Design Studio settings page);
 - identity presets, attribution-backed style atlas, content-addressed history,
   vision review, and a real harness-subagent design agent.
 
@@ -54,7 +55,9 @@ Keep it in sync with the files.
 
 ## 4. UI map
 
-Tabs: **Preview, Pages, Styles, Agent, Assets, History, Review, Upload, Settings**.
+Tabs: **Preview, Pages, Styles, Agent, Assets, History, Review, Upload**.
+The workspace **⚙ Settings** button opens the one shared DeepSeek settings
+surface; the conversation tab does not mount a second settings page.
 
 The workspace bar above the tabs includes a **Design** selector. It lists every
 visible design, marks frozen ones with 🔒, and switches the preview, files,

@@ -20,6 +20,8 @@ Larger default canvas, project-level style scope, settings cleanup.
 - Settings now shows an explicit **Unsaved changes** state, disables Save until
   there is something to save, and reports **Saved** inline instead of inserting
   a message block that broke the settings grid.
+- The conversation tab no longer mounts a second Settings page. Its **⚙
+  Settings** button opens the shared DeepSeek Design Studio settings surface.
 - The settings header is an aligned panel with Save/Refresh actions; lifecycle
   checkboxes are now full-width toggle rows that spell out the required save.
 - Studio tab bar now includes **Pages**.
