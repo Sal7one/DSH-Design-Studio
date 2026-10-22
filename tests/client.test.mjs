@@ -95,7 +95,7 @@ test('client half registers current slots and owns its style lifecycle', () => {
 
   const bySlot = (name) => registrations.filter((entry) => entry.options.name === name)
   assert.equal(bySlot('conversation.view').length, 1)
-  assert.equal(bySlot('settings.section').length, 2)
+  assert.equal(bySlot('settings.section').length, 1)
 
   const view = bySlot('conversation.view')[0]
   assert.equal(view.options.id, 'design-studio')
@@ -103,9 +103,7 @@ test('client half registers current slots and owns its style lifecycle', () => {
   assert.equal('inject' in view.options, false, 'obsolete slot inject face is gone')
   assert.equal(typeof view.component, 'function')
 
-  const allDesigns = bySlot('settings.section').find((entry) => entry.options.id === 'all-designs')
   const studio = bySlot('settings.section').find((entry) => entry.options.id === 'design-studio')
-  assert.equal(allDesigns.options.label(), 'All designs')
   assert.equal(studio.options.label(), 'Design Studio')
   assert.deepEqual(localeRegistrations.map((entry) => entry.language).sort(), ['en', 'zh'])
 
@@ -125,6 +123,7 @@ test('settings view renders the vision-first layout', async () => {
       effort: 'off',
       visionTransport: 'auto',
       reviewStyle: 'strict',
+      defaultStyleScope: 'design',
       autoVerify: true,
       capture: { width: 1440, height: 1700 },
       agentPreset: '',
@@ -178,6 +177,7 @@ test('settings view renders the vision-first layout', async () => {
     'Harness vision',
     'Vision transport',
     'Review style',
+    'Default style apply scope',
     'Reasoning effort',
     'Viewport width',
     'Viewport height',
@@ -212,14 +212,14 @@ test('studio workspace renders its library, tabs and default preview tab', async
   const makeReact = (overrides) => {
     const seeds = [
       [demo], 'demo', null, 'index', false, '', '', false, '', '', 0, '', '', '',
-      null, null, null, '', [], false, '', false, null, 'preview', 'desktop', true,
-      'page', null, null, null, false, false, '', '', false, [], false, [], false,
+      null, null, null, '', [], false, '', false, null, 'preview', 'desktop', false,
+      'design', 'design', null, null, null, false, false, '', '', false, [], false, [], false,
       '', '', null, false, null, 0,
     ]
     if (overrides && overrides.systems) seeds[0] = overrides.systems
     if (overrides && overrides.workspaceTab) seeds[23] = overrides.workspaceTab
-    if (overrides && overrides.stylePreview) seeds[27] = overrides.stylePreview
-    if (overrides && overrides.styleTour) seeds[29] = overrides.styleTour
+    if (overrides && overrides.stylePreview) seeds[28] = overrides.stylePreview
+    if (overrides && overrides.styleTour) seeds[30] = overrides.styleTour
     if (overrides && overrides.keyState) seeds[15] = overrides.keyState
     if (overrides && overrides.harnessState) seeds[16] = overrides.harnessState
     if (overrides && overrides.selection) seeds[22] = overrides.selection

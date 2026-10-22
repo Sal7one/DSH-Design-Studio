@@ -4,11 +4,17 @@ All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
 ## 2.7.6 — 2026-10-21
 
-Explicit style apply scope actions.
+Explicit style apply scope and a larger default canvas.
 
+- Preview now defaults to **1:1** (large design area, scrolls); **Fit** remains
+  available in the explicit Fit/1:1 control.
 - Style preview/tour actions now expose **Apply to this page** and **Apply to
-  all pages** buttons; the Styles tab scope remains available for applying
-  directly from a style card.
+  all pages** buttons.
+- Style apply defaults to the project/all-pages scope; the starting scope is
+  configurable in **Settings → Design Studio → Default style apply scope**.
+- Removed the separate DeepSeek settings section **All designs**; the manager is
+  now under **Design Studio → All designs (advanced)**.
+- Studio tab bar now includes **Pages**.
 
 ## 2.7.5 — 2026-10-21
 

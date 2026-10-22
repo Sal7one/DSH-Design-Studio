@@ -54,15 +54,16 @@ Keep it in sync with the files.
 
 ## 4. UI map
 
-Tabs: **Preview, Styles, Agent, Assets, History, Review, Upload, Settings**.
+Tabs: **Preview, Pages, Styles, Agent, Assets, History, Review, Upload, Settings**.
 
 The workspace bar above the tabs includes a **Design** selector. It lists every
 visible design, marks frozen ones with 🔒, and switches the preview, files,
 history, assets, styles and freeze state. Studio-wide settings (vision, capture
 size, agent preset) are global, not per design.
 
-- **Preview** — live iframe, `Fit` (default, scales the whole device into the
-  stage) / `1:1`, desktop/tablet/mobile frame, element Select, snapshot/review,
+- **Preview** — live iframe, `1:1` (default, large design area with scrolling) /
+  `Fit` (scales the whole device into the stage), desktop/tablet/mobile frame,
+  element Select, snapshot/review,
   OS-browser open. The style tour appears above the iframe while active.
 - **Styles** — gallery grid (default) and a large **Try them now** button that
   opens the horizontal style tour above the preview. `←`/`→` auto-try styles;
@@ -81,13 +82,15 @@ size, agent preset) are global, not per design.
 
 ### Page-scoped styles
 
-The Styles tab has **This page / Entire design** scope. Page scope writes
-`css/pages/<id>.tokens.css` and leaves `css/token.css` untouched; design scope
+The Styles tab has **This page / All pages** scope; the default is configurable
+in **Settings → Design Studio → Default style apply scope**. Page scope writes
+`css/pages/<id>.tokens.css` and leaves `css/token.css` untouched; All pages scope
 writes the shared tokens. Pages share assets and the shared `style.css`. Zip,
 freeze, history, and design delete operate on the whole design root, so every
 page is included.
-- **Settings** — vision transport/models, review style, capture size, agent
-  preset, and related options.
+- **Settings** — vision transport/models, review style, default style apply
+  scope, capture size, agent preset, and related options. The all-designs
+  manager is under **All designs (advanced)** in this same section.
 
 Selection flow: clicking an element opens the change editor. **Enter** sends to
 Ask DeepSeek; **Shift+Enter** adds a line; **Save only** writes
@@ -239,7 +242,7 @@ shipped yet. Do not claim a live device import or "any app" reconstruction.
 - Motion respects `prefers-reduced-motion`.
 - Images have alt text; decorative SVGs are hidden from assistive tech.
 - Empty/loading/error states are honest.
-- Text remains readable when the preview is Fit-scaled; use 1:1 to inspect detail.
+- Text remains readable at 1:1 by scrolling; use Fit for an overview.
 
 ## 14. Assets
 

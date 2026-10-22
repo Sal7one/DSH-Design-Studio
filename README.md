@@ -79,8 +79,8 @@ DSH-Design-Studio/
   tab bar as Pages, Styles, Agent, Assets, History, Review, Upload and Settings — no modal, no top-right panel.
   It renders a centered device at a real Desktop (1440×1600), Tablet, or Mobile viewport;
   switching viewport resizes the whole device frame, and the surrounding area uses the
-  panel background instead of a white strip. A **Fit / 1:1** control (`Fit` default)
-  scales the device to the available pane or shows actual size with scrolling. The open Studio polls the selected design's
+  panel background instead of a white strip. A **Fit / 1:1** control (`1:1` default)
+  shows actual size with scrolling; Fit scales the device to the available pane. The open Studio polls the selected design's
   stamp every 1.5s and auto-reloads the Preview/outline/assets on external edits.
 - **Large Studio workspace** — a 300px library (Designs, Assets, Outline) and a wide
   tabbed work area (**Preview / Pages / Styles / Agent / Assets / History / Review / Upload / Settings**). The
@@ -230,14 +230,13 @@ Click **🎯 Select**, click any element in the live preview, describe the chang
 
 ### Settings & data
 
-- **Settings → Design Studio** — a vision-first layout: live harness model and
+- **Settings → Design Studio** — vision-first layout: live harness model and
   `inputModalities`, transport (`auto`/`harness`/`openrouter`), review style
-  (`strict`/`balanced`/`lenient`), reasoning effort (including `auto` and `max`),
-  capture viewport, design-agent preset, auto-verify, and lifecycle. The OpenRouter
-  fallback + advanced request fields and the identity-preset editor are collapsed
-  disclosures, so the page stays readable.
-- **Settings → All designs** — every design system across conversations, with
-  zip/reveal/delete and an explicit orphan sweep.
+  (`strict`/`balanced`/`lenient`), default style apply scope (all pages vs this
+  page), reasoning effort (including `auto` and `max`), capture viewport,
+  design-agent preset, auto-verify, lifecycle, and the advanced all-designs
+  manager. OpenRouter fallback + advanced request fields and the identity-preset
+  editor are collapsed disclosures, so the page stays readable.
 - **Everything survives restarts** — designs live on disk in the workspace
   `design-studio/`; presets, config, reviews and agent history stay in the profile.
 
@@ -324,7 +323,7 @@ directly. The key is stored via the credential seam and never shown again.
    dsh plugin --profile desktop add @sal7one/dsh-design-studio
    ```
 4. **Restart the harness** (Ctrl+C, start again). The **Design Studio tab** now
-   appears in every conversation, plus Settings → Design Studio / All designs.
+   appears in every conversation, plus Settings → Design Studio (with All designs under advanced).
 5. **Design something.** Create a design system, or just describe a screen to the
    assistant — it routes briefs into the studio automatically. The live preview is
    served at `<harness-origin>/design-studio/<name>/html/index.html` (the exact
@@ -543,8 +542,12 @@ See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Changelog
 
-> **2.7.6 — explicit style apply scope.** Style preview and tour actions now
-> expose **Apply to this page** and **Apply to all pages** buttons.
+> **2.7.6 — explicit style apply scope and 1:1 default.** Preview now opens at
+> **1:1** (large design area) with Fit available. Style preview and tour actions
+> expose **Apply to this page** and **Apply to all pages** buttons. Style apply
+> defaults to the project/all-pages scope, configurable in Design Studio
+> settings. The old separate **All designs** settings section is folded into
+> **Design Studio → All designs (advanced)**.
 >
 > **2.7.5 — sidebar-safe preview and multi-page canvases.** Preview defaults to
 > **Fit** with an explicit **Fit / 1:1** control; wide 1:1 previews start at the
