@@ -230,16 +230,12 @@ Click **🎯 Select**, click any element in the live preview, describe the chang
 
 ### Settings & data
 
-- **Settings → Design Studio** — vision-first layout: live harness model and
-  `inputModalities`, transport (`auto`/`harness`/`openrouter`), review style
-  (`strict`/`balanced`/`lenient`), default style apply scope (all pages vs this
-  page), reasoning effort (including `auto` and `max`), capture viewport,
-  design-agent preset, auto-verify, and lifecycle. OpenRouter fallback + advanced
-  request fields and the identity-preset editor are collapsed disclosures, so the
-  page stays readable.
-- **Settings → All designs** — a dedicated library page grouped by workspace,
-  with search, status filters, counts, latest ZIP dates, and
-  preview/zip/show-in-folder/delete actions.
+- **Settings → Design Studio** — a single DeepSeek settings entry with internal
+  **Preferences** and **All designs** tabs. Preferences covers vision transport,
+  review style, default style apply scope, reasoning effort, capture viewport,
+  agent preset, auto-verify, lifecycle and advanced presets. All designs is a
+  grouped workspace library with search, status filters, counts, latest ZIP
+  dates and preview/zip/show-in-folder/delete actions.
 - **Everything survives restarts** — designs live on disk in the workspace
   `design-studio/`; presets, config, reviews and agent history stay in the profile.
 
@@ -326,7 +322,7 @@ directly. The key is stored via the credential seam and never shown again.
    dsh plugin --profile desktop add @sal7one/dsh-design-studio
    ```
 4. **Restart the harness** (Ctrl+C, start again). The **Design Studio tab** now
-   appears in every conversation, plus Settings → Design Studio and All designs.
+   appears in every conversation, plus a single Settings → Design Studio entry.
 5. **Design something.** Create a design system, or just describe a screen to the
    assistant — it routes briefs into the studio automatically. The live preview is
    served at `<harness-origin>/design-studio/<name>/html/index.html` (the exact
@@ -548,8 +544,8 @@ See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 > **2.7.7 — larger canvas and project style scope.** Preview opens at **1:1**
 > (large design area, scrolls) with Fit available. Style apply defaults to the
 > project/all-pages scope, configurable in Design Studio settings. **All designs**
-> is restored as its own revamped settings page: grouped by workspace, search and
-> status filters, summary counts, latest ZIP generation time, and clean
+> lives inside Design Studio as an internal tab, grouped by workspace with search,
+> status filters, counts, latest ZIP dates, and clean
 > preview/zip/show-in-folder/delete actions. Settings now makes unsaved changes
 > explicit and keeps its Save/Refresh header aligned.
 >

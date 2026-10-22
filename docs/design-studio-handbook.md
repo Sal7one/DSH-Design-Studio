@@ -88,10 +88,11 @@ in **Settings → Design Studio → Default style apply scope**. Page scope writ
 writes the shared tokens. Pages share assets and the shared `style.css`. Zip,
 freeze, history, and design delete operate on the whole design root, so every
 page is included.
-- **Settings → All designs** — a dedicated library grouped by workspace, with
-  search, status filters, counts, and preview/zip/reveal/delete actions.
-- **Settings → Design Studio** — vision transport/models, review style, default
-  style apply scope, capture size, agent preset, and related options.
+- **Settings → Design Studio** — one settings entry with **Preferences** and
+  **All designs** tabs. Preferences covers vision transport/models, review style,
+  default style apply scope, capture size, agent preset and related options. All
+  designs groups the library by workspace with search, status filters, counts,
+  latest ZIP dates and preview/zip/show-in-folder/delete actions.
 
 Selection flow: clicking an element opens the change editor. **Enter** sends to
 Ask DeepSeek; **Shift+Enter** adds a line; **Save only** writes

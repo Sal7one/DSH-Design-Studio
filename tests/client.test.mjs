@@ -95,7 +95,7 @@ test('client half registers current slots and owns its style lifecycle', () => {
 
   const bySlot = (name) => registrations.filter((entry) => entry.options.name === name)
   assert.equal(bySlot('conversation.view').length, 1)
-  assert.equal(bySlot('settings.section').length, 2)
+  assert.equal(bySlot('settings.section').length, 1)
 
   const view = bySlot('conversation.view')[0]
   assert.equal(view.options.id, 'design-studio')
@@ -103,9 +103,7 @@ test('client half registers current slots and owns its style lifecycle', () => {
   assert.equal('inject' in view.options, false, 'obsolete slot inject face is gone')
   assert.equal(typeof view.component, 'function')
 
-  const allDesigns = bySlot('settings.section').find((entry) => entry.options.id === 'all-designs')
   const studio = bySlot('settings.section').find((entry) => entry.options.id === 'design-studio')
-  assert.equal(allDesigns.options.label(), 'All designs')
   assert.equal(studio.options.label(), 'Design Studio')
   assert.deepEqual(localeRegistrations.map((entry) => entry.language).sort(), ['en', 'zh'])
 
@@ -177,6 +175,8 @@ test('settings view renders the vision-first layout', async () => {
   const text = flatten(tree)
   for (const label of [
     'Harness vision',
+    'Preferences',
+    'All designs',
     'Vision transport',
     'Review style',
     'Default style apply scope',
@@ -296,6 +296,36 @@ test('studio workspace renders its library, tabs and default preview tab', async
     selection,
   })
   assert.ok(warningText.includes('No image-capable model active'), 'selection warns when vision is unavailable')
+})
+
+test('embedded all designs renders the library shell', async () => {
+  const React = {
+    useState(initial) {
+      return [typeof initial === 'function' ? initial() : initial, () => {}]
+    },
+    useEffect() {},
+    createElement(type, props, ...children) {
+      return { type, props: props || {}, children }
+    },
+  }
+  globalThis.React = React
+  globalThis.h = React.createElement
+  const { AllDesignsView } = await import('../lib/client/src/settings.js?all-designs-test')
+  const tree = AllDesignsView({ embedded: true })
+
+  function flatten(node) {
+    if (node === null || node === undefined || node === false) return ''
+    if (typeof node === 'string' || typeof node === 'number') return String(node)
+    if (Array.isArray(node)) return node.map(flatten).join(' ')
+    if (typeof node === 'object') return flatten(node.children)
+    return ''
+  }
+
+  const text = flatten(tree)
+  for (const label of ['designs', 'workspaces', 'Refresh', 'Sweep orphans', 'Loading designs…']) {
+    assert.ok(text.includes(label), 'embedded All designs renders ' + label)
+  }
+  assert.equal(text.includes('Every design across every workspace'), false, 'embedded mode omits its duplicate hero')
 })
 
 test('history panel renders its controls', async () => {

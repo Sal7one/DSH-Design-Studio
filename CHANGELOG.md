@@ -10,12 +10,13 @@ Larger default canvas, project-level style scope, settings cleanup.
   available in the explicit Fit/1:1 control.
 - Style apply defaults to the project/all-pages scope; the starting scope is
   configurable in **Settings → Design Studio → Default style apply scope**.
-- Revamped **Settings → All designs** as its own section: grouped by workspace,
-  with search/status filters, summary counts, preview/zip/reveal/delete actions,
-  and an inline delete confirmation that no longer collides with card borders.
+- **All designs** now lives inside **Settings → Design Studio** as an internal
+  tab, so DeepSeek settings has one Design Studio entry instead of two. It is
+  grouped by workspace, with search, status filters, counts, latest ZIP dates,
+  preview/zip/show-in-folder/delete actions and inline delete confirmation.
 - All-design rows show the latest ZIP generation time; **Show in folder**
   creates a missing ZIP and then reveals it through Explorer/Finder/xdg-open.
-  Delete updates the list immediately after confirmation.
+  Delete updates the list immediately, including legacy profile designs.
 - Settings now shows an explicit **Unsaved changes** state, disables Save until
   there is something to save, and reports **Saved** inline instead of inserting
   a message block that broke the settings grid.
