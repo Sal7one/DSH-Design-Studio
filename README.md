@@ -509,7 +509,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.7.6`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.7.7`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 
@@ -526,7 +526,7 @@ npm pack --dry-run
   `zip` → inspect the zip for `pages/<id>.html`, `_studio/pages.json` and page
   CSS/JS → `page_delete`.
 - README screenshots use unique filenames and absolute raw URLs. The local
-  `v2.7.6` tag must match `package.json`; the workflow rejects a mismatch.
+  `v2.7.7` tag must match `package.json`; the workflow rejects a mismatch.
 
 Then PR one entry into `awesome-deepseek-harness` (alphabetical, one PR per change,
 carry the `#dsh-plugin` topic for discovery).
@@ -542,12 +542,14 @@ See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Changelog
 
-> **2.7.6 — explicit style apply scope and 1:1 default.** Preview now opens at
-> **1:1** (large design area) with Fit available. Style preview and tour actions
-> expose **Apply to this page** and **Apply to all pages** buttons. Style apply
-> defaults to the project/all-pages scope, configurable in Design Studio
-> settings. The old separate **All designs** settings section is folded into
+> **2.7.7 — larger canvas and project style scope.** Preview opens at **1:1**
+> (large design area, scrolls) with Fit available. Style apply defaults to the
+> project/all-pages scope, configurable in Design Studio settings. The separate
+> **All designs** settings section is folded into
 > **Design Studio → All designs (advanced)**.
+>
+> **2.7.6 — explicit style apply scope.** Style preview and tour actions expose
+> **Apply to this page** and **Apply to all pages** buttons.
 >
 > **2.7.5 — sidebar-safe preview and multi-page canvases.** Preview defaults to
 > **Fit** with an explicit **Fit / 1:1** control; wide 1:1 previews start at the
