@@ -95,7 +95,7 @@ test('client half registers current slots and owns its style lifecycle', () => {
 
   const bySlot = (name) => registrations.filter((entry) => entry.options.name === name)
   assert.equal(bySlot('conversation.view').length, 1)
-  assert.equal(bySlot('settings.section').length, 1)
+  assert.equal(bySlot('settings.section').length, 2)
 
   const view = bySlot('conversation.view')[0]
   assert.equal(view.options.id, 'design-studio')
@@ -103,7 +103,9 @@ test('client half registers current slots and owns its style lifecycle', () => {
   assert.equal('inject' in view.options, false, 'obsolete slot inject face is gone')
   assert.equal(typeof view.component, 'function')
 
+  const allDesigns = bySlot('settings.section').find((entry) => entry.options.id === 'all-designs')
   const studio = bySlot('settings.section').find((entry) => entry.options.id === 'design-studio')
+  assert.equal(allDesigns.options.label(), 'All designs')
   assert.equal(studio.options.label(), 'Design Studio')
   assert.deepEqual(localeRegistrations.map((entry) => entry.language).sort(), ['en', 'zh'])
 

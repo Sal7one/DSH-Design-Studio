@@ -10,8 +10,9 @@ Larger default canvas, project-level style scope, settings cleanup.
   available in the explicit Fit/1:1 control.
 - Style apply defaults to the project/all-pages scope; the starting scope is
   configurable in **Settings → Design Studio → Default style apply scope**.
-- Removed the separate DeepSeek settings section **All designs**; the manager is
-  now under **Design Studio → All designs (advanced)**.
+- Revamped **Settings → All designs** as its own section: grouped by workspace,
+  with search/status filters, summary counts, preview/zip/reveal/delete actions,
+  and an inline delete confirmation that no longer collides with card borders.
 - Studio tab bar now includes **Pages**.
 
 ## 2.7.6 — 2026-10-21
