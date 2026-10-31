@@ -1,7 +1,7 @@
 {
   "name": "@sal7one/dsh-design-studio",
-  "version": "2.7.7",
-  "description": "Persistent Design Studio plugin for DeepSeek Harness: the design_studio agent tool, a /design-studio live-preview route + JSON API, identity presets, an attributed 88-style design atlas, content-addressed edit history with undo/restore, OpenRouter vision review, a real harness-subagent design agent, and a vision-first Settings page — plus the built-in Design Studio conversation tab. Zero runtime dependencies (plain JS, no install-time build step).",
+  "version": "2.8.0",
+  "description": "Persistent Design Studio plugin for DeepSeek Harness: the design_studio agent tool, a /design-studio live-preview route + JSON API, identity presets, an attributed 88-style design atlas, content-addressed edit history with undo/restore, OpenRouter vision review, a real harness-subagent design agent, a vision-first Settings page, optional Compose Desktop and Android/Appium app targets, and the built-in Design Studio conversation tab. Zero runtime dependencies (plain JS, no install-time build step).",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -25,7 +25,9 @@
     "docs/design-studio-handbook.md",
     "docs/device-ui-reconstruction.md",
     "locale/*.json",
-    "icon.svg"
+    "icon.svg",
+    "docs/android-app-targets.md",
+    "docs/compose-desktop.md"
   ],
   "license": "MIT",
   "author": "Sal7one",
@@ -47,7 +49,10 @@
     "design-gallery",
     "design-tokens",
     "ui-mockup",
-    "openrouter"
+    "openrouter",
+    "android",
+    "appium",
+    "compose-desktop"
   ],
   "publishConfig": {
     "access": "public"
@@ -59,7 +64,7 @@
   "scripts": {
     "build:client": "node scripts/bundle-client.mjs",
     "check": "node scripts/check.mjs",
-    "test": "node --test tests/host.test.mjs tests/client.test.mjs"
+    "test": "node --test tests/host.test.mjs tests/client.test.mjs tests/hot-reload.test.mjs tests/appium.test.mjs"
   },
   "dsh": {
     "manifestVersion": 1,

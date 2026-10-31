@@ -74,16 +74,30 @@ DSH-Design-Studio/
   manage identity presets, run vision reviews, chat with the design agent, read its history,
   and configure the studio — design files live in the workspace
   `design-studio/<slug>/` folder (legacy profile designs remain readable).
+- **Optional Compose Desktop target** — point `app.project` at a Compose Multiplatform
+  project that exposes Compose Hot Reload's `hotMcpServer` (CMP 1.12+) and the **App**
+  tab drives the *real* app: start, reload, screenshot, semantic tree, logs. No Gradle
+  wrapper or no project means it stays off, with an honest empty state. See
+  [docs/compose-desktop.md](docs/compose-desktop.md).
+- **Android app target (Appium)** — bind one design project to an already-built
+  Android app and the **App** tab drives it through Appium: live screenshot and
+  uiautomator2 tree, hover-before-click highlighting, a selection popup with a
+  change-request field, and one-click capture into the project's assets and
+  edit history. The Connect popup stores the app package/activity plus the
+  project root, Gradle build task and APK path, so an agent can rebuild and
+  reinstall the same existing project after a request. The session survives tab
+  switches via a host keepalive and reconnects automatically. See
+  [docs/android-app-targets.md](docs/android-app-targets.md).
 - **Live preview route** — `/design-studio/<slug>/html/index.html`, served by the
   harness web server. Inline **Preview** is the default open tab and sits in the same
-  tab bar as Pages, Styles, Agent, Assets, History, Review, Upload and Settings — no modal, no top-right panel.
+  tab bar as App, Pages, Styles, Agent, Assets, History, Review, Upload and Settings — no modal, no top-right panel.
   It renders a centered device at a real Desktop (1440×1600), Tablet, or Mobile viewport;
   switching viewport resizes the whole device frame, and the surrounding area uses the
   panel background instead of a white strip. A **Fit / 1:1** control (`1:1` default)
   shows actual size with scrolling; Fit scales the device to the available pane. The open Studio polls the selected design's
   stamp every 1.5s and auto-reloads the Preview/outline/assets on external edits.
 - **Large Studio workspace** — a 300px library (Designs, Assets, Outline) and a wide
-  tabbed work area (**Preview / Pages / Styles / Agent / Assets / History / Review / Upload**); the
+  tabbed work area (**Preview / App / Pages / Styles / Agent / Assets / History / Review / Upload**); the
   **⚙ Settings** button opens the shared DeepSeek Design Studio settings page. The
   workspace bar's **Design** selector lists every design in the workspace (🔒 when
   frozen) and switches preview, files, history, assets and styles without leaving Preview.
@@ -368,6 +382,10 @@ tool result.
   or an OpenRouter key under credential reference `OPENROUTER_API_KEY` as the fallback.
 - For **📷 Capture**: a local Microsoft Edge, Google Chrome, or Chromium install.
   It is optional; the rest of the studio works without it.
+- For **Android app targets**: Appium 3 with the `uiautomator2` driver on
+  loopback (`127.0.0.1:4723`), an installed debug APK, and a visible
+  emulator/device. Building and installing the app itself needs the project's
+  JDK + Android SDK; the plugin never runs Gradle.
 
 ## Storage and upgrades (2.7.0)
 
@@ -509,7 +527,7 @@ committed in generated form:
 npm publish --access public
 ```
 
-Or push a version tag (`v2.7.7`); `.github/workflows/publish.yml` publishes to npm
+Or push a version tag (`v2.8.0`); `.github/workflows/publish.yml` publishes to npm
 using the `NPM_TOKEN` repository secret. `.github/workflows/ci.yml` runs the same
 checks on pull requests and pushes.
 
@@ -526,7 +544,7 @@ npm pack --dry-run
   `zip` → inspect the zip for `pages/<id>.html`, `_studio/pages.json` and page
   CSS/JS → `page_delete`.
 - README screenshots use unique filenames and absolute raw URLs. The local
-  `v2.7.7` tag must match `package.json`; the workflow rejects a mismatch.
+  `v2.8.0` tag must match `package.json`; the workflow rejects a mismatch.
 
 Then PR one entry into `awesome-deepseek-harness` (alphabetical, one PR per change,
 carry the `#dsh-plugin` topic for discovery).
@@ -542,6 +560,13 @@ See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Changelog
 
+> **2.8.0 — Android app targets and Compose Desktop.** Bind a design project to
+> an installed Android app and drive it through Appium from the **App** tab:
+> live screenshot/tree, hover highlighting, selection popup, project-root/build
+> fields, capture into assets + history, and a keepalive session that survives
+> tab switches. Also ships the optional Compose Desktop target. See
+> [docs/android-app-targets.md](docs/android-app-targets.md).
+>
 > **2.7.7 — larger canvas and project style scope.** Preview opens at **1:1**
 > (large design area, scrolls) with Fit available. Style apply defaults to the
 > project/all-pages scope, configurable in Design Studio settings. **All designs**

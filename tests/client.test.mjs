@@ -41,7 +41,17 @@ function loadClientModule() {
   assert.equal(created.length, 0, 'the lazy factory performs no DOM work')
   const module = definition.factory((specifier) => {
     assert.equal(specifier, 'react')
-    return { createElement: (type, props, ...children) => ({ type, props, children }) }
+    class Component {
+      constructor(props) {
+        this.props = props || {}
+        this.state = {}
+      }
+      setState(next) {
+        const patch = typeof next === 'function' ? next(this.state, this.props) : next
+        this.state = Object.assign({}, this.state, patch)
+      }
+    }
+    return { createElement: (type, props, ...children) => ({ type, props, children }), Component }
   })
   assert.equal(typeof module.apply, 'function')
   assert.deepEqual([...module.inject], ['slots'])

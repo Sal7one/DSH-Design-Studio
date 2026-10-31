@@ -2,6 +2,68 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## 2.8.0 — 2026-10-31
+
+Android app targets through Appium, plus the optional Compose Desktop target.
+
+### Android app target (Appium)
+
+- The Appium capability now lives inside Design Studio (`lib/host/appium.js`);
+  the separate `@sal7one/dsh-design-studio-appium` bundle is retired. One tool,
+  one API prefix, one App tab, no second configuration surface.
+- Each design project owns one Android target at
+  `_studio/appium/<slug>.json`: Appium URL, appPackage/appActivity, device,
+  project root, Gradle build task and APK path. Selecting a project selects its
+  app; a session from another project is never reported as this project's.
+- The App tab now shows the real app first (Agent/Upload/Review are hidden on
+  `tab-app`): live screenshot, uiautomator2 tree, hover highlight before click,
+  selection popup with class/text/content-desc/resource-id/bounds/locator, and a
+  change-request field that queues the request with the node identity.
+- **Capture** writes the current frame into the project at
+  `assets/images/app/` and creates a Design Studio history snapshot
+  (`reason: android-capture`), so Android review participates in the same
+  history/restore flow as mockups.
+- Session lifecycle: host keepalive every 60s, `newCommandTimeout` raised to
+  24h, stale sessions validated and recovered, automatic reconnect on App tab
+  mount, and explicit Disconnect remembered until reconnect.
+- Selection/tap refresh a tree older than 600ms, so a foreground app change
+  cannot resolve clicks against the previous app's cached nodes.
+- 12 `android_*` tool actions and matching `studio.android.*` API methods:
+  status, config, config_save, connect, disconnect, tree, shot, hover, select,
+  tap, restart, capture, history.
+- New tests for both uiautomator2 `<node>` and Appium 3 class-tag page sources,
+  resource-id/content-desc/text/class locator fallbacks, bounds and quoting.
+- `android_capture` is blocked on frozen designs at both the tool and API
+  layers; read-only device actions stay available for review.
+
+### Compose Desktop target
+
+Optional Compose Desktop target, driven through Compose Hot Reload's MCP server.
+
+- New **App** tab and `app_*` tool actions (`app_status`, `app_start`, `app_stop`,
+  `app_reload`, `app_shot`, `app_tree`, `app_logs`) that drive the real running
+  Compose app instead of a mockup.
+- Zero-dependency MCP stdio client (`lib/host/hot-reload.js`) against
+  `./gradlew hotMcpServer`; argv-only spawn, project validation, one session,
+  timeouts, and a clean stop on plugin disposal.
+- Screenshots are captured from the app, stored in the profile
+  (`_studio/app/<owner>/shots/`), served at
+  `/design-studio/__app/shots/<owner>/<file>.png`, and returned to the agent as an
+  attachment.
+- `config` gained `app{project,task,initializeTimeoutMs,toolTimeoutMs}` and the
+  tool gained `config_save` so configuration no longer requires hand-editing JSON.
+- App actions work on frozen designs (read-only review) and never write into the
+  app repo.
+- `app_start` now launches the app run task (`app.runTask`, default
+  `hotRunDesktop`) when nothing is connected, and waits for the application.
+- Live review: the App tab polls `studio.app.frame`, pins the first frame as the
+  baseline, and overlays changed regions on the image, named from the semantic
+  tree. `app_call` invokes any advertised MCP tool (click, type, scroll,
+  resize_window, restart).
+- macOS captures use the window server (`CGWindowID` + `screencapture -l`), so a
+  covered app window is captured correctly; MCP `take_screenshot` stays as the
+  fallback.
+
 ## 2.7.7 — 2026-10-22
 
 Larger default canvas, project-level style scope, settings cleanup.
