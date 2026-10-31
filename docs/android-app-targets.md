@@ -108,6 +108,29 @@ design_studio action=android_capture slug=<slug>
 - A session belongs to one design project; switching projects switches the
   target. The status for another project never reports someone else's session.
 
+## Context awareness
+
+`android_context` answers "where am I and where does this component live?":
+
+- `activity` — the Appium current activity.
+- `screen` / `screenLabel` — the first `SCREEN_*`, `PAGE_*`, `ROUTE_*` or
+  `DESTINATION_*` resource-id in the current tree. If the app has no screen tag,
+  this is empty and the activity is the honest fallback.
+- `routes` — a static index of `composable(route = …)` and
+  `navigation(route = …)` entries in `projectRoot`, resolved per module.
+- `tag` — when a tag is supplied, its definition (`file:line`, enclosing
+  function) and the places that call that composable.
+
+Requirements and limits:
+
+- Enable `testTagsAsResourceId = true` at the Compose root, otherwise Appium
+  sees no test tags and neither screen identity nor source lookup can work.
+- Put `SCREEN_<NAME>` on a semantic node at each destination root, for example
+  `Modifier.testTag("SCREEN_SETTINGS")`.
+- The route index is static; routes built from runtime values or conditional
+  graphs may be missing. Reuse detection is tag/function-level and does not
+  build a full component graph.
+
 ## Models and bounds
 
 Compose exposes test tags as `resource-id` when

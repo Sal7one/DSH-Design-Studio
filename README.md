@@ -85,9 +85,11 @@ DSH-Design-Studio/
   change-request field, and one-click capture into the project's assets and
   edit history. The Connect popup stores the app package/activity plus the
   project root, Gradle build task and APK path, so an agent can rebuild and
-  reinstall the same existing project after a request. The session survives tab
-  switches via a host keepalive and reconnects automatically. See
-  [docs/android-app-targets.md](docs/android-app-targets.md).
+  reinstall the same existing project after a request. It also indexes the
+  project's static navigation routes and maps a selected test tag back to its
+  source definition and other usages; screen identity comes from `SCREEN_*`
+  tags. The session survives tab switches via a host keepalive and reconnects
+  automatically. See [docs/android-app-targets.md](docs/android-app-targets.md).
 - **Live preview route** — `/design-studio/<slug>/html/index.html`, served by the
   harness web server. Inline **Preview** is the default open tab and sits in the same
   tab bar as App, Pages, Styles, Agent, Assets, History, Review, Upload and Settings — no modal, no top-right panel.

@@ -35,6 +35,15 @@ Android app targets through Appium, plus the optional Compose Desktop target.
   resource-id/content-desc/text/class locator fallbacks, bounds and quoting.
 - `android_capture` is blocked on frozen designs at both the tool and API
   layers; read-only device actions stay available for review.
+- Context awareness: `android_context` reports the current activity, the
+  `SCREEN_*` destination tag, top-level tags, a static navigation-route index
+  read from `projectRoot`, and a tag-to-source mapping (definition file:line,
+  enclosing composable, usage count). The App tab shows screen/routes/source;
+  the selection popup shows where the tag is defined and how many places use it.
+- Context requires the app to expose `testTagsAsResourceId = true` and put
+  `SCREEN_*` tags at destination roots. Without those the plugin reports the
+  activity and omits the screen instead of guessing; the route index is static
+  and heuristic (dynamic/conditional destinations may be missing).
 
 ### Compose Desktop target
 
