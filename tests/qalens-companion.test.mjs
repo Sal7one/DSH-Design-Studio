@@ -10,7 +10,7 @@ test("a missing sidecar executable fails promptly and remains stopped", { timeou
 });
 
 async function fixture() {
-  const state = { connected: true, phase: "connected", connectionId: "phone-a", selectedId: "node-a", snapshotNodes: null, snapshotFailure: 0, failed: 0, requests: [], hold: null };
+  const state = { connected: true, phase: "connected", connectionId: "phone-a", selectedId: "node-a", snapshotNodes: null, snapshotFailure: 0, failed: 0, requests: [], hold: null, scanHold: null };
   const secret = "test-secret-not-for-client";
   const server = createServer(async (req, res) => {
     const chunks = [];
@@ -20,7 +20,12 @@ async function fixture() {
     if (req.url === "/api/bootstrap") return reply(200, { ok: true, session: secret });
     if (req.headers["x-qalens-session"] !== secret) return reply(401, { ok: false });
     if (state.failed) return reply(state.failed, { ok: false, error: secret });
-    if (req.url === "/api/workbench") return reply(200, { ok: true, phase: state.phase, connected: state.connected, connectionId: state.connectionId, privateValue: secret });
+    if (req.url === "/api/devices") {
+      if (state.scanHold) await state.scanHold;
+      return reply(200, { ok: true, devices: [{ serial: "emulator-5554", state: "device", description: "model:Pixel_8", secret }, { serial: "bad serial", state: "device" }, { serial: "offline-1", state: "offline" }] });
+    }
+    if (req.url === "/api/apps") return reply(200, { ok: true, apps: [{ package: "example.qa", activity: ".MainActivity", qalens: true, secret }, { package: "example.other", qalens: false }, { package: "../bad", qalens: true }] });
+    if (req.url === "/api/workbench") return reply(200, { ok: true, phase: state.phase, connected: state.connected, connectionId: state.connectionId, connection: { serial: "emulator-5554", package: "example.qa", secret }, privateValue: secret });
     if (req.url === "/api/selection") return reply(200, { ok: true, selectedId: state.selectedId, connectionId: state.connectionId });
     if (req.url === "/api/snapshot") {
       if (state.snapshotFailure) return reply(state.snapshotFailure, { ok: false, error: secret });
@@ -38,6 +43,34 @@ async function fixture() {
   return { state, secret, url: `http://127.0.0.1:${server.address().port}`, close: () => new Promise(resolve => server.close(resolve)) };
 }
 
+test("discovery uses the attached workbench and exposes only QaLens apps and safe device details", async () => {
+  const f = await fixture();
+  const bridge = createQaLensCompanion();
+  try {
+    await assert.rejects(() => bridge.devices(), /attach/i);
+    await bridge.attach(f.url);
+    assert.deepEqual(await bridge.devices(), [{ serial: "emulator-5554", state: "device", description: "model:Pixel_8" }, { serial: "offline-1", state: "offline", description: "" }]);
+    assert.deepEqual(await bridge.apps("emulator-5554"), [{ package: "example.qa" }]);
+    await assert.rejects(() => bridge.apps("bad serial"), /device/i);
+    assert.equal(f.state.requests.find(r => r.path === "/api/devices").method, "POST");
+    assert.deepEqual(JSON.parse(f.state.requests.find(r => r.path === "/api/apps").body), { serial: "emulator-5554" });
+  } finally { await bridge.stop(); await f.close(); }
+});
+
+test("discovery drops an in-flight result after disconnect", async () => {
+  const f = await fixture();
+  const bridge = createQaLensCompanion();
+  let release;
+  f.state.scanHold = new Promise(resolve => { release = resolve });
+  try {
+    await bridge.attach(f.url);
+    const scan = bridge.devices();
+    while (!f.state.requests.some(r => r.path === "/api/devices")) await new Promise(resolve => setTimeout(resolve, 5));
+    await bridge.stop(); release();
+    await assert.rejects(scan, /connection.*changed/i);
+  } finally { release(); await bridge.stop(); await f.close(); }
+});
+
 test("reads selection and cached component without exposing session or issuing controls", async () => {
   const f = await fixture();
   const bridge = createQaLensCompanion({ minimumIntervalMs: 0 });
@@ -45,6 +78,7 @@ test("reads selection and cached component without exposing session or issuing c
     await bridge.attach(f.url);
     const first = await bridge.poll();
     assert.equal(first.connected, true);
+    assert.deepEqual(first.connectedTarget, { serial: 'emulator-5554', package: 'example.qa' });
     assert.deepEqual(first.selection, { id: "node-a", sourceRef: "a".repeat(64), actions: ["tap"], screen: "Home", route: "home", snapshotWarning: "" });
     assert.equal(first.component.content.component.tag, "HOME_BUTTON");
     assert(!JSON.stringify(first).includes(f.secret));
@@ -103,6 +137,7 @@ test("clears cached data on lost authorization and never returns response errors
     assert.equal(result.component, null);
     assert.equal(result.selection, null);
     assert.equal(result.connected, false);
+    assert.equal(result.connectedTarget, null);
     assert.equal(result.state, "disconnected");
     assert(!JSON.stringify(result).includes(f.secret));
   } finally { await bridge.stop(); await f.close(); }

@@ -27,7 +27,9 @@ does not replace it.
    merged manifest; where shared code needs it, use the matching no-op facade.
    A runtime flag and a release-built active AAR do not establish isolation.
 4. Connect to the existing loopback QaLens workbench, use its phone-approved
-   pairing flow and keep sessions/tokens private. Use one device input
+   pairing flow and keep sessions/tokens private. In the companion, scan for
+   installed QaLens apps and select one; this does not pair or prove the SDK is
+   active. A source folder is optional until source mapping is requested. Use one device input
    controller. Do not iframe or rewrite QaLens, bypass approval, or infer host
    runtime behavior from an SDK sample.
 5. Source-map instrumentation is a **separate experimental opt-in**. Preserve

@@ -473,6 +473,63 @@ test('QaLens design draft queues reviewed context only for the same live target'
   }
 })
 
+test('QaLens scanner selects an installed app without typing a package or source root', async () => {
+  const { AppPanel } = await import('../lib/client/src/app-panel.js?scanner')
+  const saved = { React: globalThis.React, h: globalThis.h, fetch: globalThis.fetch }
+  const calls = [], slots = [], effects = []
+  let deviceList = [{ serial: 'emulator-5554', state: 'device', description: 'model:Pixel' }]
+  let appList = [{ package: 'example.qa' }]
+  const view = { companion: { state: 'ready', connected: true, connectedTarget: { serial: 'emulator-5554', package: 'example.qa' }, url: 'http://127.0.0.1:8765' }, target: { package: '', projectRoot: '' } }
+  function react(seeds) { return { useState(initial) { return [seeds.length ? seeds.shift() : initial, () => {}] }, useRef(initial) { return { current: initial } }, useEffect() {}, createElement(type, props, ...children) { return { type, props: props || {}, children } } } }
+  function find(node, fn) { if (!node || typeof node !== 'object') return null; if (fn(node)) return node; for (const child of (node.children || []).flat(Infinity)) { const found = find(child, fn); if (found) return found } return null }
+  globalThis.React = react(['qalens', false, true, '']); globalThis.h = React.createElement
+  const shell = AppPanel({ slug: 'demo' })
+  const panel = find(shell, n => typeof n.type === 'function' && n.type.name === 'QaLensPanel')
+  function render() {
+    let i = 0
+    globalThis.React = { useState(initial) { const n = i++; if (!(n in slots)) slots[n] = initial; return [slots[n], value => { slots[n] = typeof value === 'function' ? value(slots[n]) : value }] }, useRef(initial) { return { current: initial } }, useEffect(fn) { effects.push(fn) }, createElement(type, props, ...children) { return { type, props: props || {}, children } } }
+    globalThis.h = React.createElement
+    return panel.type(panel.props)
+  }
+  slots[1] = view
+  globalThis.fetch = async (url, options) => {
+    const method = String(url).split('/').at(-1), body = JSON.parse(options.body)
+    calls.push({ method, body })
+    const data = method === 'studio.qalens.devices' ? { devices: deviceList }
+      : method === 'studio.qalens.apps' ? { apps: appList }
+        : method === 'studio.qalens.target.save' ? { package: body.package, projectRoot: body.projectRoot, ...(body.serial ? { serial: body.serial } : {}) } : {}
+    return { ok: true, json: async () => ({ ok: true, data }) }
+  }
+  try {
+    let button = find(render(), n => n.props && n.props.label === 'Scan for QaLens apps')
+    assert.ok(button); await button.props.onClick()
+    assert.deepEqual(calls.map(c => c.method), ['studio.qalens.devices', 'studio.qalens.apps'])
+    button = find(render(), n => n.props && n.props.label === 'Use this app')
+    assert.ok(button); assert.equal(button.props.disabled, false)
+    await button.props.onClick()
+    assert.deepEqual(calls.at(-1).body, { slug: 'demo', package: 'example.qa', projectRoot: '', serial: 'emulator-5554' })
+    assert.equal(find(render(), n => n.type === 'input' && n.props.placeholder === 'com.example.app').props.value, 'example.qa')
+    slots[5] = 'previous.app'; slots[6] = '/work/previous'; slots[8] = { package: 'previous.app', projectRoot: '/work/previous' }
+    button = find(render(), n => n.props && n.props.label === 'Use this app')
+    await button.props.onClick()
+    assert.deepEqual(calls.at(-1).body, { slug: 'demo', package: 'example.qa', projectRoot: '', serial: 'emulator-5554' }, 'a different app must not inherit the previous app source folder')
+    appList = [{ package: 'other.qa' }, { package: 'example.qa' }]
+    await find(render(), n => n.props && n.props.label === 'Scan for QaLens apps').props.onClick()
+    const appSelect = find(render(), n => n.type === 'select' && find(n, child => child.type === 'option' && child.props.value === 'other.qa'))
+    assert.equal(appSelect.props.value, 'example.qa', 'the currently connected app is selected when present')
+    assert.match(find(appSelect, n => n.type === 'option' && n.props.value === 'example.qa').children.join(''), /connected/)
+    deviceList = [{ serial: 'phone-1', state: 'device' }, { serial: 'phone-2', state: 'device' }, { serial: 'phone-3', state: 'unauthorized' }]
+    const previousAppsCalls = calls.filter(c => c.method === 'studio.qalens.apps').length
+    await find(render(), n => n.props && n.props.label === 'Scan for QaLens apps').props.onClick()
+    assert.equal(calls.filter(c => c.method === 'studio.qalens.apps').length, previousAppsCalls, 'multiple devices require an explicit choice')
+    const deviceSelect = find(render(), n => n.type === 'select' && find(n, child => child.type === 'option' && child.props.value === 'phone-2'))
+    assert.ok(deviceSelect)
+    assert.equal(find(deviceSelect, n => n.type === 'option' && n.props.value === 'phone-3').props.disabled, true)
+    await deviceSelect.props.onChange({ target: { value: 'phone-2' } })
+    assert.deepEqual(calls.at(-1).body, { serial: 'phone-2' })
+  } finally { globalThis.React = saved.React; globalThis.h = saved.h; globalThis.fetch = saved.fetch }
+})
+
 test('Appium disconnect waits for pending reads and discards stale UI results', async () => {
   const { AppPanel } = await import('../lib/client/src/app-panel.js?disconnect-regression')
   const saved = { React: globalThis.React, h: globalThis.h, fetch: globalThis.fetch }

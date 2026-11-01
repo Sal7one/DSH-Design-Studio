@@ -21,14 +21,22 @@ the workbench, edit source, or automatically build the app. **Appium fallback**
 and **Compose Desktop** remain separate modes. Avoid sending Appium actions and
 QaLens mirror controls to the same device at the same time.
 
-1. Open **Project settings** in the QaLens companion and save the app's package and project root.
+1. Run the existing QaLens workbench on this machine and enter its exact
+   `http://127.0.0.1:<port>` URL in the companion, then choose **Attach**.
+   Only numeric IPv4 loopback HTTP origins are accepted.
+2. Choose **Scan for QaLens apps**, select an authorized
+   device and app, then choose **Use this app**. The scan finds installed apps
+   advertising the QaLens Control launcher; it cannot prove an app is running
+   or that QaLens is enabled. For older/custom SDKs that do not appear, enter
+   the package under **Project settings**. A source project root is optional for
+   inspection and drafts; set it explicitly for source mapping. Scanned targets
+   also remember the chosen device; rescan to switch phones. The device identifier
+   stays in the local profile and is not included in the review draft.
    A package mismatch, or a missing package, prevents a source claim. QaLens
    target settings are stored separately from Appium; re-enter them once if an
    earlier experimental checkout used the shared Appium target.
-2. Run the existing QaLens workbench on this machine and enter its exact
-   `http://127.0.0.1:<port>` URL in the companion, then choose **Attach** and
-   **Open QaLens**. Only numeric IPv4 loopback HTTP origins are accepted.
-3. In QaLens, pair a debug/QA build and approve on the phone. Select on the
+3. Choose **Open QaLens**. In its workbench, select the same device and app,
+   pair the debug/QA build and approve on the phone. Select on the
    phone, or turn on **Link selections** in the workbench before selecting
    there. The companion reads while its App tab and browser are visible.
 4. Review the source badge. `verified` means a unique runtime source reference

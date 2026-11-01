@@ -16,6 +16,8 @@ All notable changes to `@sal7one/dsh-design-studio` are documented here.
   phones and consumer-host apps remain unverified.
 - Explain how to reload the plugin when a newer App tab contacts an older host,
   and provide the correct account-menu path when settings cannot open directly.
+- Scan attached devices for installed QaLens apps and select one without typing
+  its package. Source folders remain optional for inspection and drafts.
 
 ## 2.8.0 — 2026-10-31
 

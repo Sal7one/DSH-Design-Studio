@@ -16,6 +16,25 @@ test('draft captures bounded identity, omits values and preserves honest claims'
   assert.match(text, /Make it larger/)
   assert.doesNotMatch(text, /private-value|secret-value|private-source/)
 })
+test('a matched app can be reviewed without a source checkout', () => {
+  const view = sample()
+  view.target.projectRoot = ''
+  view.claim = { state: 'unavailable', reason: 'Configure the Android project root first.', candidates: [] }
+  const pin = captureAndroidSelection(view, { ...target, projectRoot: '' }, 0)
+  assert.ok(pin)
+  assert.equal(pin.claim.state, 'unavailable')
+  assert.equal(pin.projectRoot, '')
+})
+test('a scanned target cannot pin the same package from a different phone', () => {
+  const view = sample()
+  view.target.serial = 'phone-b'
+  view.companion.connectedTarget = { serial: 'phone-a', package: target.package }
+  assert.equal(captureAndroidSelection(view, { ...target, serial: 'phone-b' }), null)
+  view.companion.connectedTarget.serial = 'phone-b'
+  assert.ok(captureAndroidSelection(view, { ...target, serial: 'phone-b' }))
+  view.target.serial = 'phone-c'
+  assert.equal(captureAndroidSelection(view, { ...target, serial: 'phone-b' }), null)
+})
 test('pins deduplicate, bound capacity, and reject changed or disconnected targets', () => {
   const view = sample(), pin = captureAndroidSelection(view, target, 0)
   let pins = addAndroidPin([], pin)

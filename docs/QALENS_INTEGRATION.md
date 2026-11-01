@@ -170,12 +170,22 @@ requests, or assume encrypted data can be decoded without the host's serializer.
    this optional workbench, not the Design Studio web editor. Use the printed
    loopback URL. Do not expose the server to a LAN or tunnel it to other users.
 4. In Design Studio's **App** target selector, choose **Android · QaLens**.
-   Under **Project settings**, save the QA app's actual installed package and
-   the source project root. QaLens and Appium store separate targets. If an
+   In **Connection**, attach the workbench URL, then choose **Scan for QaLens
+   apps**. Select an authorized device and installed app, then **Use this app**;
+   no package typing is needed. This scan finds installed apps advertising the
+   QaLens Control launcher, not proof that the SDK is currently enabled or the
+   app is running. Older or customized SDKs may not appear; enter their package
+   manually under **Project settings**. A source project root is optional for
+   inspection and drafts but required for source claims; choose the correct
+   source root explicitly when needed. A scanned target is bound to its chosen
+   device as well as its package, so the same app on another phone cannot be
+   mistaken for it; rescan to choose a different device. The device identifier
+   stays in the local profile and is not included in the review draft. QaLens
+   and Appium store separate targets. If an
    earlier experimental checkout used the shared Appium target, enter the
-   QaLens target once again; neither setting changes the other. In **Connection**,
-   attach the workbench URL, then **Open QaLens**. The companion accepts `http://127.0.0.1:<port>`; use the
-   printed address, without credentials or a path.
+   QaLens target once again; neither setting changes the other. Select **Open
+   QaLens** to continue pairing. The companion accepts `http://127.0.0.1:<port>`;
+   use the printed address, without credentials or a path.
 5. In QaLens select the phone and installed app, choose **Connect**, and approve
    the request on the phone. Turn on **Link phone & web selection** when choosing
    elements in the workbench, or select on the phone. Select one visible Compose
