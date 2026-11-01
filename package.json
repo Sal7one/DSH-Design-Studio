@@ -27,6 +27,7 @@
     "locale/*.json",
     "icon.svg",
     "docs/android-app-targets.md",
+    "docs/QALENS_INTEGRATION.md",
     "docs/compose-desktop.md"
   ],
   "license": "MIT",
@@ -64,7 +65,7 @@
   "scripts": {
     "build:client": "node scripts/bundle-client.mjs",
     "check": "node scripts/check.mjs",
-    "test": "node --test tests/host.test.mjs tests/client.test.mjs tests/hot-reload.test.mjs tests/appium.test.mjs"
+    "test": "node --test tests/host.test.mjs tests/client.test.mjs tests/hot-reload.test.mjs tests/appium.test.mjs tests/app-adapters.test.mjs tests/source-map.test.mjs tests/qalens-companion.test.mjs tests/android-change-draft.test.mjs"
   },
   "dsh": {
     "manifestVersion": 1,

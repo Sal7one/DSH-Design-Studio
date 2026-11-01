@@ -70,13 +70,18 @@ function makeFs() {
   }
 }
 
-function makeSubprocess() {
+function makeSubprocess(fs) {
   const calls = []
   return {
     calls,
     async resolveExecutable(command) { return '/usr/bin/' + command },
     spawn(spec) {
       calls.push(spec)
+      if (spec.argv[1] === '-e' && spec.argv[2].includes('fs.rmSync(p')) {
+        for (const root of spec.argv.slice(3)) {
+          for (const path of fs.files.keys()) if (path === root || path.startsWith(root + '/')) fs.files.delete(path)
+        }
+      }
       return {
         done: Promise.resolve({ exitCode: 0, signal: null }),
         collected: {
@@ -91,7 +96,7 @@ function makeSubprocess() {
 
 function makeHarness() {
   const fs = makeFs()
-  const subprocess = makeSubprocess()
+  const subprocess = makeSubprocess(fs)
   const routes = []
   const sections = []
   const registeredTools = new Map()
@@ -499,4 +504,213 @@ test('route serves the API and the live preview', async () => {
   const crossReq = Object.assign(fakeReq('POST', '/design-studio/__api/studio.ping', {}), { headers: { 'sec-fetch-site': 'cross-site' } })
   await route.handler(crossReq, crossRes)
   assert.equal(crossRes.statusCode, 403)
+})
+
+test('QaLens route hides session and refuses source claims for a different app', async () => {
+  const { createServer } = await import('node:http')
+  const secret = 'session-should-not-leave-host'
+  let requests = 0
+  const server = createServer((req, res) => {
+    requests++
+    const send = (value) => { res.setHeader('content-type', 'application/json'); res.end(JSON.stringify(value)) }
+    if (req.url === '/api/bootstrap') return send({ ok: true, session: secret })
+    if (req.headers['x-qalens-session'] !== secret) { res.statusCode = 401; return send({ ok: false }) }
+    if (req.url === '/api/workbench') return send({ ok: true, connected: true, phase: 'connected', connectionId: 'connection-a' })
+    if (req.url === '/api/selection') return send({ ok: true, connectionId: 'connection-a', selectedId: 'node-a' })
+    if (req.url === '/api/snapshot') return send({ ok: true, connectionId: 'connection-a', nodes: [{ id: 'node-a', sourceRef: 'a'.repeat(64), actions: ['tap'] }] })
+    if (req.url === '/api/component') return send({ ok: true, document: { content: { package: 'other.app', component: { tag: 'HOME' } } } })
+    res.statusCode = 404; send({ ok: false })
+  })
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
+  const harness = makeHarness()
+  apply(harness.ctx)
+  const route = harness.routes.find(r => r.path === '/design-studio')
+  const tool = harness.registeredTools.get('design_studio')
+  const exec = { agent: { id: 'session-1' } }
+  async function api(method, body) {
+    const req = { method: 'POST', url: '/design-studio/__api/' + method, on(event, cb) { if (event === 'data') cb(Buffer.from(JSON.stringify(body))); if (event === 'end') cb() } }
+    const res = { setHeader() {}, end(value) { this.body = String(value) } }
+    await route.handler(req, res)
+    return JSON.parse(res.body)
+  }
+  try {
+    await tool.execute({ action: 'create', slug: 'fixture' }, exec)
+    assert.equal((await api('studio.features', {})).data.qalensEnabled, false)
+    const denied = await api('studio.qalens.attach', { url: `http://127.0.0.1:${server.address().port}` })
+    assert.equal(denied.ok, false)
+    assert.match(denied.error, /disabled/i)
+    assert.equal(requests, 0, 'disabled integration must not contact the workbench')
+    assert.equal((await api('studio.qalens.target', { slug: 'fixture' })).ok, false)
+    await assert.rejects(() => tool.execute({ action: 'qalens_selection', slug: 'fixture' }, exec), /disabled/i)
+    const badFlag = await api('studio.config.save', { patch: { qalens: { enabled: 'true' } } })
+    assert.equal(badFlag.ok, false)
+    await tool.execute({ action: 'config_save', patch: { qalens: { enabled: true } } }, exec)
+    assert.equal((await api('studio.features', {})).data.qalensEnabled, true)
+    await tool.execute({ action: 'android_config_save', slug: 'fixture', patch: { capabilities: { 'appium:appPackage': 'appium.original' }, projectRoot: '/work/appium', buildCommand: ['existing-build'] } }, exec)
+    assert.deepEqual((await api('studio.qalens.target', { slug: 'fixture' })).data, { package: '', projectRoot: '' })
+    const target = await api('studio.qalens.target.save', { slug: 'fixture', package: 'expected.app', projectRoot: '/work/source' })
+    assert.equal(target.ok, true)
+    assert.equal(target.data.package, 'expected.app')
+    assert.equal(target.data.projectRoot, '/work/source')
+    const appiumTarget = JSON.parse(await tool.execute({ action: 'android_config', slug: 'fixture' }, exec)).config
+    assert.deepEqual(appiumTarget.buildCommand, ['existing-build'])
+    assert.equal(appiumTarget.capabilities['appium:appPackage'], 'appium.original')
+    assert.equal(appiumTarget.projectRoot, '/work/appium')
+    const invalidTarget = await api('studio.qalens.target.save', { slug: 'fixture', package: 'https://example.com', projectRoot: '/work/source' })
+    assert.equal(invalidTarget.ok, false)
+    assert.equal((await api('studio.qalens.target.save', { slug: 'fixture', package: 'expected.app', projectRoot: 'relative/path' })).ok, false)
+    assert.equal((await api('studio.qalens.target', { slug: 'fixture' })).data.package, 'expected.app')
+    const attached = await api('studio.qalens.attach', { url: `http://127.0.0.1:${server.address().port}` })
+    assert.equal(attached.ok, true)
+    const result = await api('studio.qalens.selection', { slug: 'fixture' })
+    assert.equal(result.ok, true)
+    assert.equal(result.data.companion.selection.id, 'node-a')
+    assert.equal(result.data.claim.state, 'unavailable')
+    assert.match(result.data.mismatch, /other\.app/)
+    assert(!JSON.stringify(result).includes(secret))
+    const rejected = await api('studio.qalens.attach', { url: 'http://localhost:1234' })
+    assert.equal(rejected.ok, false)
+    assert.equal((await api('studio.config.save', { patch: { qalens: { enabled: false } } })).ok, true)
+    assert.equal((await api('studio.features', {})).data.qalensEnabled, false)
+    const beforeDenied = requests
+    assert.equal((await api('studio.qalens.selection', { slug: 'fixture' })).ok, false)
+    assert.equal((await api('studio.qalens.attach', { url: `http://127.0.0.1:${server.address().port}` })).ok, false)
+    assert.equal(requests, beforeDenied, 'disabled reads and attaches never reach the workbench')
+    await tool.execute({ action: 'config_save', patch: { reviewStyle: 'balanced' } }, exec)
+    assert.equal((await api('studio.features', {})).data.qalensEnabled, false, 'unrelated settings do not enable QaLens')
+    await tool.execute({ action: 'config_save', patch: { qalens: { enabled: true } } }, exec)
+    const detached = await api('studio.qalens.selection', { slug: 'fixture' })
+    assert.equal(detached.data.companion.state, 'stopped', 're-enabling never silently reattaches')
+    assert.equal(requests, beforeDenied, 'external workbench was detached, not contacted')
+    let enteredWrite, releaseWrite
+    const writing = new Promise(resolve => { enteredWrite = resolve })
+    const holdWrite = new Promise(resolve => { releaseWrite = resolve })
+    const fs = harness.services.fs
+    const writeText = fs.writeText.bind(fs)
+    fs.writeText = async (target, content) => {
+      if (target.targetKey.endsWith('/_studio/qalens/fixture.json')) { enteredWrite(); await holdWrite }
+      return writeText(target, content)
+    }
+    const saving = api('studio.qalens.target.save', { slug: 'fixture', package: 'old.app', projectRoot: '/work/old' })
+    await writing
+    const deleting = tool.execute({ action: 'delete', slug: 'fixture' }, exec)
+    releaseWrite()
+    await saving
+    await deleting
+    fs.writeText = writeText
+    await tool.execute({ action: 'create', slug: 'fixture' }, exec)
+    assert.deepEqual((await api('studio.qalens.target', { slug: 'fixture' })).data, { package: '', projectRoot: '' }, 'reusing a deleted slug must not reuse its old Android target')
+    let deleteEntered, releaseDelete, configEntered, releaseConfig
+    const deleteStarted = new Promise(resolve => { deleteEntered = resolve })
+    const holdDelete = new Promise(resolve => { releaseDelete = resolve })
+    const configStarted = new Promise(resolve => { configEntered = resolve })
+    const holdConfig = new Promise(resolve => { releaseConfig = resolve })
+    const stat = fs.stat.bind(fs), readText = fs.readText.bind(fs)
+    let blockDelete = true, blockConfig = true
+    fs.stat = async target => {
+      if (blockDelete && target.targetKey.endsWith('/design-studio/fixture')) { blockDelete = false; deleteEntered(); await holdDelete }
+      return stat(target)
+    }
+    fs.readText = async target => {
+      if (blockConfig && target.targetKey.endsWith('/_studio/config.json')) { blockConfig = false; configEntered(); await holdConfig }
+      return readText(target)
+    }
+    const deletingAgain = tool.execute({ action: 'delete', slug: 'fixture' }, exec)
+    await deleteStarted
+    const staleSave = api('studio.qalens.target.save', { slug: 'fixture', package: 'stale.app', projectRoot: '/work/stale' })
+    await configStarted
+    releaseDelete()
+    await deletingAgain
+    await tool.execute({ action: 'create', slug: 'fixture' }, exec)
+    releaseConfig()
+    assert.equal((await staleSave).ok, false, 'a save admitted during deletion must not affect a replacement design')
+    fs.stat = stat; fs.readText = readText
+    assert.deepEqual((await api('studio.qalens.target', { slug: 'fixture' })).data, { package: '', projectRoot: '' })
+  } finally {
+    for (const dispose of harness.disposers) dispose()
+    await new Promise(resolve => server.close(resolve))
+  }
+})
+
+test('disabling QaLens cancels an in-flight attach and leaves the external workbench running', async () => {
+  const { createServer } = await import('node:http')
+  let release, entered
+  const waitForBootstrap = new Promise(resolve => { entered = resolve })
+  const holdBootstrap = new Promise(resolve => { release = resolve })
+  const server = createServer(async (req, res) => {
+    if (req.url === '/api/bootstrap') { entered(); await holdBootstrap }
+    res.setHeader('content-type', 'application/json')
+    res.end(JSON.stringify({ ok: true, session: 'fixture-secret' }))
+  })
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
+  const harness = makeHarness(); apply(harness.ctx)
+  const route = harness.routes.find(r => r.path === '/design-studio')
+  async function api(method, body) {
+    const req = { method: 'POST', url: '/design-studio/__api/' + method, on(event, cb) { if (event === 'data') cb(Buffer.from(JSON.stringify(body))); if (event === 'end') cb() } }
+    const res = { setHeader() {}, end(value) { this.body = String(value) } }
+    await route.handler(req, res); return JSON.parse(res.body)
+  }
+  try {
+    assert.equal((await api('studio.config.save', { patch: { qalens: { enabled: true } } })).ok, true)
+    const attaching = api('studio.qalens.attach', { url: `http://127.0.0.1:${server.address().port}` })
+    await waitForBootstrap
+    assert.equal((await api('studio.config.save', { patch: { qalens: { enabled: false } } })).ok, true)
+    release()
+    assert.equal((await attaching).ok, false)
+    assert.equal((await api('studio.features', {})).data.qalensEnabled, false)
+    assert.equal(server.listening, true, 'an attached external server is not stopped')
+    assert.equal((await api('studio.config.save', { patch: { qalens: { enabled: true } } })).ok, true)
+    const tool = harness.registeredTools.get('design_studio')
+    await tool.execute({ action: 'create', slug: 'race' }, { agent: { id: 'session-1' } })
+    assert.equal((await api('studio.qalens.selection', { slug: 'race' })).data.companion.state, 'stopped')
+  } finally {
+    release()
+    for (const dispose of harness.disposers) dispose()
+    await new Promise(resolve => server.close(resolve))
+  }
+})
+
+test('disabling QaLens stops an owned sidecar without affecting independent tools', async () => {
+  const { mkdtemp, mkdir, writeFile, readFile, rm } = await import('node:fs/promises')
+  const { tmpdir } = await import('node:os')
+  const { join } = await import('node:path')
+  const checkout = await mkdtemp(join(tmpdir(), 'dsh-qalens-opt-in-'))
+  await mkdir(join(checkout, 'tools', 'local-bridge'), { recursive: true })
+  await writeFile(join(checkout, 'tools', 'local-bridge', 'server.py'), `
+    const http = require('node:http'); const fs = require('node:fs');
+    fs.writeFileSync('fixture.pid', String(process.pid));
+    process.on('SIGTERM', () => { fs.writeFileSync('fixture.term', 'received'); setTimeout(() => process.exit(0), 200); });
+    const server = http.createServer((req, res) => { res.setHeader('content-type', 'application/json'); res.end(JSON.stringify({ ok: true, session: 'fixture' })); });
+    server.listen(0, '127.0.0.1', () => console.log('QaLens workbench: http://127.0.0.1:' + server.address().port));
+  `)
+  const oldCheckout = process.env.DSH_QALENS_CHECKOUT, oldPython = process.env.DSH_QALENS_PYTHON
+  process.env.DSH_QALENS_CHECKOUT = checkout; process.env.DSH_QALENS_PYTHON = process.execPath
+  const harness = makeHarness(); apply(harness.ctx)
+  const route = harness.routes.find(r => r.path === '/design-studio')
+  async function api(method, body) {
+    const req = { method: 'POST', url: '/design-studio/__api/' + method, on(event, cb) { if (event === 'data') cb(Buffer.from(JSON.stringify(body))); if (event === 'end') cb() } }
+    const res = { setHeader() {}, end(value) { this.body = String(value) } }
+    await route.handler(req, res); return JSON.parse(res.body)
+  }
+  try {
+    assert.equal((await api('studio.qalens.start', {})).ok, false)
+    assert.equal((await api('studio.config.save', { patch: { qalens: { enabled: true } } })).ok, true)
+    const started = await api('studio.qalens.start', {})
+    assert.equal(started.ok, true); assert.equal(started.data.owned, true)
+    const pid = Number(await readFile(join(checkout, 'fixture.pid'), 'utf8'))
+    const switching = api('studio.qalens.attach', { url: 'http://127.0.0.1:1' })
+    for (let i = 0; i < 200; i++) {
+      try { await readFile(join(checkout, 'fixture.term')); break } catch (_) { await new Promise(resolve => setTimeout(resolve, 5)) }
+      if (i === 199) throw new Error('sidecar did not receive SIGTERM')
+    }
+    assert.equal((await api('studio.config.save', { patch: { qalens: { enabled: false } } })).ok, true)
+    assert.throws(() => process.kill(pid, 0), /ESRCH/)
+    assert.equal((await switching).ok, false, 'disable cancels a connection change while it waits for the sidecar')
+    assert.equal((await api('studio.ping', {})).ok, true, 'web/design APIs remain available')
+  } finally {
+    for (const dispose of harness.disposers) dispose()
+    if (oldCheckout === undefined) delete process.env.DSH_QALENS_CHECKOUT; else process.env.DSH_QALENS_CHECKOUT = oldCheckout
+    if (oldPython === undefined) delete process.env.DSH_QALENS_PYTHON; else process.env.DSH_QALENS_PYTHON = oldPython
+    await rm(checkout, { recursive: true, force: true })
+  }
 })

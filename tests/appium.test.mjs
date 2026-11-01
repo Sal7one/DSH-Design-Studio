@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { parseUiTree, locatorFor } from "../lib/host/appium.js";
+import { expandCommandArgv, gradleInvocation, normalizeCommandArgv, parseUiTree, routeTagCandidates, locatorFor } from "../lib/host/appium.js";
 
 const UIAUTOMATOR_XML = `<?xml version="1.0" encoding="UTF-8"?>
 <hierarchy rotation="0">
@@ -63,4 +63,33 @@ test("text falls back to XPath and quotes both quote kinds", () => {
 test("class name is the last-resort locator", () => {
   const locator = locatorFor({ resourceId: "", contentDesc: "", text: "", className: "android.widget.EditText" });
   assert.deepEqual(locator, { using: "class name", value: "android.widget.EditText" });
+});
+
+test("gradle invocation requires an absolute root and a safe task", () => {
+  const inv = gradleInvocation("/tmp/chirpy", ":app:assembleDebug");
+  assert.equal(inv.cwd, "/tmp/chirpy");
+  assert.equal(inv.task, ":app:assembleDebug");
+  assert.ok(inv.argv[0].endsWith("gradlew"));
+  assert.ok(inv.argv.includes(":app:assembleDebug"));
+  assert.throws(() => gradleInvocation("relative/project", ":app:assembleDebug"), /absolute path/);
+  assert.throws(() => gradleInvocation("/tmp/app", ":app:assembleDebug; rm -rf /"), /invalid Gradle build task/);
+  assert.throws(() => gradleInvocation("/tmp/app", ":app:assembleDebug\ntouch pwned"), /invalid Gradle build task/);
+});
+
+test("route tags cover NAV/ROUTE/SCREEN and strip path params", () => {
+  const settings = routeTagCandidates("settings");
+  assert.ok(settings.includes("NAV_SETTINGS"));
+  assert.ok(settings.includes("ROUTE_SETTINGS"));
+  assert.ok(settings.includes("SCREEN_SETTINGS"));
+  const details = routeTagCandidates("place_details/{placeID}");
+  assert.ok(details.includes("NAV_PLACE_DETAILS"));
+  assert.ok(!details.some((tag) => tag.includes("{")));
+});
+
+test("generic commands are argv-only and expand placeholders", () => {
+  const argv = normalizeCommandArgv(["make", "{projectRoot}/build", "--apk={apk}"], "buildCommand");
+  assert.deepEqual(expandCommandArgv(argv, "/tmp/app", "/tmp/app/a.apk"), ["make", "/tmp/app/build", "--apk=/tmp/app/a.apk"]);
+  assert.throws(() => normalizeCommandArgv(["make\nrm -rf /"], "buildCommand"), /invalid buildCommand/);
+  assert.throws(() => normalizeCommandArgv(["make", ""], "buildCommand"), /invalid buildCommand/);
+  assert.deepEqual(normalizeCommandArgv([], "buildCommand"), []);
 });

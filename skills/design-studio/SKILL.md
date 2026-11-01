@@ -9,6 +9,11 @@ Use this skill when a request is a design brief or a change to a Design Studio
 mockup. Read [the handbook](../../docs/design-studio-handbook.md) for the full
 reference; this skill is the working procedure.
 
+For an explicitly requested Android QaLens integration, use the separate
+[QaLens integration skill](../qalens-integration/SKILL.md). QaLens is off by
+default and is not required for ordinary mockup work; do not enable it or add
+the SDK unless the user requests it.
+
 ## First moves
 
 1. Check whether a design system already exists:

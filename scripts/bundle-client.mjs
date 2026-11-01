@@ -22,6 +22,7 @@ const ORDER = [
   'assets-modal.js',
   'history.js',
   'frame-diff.js',
+  'android-change-draft.js',
   'app-panel.js',
   'style-atlas.js',
   'studio-view.js',

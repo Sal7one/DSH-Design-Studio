@@ -88,8 +88,9 @@ DSH-Design-Studio/
   reinstall the same existing project after a request. It also indexes the
   project's static navigation routes and maps a selected test tag back to its
   source definition and other usages; screen identity comes from `SCREEN_*`
-  tags. The session survives tab switches via a host keepalive and reconnects
-  automatically. See [docs/android-app-targets.md](docs/android-app-targets.md).
+  tags. The Screens chips navigate via `NAV_*`/`ROUTE_*` destination tags and
+  report an honest fallback when the app exposes none. The session survives tab
+  switches via a host keepalive and reconnects automatically. See [docs/android-app-targets.md](docs/android-app-targets.md).
 - **Live preview route** — `/design-studio/<slug>/html/index.html`, served by the
   harness web server. Inline **Preview** is the default open tab and sits in the same
   tab bar as App, Pages, Styles, Agent, Assets, History, Review, Upload and Settings — no modal, no top-right panel.
@@ -384,10 +385,13 @@ tool result.
   or an OpenRouter key under credential reference `OPENROUTER_API_KEY` as the fallback.
 - For **📷 Capture**: a local Microsoft Edge, Google Chrome, or Chromium install.
   It is optional; the rest of the studio works without it.
-- For **Android app targets**: Appium 3 with the `uiautomator2` driver on
-  loopback (`127.0.0.1:4723`), an installed debug APK, and a visible
-  emulator/device. Building and installing the app itself needs the project's
-  JDK + Android SDK; the plugin never runs Gradle.
+- For the optional **Android Appium target**: Appium 3 with `uiautomator2` on
+  loopback, an installed debug APK, and an authorized emulator/device. Explicit
+  Build & install invokes the configured build and install commands; see the
+  [security limitation](docs/android-app-targets.md#qalens-companion-experimental).
+- The experimental **QaLens companion** is off by default and requires a
+  separately opted-in SDK/debug app and local workbench only if selected. Web,
+  Appium, and Compose Desktop users do not need QaLens or its Python tooling.
 
 ## Storage and upgrades (2.7.0)
 
@@ -682,3 +686,17 @@ See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 > slot registration and Session `prompt()` API, and the plugin no longer shells out to
 > `sh`, `curl`, `zip`, `base64` or `screencapture`. The buggy screenshot-capture feature
 > and the unused `dynamic/` prototype were removed. See [CHANGELOG.md](CHANGELOG.md).
+
+### Optional Android: QaLens companion
+
+The experimental companion is **off by default**. To use it, enable **QaLens
+companion** in **Settings → Design Studio**, save, then choose **Android ·
+QaLens** in App. Enabling the desktop setting does not install an SDK, start a
+server, pair a phone, or change a host app. The web editor and other app targets
+work independently.
+
+The [integration guide](docs/QALENS_INTEGRATION.md) covers opted-in installation,
+QA/release variants, the existing workbench, privacy, verification and rollback.
+The separate [agent skill](skills/qalens-integration/SKILL.md) helps with explicit
+integration requests; it is not required for mockup work. The feature in this
+checkout may not yet exist in a published npm version.

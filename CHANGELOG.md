@@ -2,6 +2,18 @@
 
 All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
+## Unreleased
+
+- Add an experimental, opt-in QaLens companion for reading a selected Android
+  component and reviewing source claims and investigation drafts. It is off
+  by default and does not install an SDK, start a workbench or pair a phone.
+- Simplify the App target selector and keep QaLens and Appium project settings
+  separate. Add bounded in-memory draft pins and explicit review before handoff.
+- Add optional integration guidance and an agent skill covering host variants,
+  privacy, setup, source-map limitations and verification.
+- Preserve the existing Appium and Compose Desktop paths. The integration has
+  not yet been validated end to end against a paired phone in this revision.
+
 ## 2.8.0 — 2026-10-31
 
 Android app targets through Appium, plus the optional Compose Desktop target.
