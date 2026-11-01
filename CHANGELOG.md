@@ -11,8 +11,11 @@ All notable changes to `@sal7one/dsh-design-studio` are documented here.
   separate. Add bounded in-memory draft pins and explicit review before handoff.
 - Add optional integration guidance and an agent skill covering host variants,
   privacy, setup, source-map limitations and verification.
-- Preserve the existing Appium and Compose Desktop paths. The integration has
-  not yet been validated end to end against a paired phone in this revision.
+- Preserve the existing Appium and Compose Desktop paths. Verify a selected
+  Compose element from an emulator through QaLens into Design Studio; physical
+  phones and consumer-host apps remain unverified.
+- Explain how to reload the plugin when a newer App tab contacts an older host,
+  and provide the correct account-menu path when settings cannot open directly.
 
 ## 2.8.0 — 2026-10-31
 

@@ -815,6 +815,39 @@ test('App starts without QaLens and makes no companion calls until opted in', as
   } finally { globalThis.React = saved.React; globalThis.h = saved.h; globalThis.fetch = saved.fetch; globalThis.window = saved.window }
 })
 
+test('App explains when an older host needs a plugin reload', async () => {
+  const { AppPanel } = await import('../lib/client/src/app-panel.js?older-host')
+  const saved = { React: globalThis.React, h: globalThis.h, fetch: globalThis.fetch, window: globalThis.window }
+  const slots = [], effects = []
+  function render() {
+    let i = 0
+    globalThis.React = {
+      useState(initial) { const n = i++; if (!(n in slots)) slots[n] = initial; return [slots[n], value => { slots[n] = value }] },
+      useRef(initial) { return { current: initial } },
+      useEffect(fn) { effects.push(fn) },
+      createElement(type, props, ...children) { return { type, props: props || {}, children } },
+    }
+    globalThis.h = React.createElement
+    return AppPanel({ slug: 'demo', onOpenSettings() {} })
+  }
+  function flatten(node) { if (node == null || node === false) return ''; if (typeof node !== 'object') return String(node); if (Array.isArray(node)) return node.map(flatten).join(' '); return flatten(node.children || []) }
+  function find(node, fn) { if (!node || typeof node !== 'object') return null; if (fn(node)) return node; for (const child of (node.children || []).flat(Infinity)) { const result = find(child, fn); if (result) return result } return null }
+  globalThis.fetch = async () => ({ ok: true, json: async () => ({ ok: false, error: 'unknown api method: studio.features' }) })
+  globalThis.window = { addEventListener() {}, removeEventListener() {} }
+  try {
+    render()
+    const dispose = effects.find(fn => String(fn).includes('refreshFeatures'))()
+    await new Promise(resolve => setImmediate(resolve))
+    const tree = render(), text = flatten(tree)
+    assert.match(text, /reload.*plugin.*refresh/i)
+    assert.doesNotMatch(text, /unknown api method/i)
+    assert.match(text, /Android · Appium/)
+    assert.match(text, /Compose Desktop/)
+    assert.equal(find(tree, n => n.props && n.props.label === 'Open Design Studio settings'), null)
+    dispose()
+  } finally { globalThis.React = saved.React; globalThis.h = saved.h; globalThis.fetch = saved.fetch; globalThis.window = saved.window }
+})
+
 test('settings make QaLens an explicit saved opt-in', async () => {
   const { SettingsView } = await import('../lib/client/src/settings.js?qalens-opt-in')
   const saved = { React: globalThis.React, h: globalThis.h, fetch: globalThis.fetch, window: globalThis.window }
