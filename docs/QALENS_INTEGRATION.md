@@ -227,6 +227,30 @@ not uninstall the SDK, revoke previously shared files or erase app data. An
 attached workbench is a separate process and remains running: disconnect it in
 its own UI and stop the phone inspector when access should end.
 
+## Developer tools for the agent
+
+With a workbench attached and the app approved on the phone, the main chat can
+work on the live app through `design_studio` actions; Appium is not involved:
+
+| Action | What the agent gets |
+| --- | --- |
+| `qalens_screen`, `qalens_shot`, `qalens_find` | Screen outline with node ids, a masked screenshot, QaLens XPath matches |
+| `qalens_act` | Tap, type or scroll one element, then what appeared, disappeared or changed; the step is recorded |
+| `qalens_logs`, `qalens_network`, `qalens_data`, `qalens_sql` | Recent logs, network calls (bodies only if the app captures them), decoded app values, read-only SQL |
+| `qalens_trace` | Where a visible value appears in responses, app data and logs |
+| `qalens_source` | Unverified Kotlin file:line candidates by tag, text literal or string resource |
+| `qalens_audit` | Unlabeled actions, touch targets under 48 dp, duplicate tags, untagged actions |
+| `qalens_flow`, `qalens_replay`, `qalens_test` | The recorded path, a replay after reinstall, and a Compose UI test or Maestro flow |
+
+A design whose QaLens target names a package refuses to act on a different
+connected app. Device commands are sent once and never retried. A password
+field's typed value is not recorded. Reinstalling the app ends the QaLens
+session, so the operator approves the phone again before `qalens_replay`.
+
+The QaLens panel's Developer tools card sends the common tasks (Fix in code,
+Debug this screen, Audit this screen, Write a UI test) to the main chat, which
+keeps its normal tool permissions.
+
 ## Source claims and the optional auto-tag experiment
 
 Ordinary QaLens inspection works without the experimental compiler. Test tags,

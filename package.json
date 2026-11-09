@@ -65,7 +65,7 @@
   "scripts": {
     "build:client": "node scripts/bundle-client.mjs",
     "check": "node scripts/check.mjs",
-    "test": "node --test tests/host.test.mjs tests/client.test.mjs tests/hot-reload.test.mjs tests/appium.test.mjs tests/app-adapters.test.mjs tests/source-map.test.mjs tests/qalens-companion.test.mjs tests/android-change-draft.test.mjs tests/view-state.test.mjs tests/qalens-detect.test.mjs"
+    "test": "node --test tests/host.test.mjs tests/client.test.mjs tests/hot-reload.test.mjs tests/appium.test.mjs tests/app-adapters.test.mjs tests/source-map.test.mjs tests/qalens-companion.test.mjs tests/android-change-draft.test.mjs tests/view-state.test.mjs tests/qalens-detect.test.mjs tests/qalens-tools.test.mjs tests/qalens-live.test.mjs"
   },
   "dsh": {
     "manifestVersion": 1,

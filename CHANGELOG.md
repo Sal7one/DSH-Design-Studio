@@ -4,6 +4,23 @@ All notable changes to `@sal7one/dsh-design-studio` are documented here.
 
 ## Unreleased
 
+- Give the agent the live app through QaLens, with no Appium: `qalens_screen`
+  (screen outline with node ids, text, tags and actions), `qalens_shot` (masked
+  screenshot as an image), `qalens_find` (QaLens XPath), `qalens_act` (tap, type
+  or scroll; reports what changed on screen), `qalens_logs`, `qalens_network`,
+  `qalens_data`, `qalens_sql` (read-only), `qalens_trace` (where a visible value
+  appears in response bodies, app data and logs), `qalens_source` (file:line
+  candidates), `qalens_audit` (accessibility and testability findings).
+- Record each accepted `qalens_act` step with its most stable selector and the
+  element it revealed. `qalens_replay` returns to the same screen after a
+  reinstall; `qalens_test` turns the flow into a Compose UI test or a Maestro flow.
+- Map untagged elements to source: search Kotlin text literals (including string
+  templates), `strings.xml`/plurals with format arguments and their `R.string`
+  uses, and `testTag`/`qaTag` values, including tag constants. Results are
+  labelled unverified candidates.
+- Add a Developer tools card to the QaLens panel: recent failed requests and
+  error logs, where the selected value came from, and one-click Fix in code,
+  Debug this screen, Audit this screen and Write a UI test tasks for the main chat.
 - Add an experimental, opt-in QaLens companion for reading a selected Android
   component and reviewing source claims and investigation drafts. It is off
   by default and does not install an SDK, start a workbench or pair a phone.
