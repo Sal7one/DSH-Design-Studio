@@ -13,6 +13,7 @@ const target = join(root, 'lib', 'client.js')
 
 const ORDER = [
   'runtime.js',
+  'view-state.js',
   'styles.js',
   'labels.js',
   'primitives.js',
