@@ -25,6 +25,12 @@ All notable changes to `@sal7one/dsh-design-studio` are documented here.
   harness unmounted the view and every choice reset to its default.
 - Stop resetting a saved QaLens target to "Choose a target" while the feature
   check is still loading after the tab is shown again.
+- Find a running QaLens workbench automatically (a read-only probe of
+  `http://127.0.0.1:8765` and the remembered URL) and attach it in one click.
+  A workbench you attached is reattached when the panel reopens, including after
+  a harness restart, until you press Disconnect or disable QaLens. Start QaLens
+  is offered only when `DSH_QALENS_CHECKOUT` is configured on the host.
+- Recommend QaLens over Appium in the App target chooser when it is enabled.
 
 ## 2.8.0 — 2026-10-31
 

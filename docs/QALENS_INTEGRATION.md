@@ -170,7 +170,13 @@ requests, or assume encrypted data can be decoded without the host's serializer.
    this optional workbench, not the Design Studio web editor. Use the printed
    loopback URL. Do not expose the server to a LAN or tunnel it to other users.
 4. In Design Studio's **App** target selector, choose **Android · QaLens**.
-   In **Connection**, attach the workbench URL, then choose **Scan for QaLens
+   When a workbench answers on `http://127.0.0.1:8765` (its default port) or at
+   the URL you attached before, the panel offers **Attach to QaLens at …**; on
+   another port, attach its printed URL under **Connection**. The probe only
+   reads the workbench's bootstrap endpoint and attaches nothing by itself. A
+   workbench you attached is reattached when the panel reopens, including after
+   a harness restart, until you press **Disconnect** or disable QaLens in
+   settings. Then choose **Scan for QaLens
    apps**. Select an authorized device and installed app, then **Use this app**;
    no package typing is needed. This scan finds installed apps advertising the
    QaLens Control launcher, not proof that the SDK is currently enabled or the
